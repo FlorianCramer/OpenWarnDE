@@ -19,27 +19,24 @@ Dadurch muss nicht mehr jedes Endgerät selbst externe Datenquellen abrufen und 
 
 ## Bestandteile der Plattform
 
-| Bestandteil | Aufgabe |
-|---|---|
-| **OpenWarnDE App** | Primärer Client für Endnutzer (Web, Android, iOS via Capacitor). Zeigt Karte, Warnungen und Standort an, enthält keine eigene Geschäftslogik. |
-| **OpenWarnDE Backend** | Zentrale Verarbeitungsschicht: Datenbeschaffung, Validierung, Normalisierung, Warnlogik, Aggregation, Veröffentlichung. |
-| **OpenWarnDE API** | Standardisierte, versionierte Schnittstelle (`/api/v1/...`), über die App und externe Nutzer auf Daten zugreifen. |
-| **Web Platform** | Betreiber-Dashboard (Admin) sowie – langfristig – eine Developer Platform für externe API-Kunden (API Keys, Usage, Billing). |
+| Bestandteil            | Aufgabe                                                                                                                                       |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **OpenWarnDE App**     | Primärer Client für Endnutzer (Web, Android, iOS via Capacitor). Zeigt Karte, Warnungen und Standort an, enthält keine eigene Geschäftslogik. |
+| **OpenWarnDE Backend** | Zentrale Verarbeitungsschicht: Datenbeschaffung, Validierung, Normalisierung, Warnlogik, Aggregation, Veröffentlichung.                       |
+| **OpenWarnDE API**     | Standardisierte, versionierte Schnittstelle (`/api/v1/...`), über die App und externe Nutzer auf Daten zugreifen.                             |
+| **Web Platform**       | Betreiber-Dashboard (Admin) sowie – langfristig – eine Developer Platform für externe API-Kunden (API Keys, Usage, Billing).                  |
 
-```
-Externe Datenquellen (DWD, Pegel, ...)
-        │
-        ▼
-  OpenWarnDE Backend
-        │
-  (Abruf → Normalisierung → Warnlogik → Aggregation)
-        │
-        ▼
-  OpenWarnDE API
-        │
-   ┌────┴────┐
-   ▼         ▼
-  App    Externe API-Nutzer
+```mermaid
+graph TD
+    A[Externe Datenquellen<br>DWD, Pegel, ...] --> B
+    
+    subgraph B[OpenWarnDE Backend]
+        B1[Abruf] --> B2[Normalisierung] --> B3[Warnlogik] --> B4[Aggregation]
+    end
+    
+    B --> C[OpenWarnDE API]
+    C --> D[App]
+    C --> E[Externe API-Nutzer]
 ```
 
 Die App kommuniziert grundsätzlich **nicht direkt** mit externen Datenquellen (DWD, Pegelstände etc.), sondern ausschließlich über die eigene API. Dadurch können Datenquellen ausgetauscht oder erweitert werden, ohne die App aktualisieren zu müssen.

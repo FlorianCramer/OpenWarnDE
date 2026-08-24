@@ -1,0 +1,29 @@
+school-project/
+├── README.md
+│
+├── 01-project-application/
+│   ├── projektantrag.md
+│   └── version-history.md
+│
+├── 02-analysis-and-planning/
+│   ├── ist-analyse.md
+│   ├── stakeholderanalyse.md
+│   ├── anforderungen.md
+│   ├── soll-ist-vergleich.md
+│   ├── variantenvergleich.md
+│   └── projektplanung.md
+│
+├── 03-implementation/
+│   ├── architecture.md
+│   ├── mvp.md
+│   └── implementation-notes.md
+│
+├── 04-testing/
+│   ├── testkonzept.md
+│   ├── testprotokoll.md
+│   └── abnahme.md
+│
+└── 05-documentation/
+    ├── entwicklerdokumentation.md
+    ├── benutzerdokumentation.md
+    └── projektfazit.md

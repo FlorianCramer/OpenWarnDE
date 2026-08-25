@@ -54,7 +54,7 @@ Die App kommuniziert grundsätzlich **nicht direkt** mit externen Datenquellen (
 ## Geplante Repository-Struktur (Monorepo)
 
 ```
-openwarn/
+openwarnde/
 ├── apps/
 │   ├── app/            # OpenWarnDE App (Web, Android, iOS)
 │   └── web/             # Admin- und Developer-Platform

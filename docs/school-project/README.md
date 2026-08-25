@@ -6,7 +6,7 @@ des Miniprojekts LF12 im Rahmen der Vorbereitung auf die AP2.
 ## Projekt
 
 **Projekt:** Neukonzeption und prototypische Entwicklung der
-Warn- und Lageinformationsplattform OpenWarn 2.0
+Warn- und Lageinformationsplattform OpenWarnDE 2.0
 
 **Projektart:** Einzelprojekt
 

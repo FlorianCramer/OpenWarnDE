@@ -34,7 +34,7 @@ OpenWarnDEV soll daher nicht einfach weiterentwickelt oder unverändert übernom
 ### Projektressourcen
 
 - **OpenWarnDEV (Ausgangssystem):** https://github.com/FlorianCramer/OpenWarnDEV
-- **OpenWarnDE (OpenWarn 2.0 / Zielprojekt):** https://github.com/FlorianCramer/OpenWarnDE
+- **OpenWarnDE (OpenWarnDE 2.0 / Zielprojekt):** https://github.com/FlorianCramer/OpenWarnDE
 
 ---
 

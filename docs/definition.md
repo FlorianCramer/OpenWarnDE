@@ -217,7 +217,7 @@ Zusätzlich soll die Web-Plattform später einen Bereich für externe API-Nutzer
 Beispielsweise:
 
 ```text
-    OpenWarn
+    OpenWarnDE
     ├── App
     ├── Admin
     └── Developer Platform
@@ -279,7 +279,7 @@ Das Projekt soll als Monorepo aufgebaut werden.
 Zielstruktur:
 
 ```text
-    openwarn/
+    openwarnde/
     │
     ├── apps/
     │   ├── app/
@@ -1105,7 +1105,7 @@ Dadurch kann OpenWarnDE langfristig neben der App auch eine Plattform für Dritt
 Die Repository-Struktur soll die fachliche Architektur widerspiegeln.
 
 ```text
-    openwarn/
+    openwarnde/
     │
     ├── apps/
     │   ├── app/
@@ -1363,7 +1363,7 @@ Externe API-Nutzer erhalten kontrollierten Zugriff über API Keys, Limits und pe
 Das langfristige Zielbild:
 
 ```text
-                              OPENWARN
+                             OPENWARNDE
                                   │
                      ┌────────────┴────────────┐
                      │                         │
@@ -1702,7 +1702,7 @@ Beispiel:
     ├── Feld X
     └── Feld Y
 
-    OpenWarn
+    OpenWarnDE
     ├── Warning
     ├── severity
     ├── region
@@ -2889,7 +2889,7 @@ Es soll ein nachvollziehbares technisches Gesamtkonzept entstehen.
 Ein Entwickler, der das Repository zum ersten Mal öffnet, soll verstehen können:
 
 ```text
-    Was ist OpenWarn?
+    Was ist OpenWarnDE?
 
     Welches Problem löst es?
 

@@ -227,10 +227,10 @@ Die für das Projekt relevanten Bereiche wie Anforderungsanalyse, Variantenvergl
 
 ## 12. Unterschriften <!-- (Werden Privat gehalten) -->
 
-| Rolle                   | Name               | Datum                                                     | Unterschrift       |
-| ----------------------- | ------------------ | --------------------------------------------------------- | ------------------ |
-| Projektverantwortlicher | Florian Cramer     | <u>&nbsp;&nbsp;&nbsp;</u>.<u>&nbsp;&nbsp;&nbsp;</u>. 2026 | __________________ |
-| Lehrkraft               | __________________ | <u>&nbsp;&nbsp;&nbsp;</u>.<u>&nbsp;&nbsp;&nbsp;</u>. 2026 | __________________ |
+| Rolle                   | Name               | Datum      | Unterschrift       |
+| ----------------------- | ------------------ | ---------- | ------------------ |
+| Projektverantwortlicher | Florian Cramer     | __.__.2026 | __________________ |
+| Lehrkraft               | __________________ | __.__.2026 | __________________ |
 
 ---
 

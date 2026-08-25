@@ -1,8 +1,8 @@
-# Variantenvergleich – OpenWarn 2.0
+# Variantenvergleich – OpenWarnDE 2.0
 
 **Projekt:** OpenWarnDE 2.0
 **Projektphase:** Vorbereitung AP2
-**Vergleichsziel:** Auswahl einer geeigneten technischen und organisatorischen Grundlage für den OpenWarn 2.0 MVP
+**Vergleichsziel:** Auswahl einer geeigneten technischen und organisatorischen Grundlage für den OpenWarnDE 2.0 MVP
 
 ---
 
@@ -10,7 +10,7 @@
 
 Im Rahmen des Projekts soll nicht ausschließlich die bestehende technische Lösung aus OpenWarnDEV übernommen werden.
 
-Da OpenWarn 2.0 als strukturierter Neustart geplant ist, müssen verschiedene Lösungsvarianten hinsichtlich ihrer Eignung für den geplanten MVP bewertet werden.
+Da OpenWarnDE 2.0 als strukturierter Neustart geplant ist, müssen verschiedene Lösungsvarianten hinsichtlich ihrer Eignung für den geplanten MVP bewertet werden.
 
 Der Variantenvergleich betrachtet insbesondere:
 
@@ -41,7 +41,7 @@ Der MVP soll zunächst folgende Kernbereiche ermöglichen:
 * grundlegende Verwaltungsoberfläche
 * manuelles Erstellen und Auslösen von Push-Nachrichten
 
-Die umfangreiche Verarbeitung externer Warn- und Informationsdaten, die Integration zahlreicher Datenquellen sowie eine öffentliche OpenWarn-API sind ausdrücklich nicht Bestandteil des Schul-MVPs.
+Die umfangreiche Verarbeitung externer Warn- und Informationsdaten, die Integration zahlreicher Datenquellen sowie eine öffentliche OpenWarnDE-API sind ausdrücklich nicht Bestandteil des Schul-MVPs.
 
 Die gewählte Lösung muss jedoch eine spätere Erweiterung um diese Funktionen ermöglichen.
 
@@ -53,15 +53,15 @@ Für die technische Grundlage werden drei Varianten betrachtet.
 
 ### Variante A – Weiterentwicklung von OpenWarnDEV
 
-Die bestehende Codebasis wird weiterverwendet und schrittweise um die Anforderungen des OpenWarn-2.0-MVPs erweitert.
+Die bestehende Codebasis wird weiterverwendet und schrittweise um die Anforderungen des OpenWarnDE-2.0-MVPs erweitert.
 
 ### Variante B – Vollständiger technischer Neustart
 
-OpenWarn 2.0 wird vollständig neu aufgebaut. Bestehende OpenWarnDEV-Komponenten werden grundsätzlich nicht übernommen.
+OpenWarnDE 2.0 wird vollständig neu aufgebaut. Bestehende OpenWarnDEV-Komponenten werden grundsätzlich nicht übernommen.
 
 ### Variante C – Strukturierter Neustart mit gezielter Wiederverwendung
 
-OpenWarn 2.0 wird als neues Projekt aufgebaut. Bestehende Komponenten, Erfahrungen und technische Lösungen aus OpenWarnDEV werden jedoch einzeln bewertet und nur bei ausreichender Eignung übernommen.
+OpenWarnDE 2.0 wird als neues Projekt aufgebaut. Bestehende Komponenten, Erfahrungen und technische Lösungen aus OpenWarnDEV werden jedoch einzeln bewertet und nur bei ausreichender Eignung übernommen.
 
 ---
 
@@ -74,7 +74,7 @@ Die Varianten werden anhand der folgenden Kriterien bewertet.
 | **Technische Eignung**  | Wie gut unterstützt die Variante die Anforderungen des MVP?                  |
 | **Entwicklungsaufwand** | Wie hoch ist der Aufwand für die Umsetzung?                                  |
 | **Wartbarkeit**         | Wie gut kann das System langfristig gepflegt werden?                         |
-| **Erweiterbarkeit**     | Wie einfach können zukünftige OpenWarn-Funktionen ergänzt werden?            |
+| **Erweiterbarkeit**     | Wie einfach können zukünftige OpenWarnDE-Funktionen ergänzt werden?            |
 | **Betriebskosten**      | Welche laufenden Kosten können durch die Lösung entstehen?                   |
 | **Abhängigkeiten**      | Wie stark ist die Lösung von bestehenden oder externen Komponenten abhängig? |
 | **Risiko**              | Wie hoch ist das technische und organisatorische Projektrisiko?              |
@@ -105,7 +105,7 @@ Bei Kriterien wie **Entwicklungsaufwand**, **Betriebskosten** und **Risiko** bed
 
 Bei dieser Variante wird OpenWarnDEV als direkte technische Grundlage verwendet.
 
-Die bestehenden Komponenten werden weiterentwickelt und an die Anforderungen von OpenWarn 2.0 angepasst.
+Die bestehenden Komponenten werden weiterentwickelt und an die Anforderungen von OpenWarnDE 2.0 angepasst.
 
 Die Kartenfunktion, Geolocation, vorhandene Projektstrukturen und weitere bereits vorhandene Komponenten könnten direkt weiterverwendet werden.
 
@@ -148,7 +148,7 @@ Die Kartenfunktion, Geolocation, vorhandene Projektstrukturen und weitere bereit
 
 ## 7.1 Beschreibung
 
-Bei dieser Variante wird OpenWarn 2.0 vollständig neu entwickelt.
+Bei dieser Variante wird OpenWarnDE 2.0 vollständig neu entwickelt.
 
 Die Erfahrungen aus OpenWarnDEV können in die Konzeption einfließen, bestehende technische Komponenten werden jedoch nicht übernommen.
 
@@ -161,7 +161,7 @@ Die Architektur, Projektstruktur und Implementierung werden vollständig neu def
 * klare Projektstruktur von Beginn an
 * Anforderungen können direkt in die Architektur einfließen
 * gute langfristige Erweiterbarkeit
-* klare Trennung zwischen OpenWarnDEV und OpenWarn 2.0
+* klare Trennung zwischen OpenWarnDEV und OpenWarnDE 2.0
 
 ## 7.3 Nachteile
 
@@ -193,13 +193,13 @@ Die Architektur, Projektstruktur und Implementierung werden vollständig neu def
 
 ## 8.1 Beschreibung
 
-Bei dieser Variante wird OpenWarn 2.0 als eigenständiges und strukturiertes Projekt neu aufgebaut.
+Bei dieser Variante wird OpenWarnDE 2.0 als eigenständiges und strukturiertes Projekt neu aufgebaut.
 
 OpenWarnDEV dient dabei als **Ist-System, Wissensbasis und Referenz**.
 
 Bestehende Komponenten werden nicht automatisch übernommen. Stattdessen wird für jede relevante Komponente geprüft:
 
-* Ist die Funktion für OpenWarn 2.0 weiterhin erforderlich?
+* Ist die Funktion für OpenWarnDE 2.0 weiterhin erforderlich?
 * Entspricht die technische Umsetzung den neuen Anforderungen?
 * Ist die Komponente wartbar?
 * Kann sie in die neue Architektur integriert werden?
@@ -268,7 +268,7 @@ Diese Variante bietet für das Schulprojekt das beste Verhältnis zwischen techn
 
 Insbesondere wird dadurch vermieden, dass die bestehenden Strukturen von OpenWarnDEV ungeprüft übernommen werden. Gleichzeitig können bereits vorhandenes Wissen, Erfahrungen und technisch geeignete Komponenten weiterhin genutzt werden.
 
-OpenWarnDEV wird deshalb nicht als direkte Codebasis für OpenWarn 2.0 betrachtet, sondern als **Ist-System und Wissensbasis**.
+OpenWarnDEV wird deshalb nicht als direkte Codebasis für OpenWarnDE 2.0 betrachtet, sondern als **Ist-System und Wissensbasis**.
 
 ---
 
@@ -276,7 +276,7 @@ OpenWarnDEV wird deshalb nicht als direkte Codebasis für OpenWarn 2.0 betrachte
 
 Aus der Entscheidung ergeben sich folgende Grundsätze für die Entwicklung:
 
-1. OpenWarn 2.0 erhält eine eigene Projektstruktur.
+1. OpenWarnDE 2.0 erhält eine eigene Projektstruktur.
 2. Anforderungen werden vor der Implementierung definiert und priorisiert.
 3. Bestehende OpenWarnDEV-Komponenten werden einzeln bewertet.
 4. Eine Wiederverwendung erfolgt nur bei ausreichender technischer Eignung.
@@ -303,7 +303,7 @@ Für die bereits bekannte technische Grundlage werden insbesondere folgende Tech
 * GitHub
 * GitHub Actions
 
-Dabei wird nicht vorausgesetzt, dass jede Technologie aus OpenWarnDEV automatisch in OpenWarn 2.0 übernommen wird.
+Dabei wird nicht vorausgesetzt, dass jede Technologie aus OpenWarnDEV automatisch in OpenWarnDE 2.0 übernommen wird.
 
 Die endgültige Auswahl wird anhand der Anforderungen, der technischen Eignung, des Entwicklungsaufwands und der Erweiterbarkeit begründet.
 
@@ -311,7 +311,7 @@ Die endgültige Auswahl wird anhand der Anforderungen, der technischen Eignung, 
 
 # 13. Wirtschaftliche Betrachtung
 
-Für das Schulprojekt stehen keine vollständigen realen Betriebskosten eines produktiven OpenWarn-Systems zur Verfügung.
+Für das Schulprojekt stehen keine vollständigen realen Betriebskosten eines produktiven OpenWarnDE-Systems zur Verfügung.
 
 Daher wird die wirtschaftliche Betrachtung auf qualitative Faktoren konzentriert.
 
@@ -363,7 +363,7 @@ Für den geplanten MVP stellt Variante C den sinnvollsten Kompromiss zwischen in
 
 # 14. Technische und organisatorische Entscheidung
 
-Die Entscheidung für Variante C bedeutet, dass OpenWarn 2.0 bewusst als **neues, strukturiertes Projekt** begonnen wird.
+Die Entscheidung für Variante C bedeutet, dass OpenWarnDE 2.0 bewusst als **neues, strukturiertes Projekt** begonnen wird.
 
 Der Entwicklungsprozess folgt dabei dem Prinzip:
 
@@ -377,7 +377,7 @@ Dadurch wird verhindert, dass technische Entscheidungen aus OpenWarnDEV ungeprü
 
 Der Variantenvergleich zeigt, dass sowohl die direkte Weiterentwicklung von OpenWarnDEV als auch ein vollständiger technischer Neustart Nachteile für das geplante Einzelprojekt besitzen.
 
-Die direkte Weiterentwicklung bietet zwar den geringsten Entwicklungsaufwand, würde jedoch einen Teil der bestehenden strukturellen Probleme in OpenWarn 2.0 übernehmen.
+Die direkte Weiterentwicklung bietet zwar den geringsten Entwicklungsaufwand, würde jedoch einen Teil der bestehenden strukturellen Probleme in OpenWarnDE 2.0 übernehmen.
 
 Ein vollständiger Neustart bietet technisch die größte Freiheit, verursacht für den begrenzten Projektzeitraum jedoch einen zu hohen Entwicklungsaufwand.
 

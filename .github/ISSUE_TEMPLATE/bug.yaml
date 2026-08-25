@@ -1,0 +1,93 @@
+name: 🐞 Bug
+description: Einen Fehler oder ein unerwartetes Verhalten melden
+title: "[BUG] - "
+labels:
+  - bug
+projects:
+  - FlorianCramer/OpenWarnDE
+assignees:
+  - FlorianCramer
+type: bug
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für deinen Bug-Report!
+        Bitte fülle möglichst alle relevanten Felder aus.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Endgerät / Plattform
+      description: Wo tritt der Fehler auf?
+      options:
+        - app
+        - web
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: Gerät / Betriebssystem
+      description: Auf welchem Gerät bzw. Betriebssystem tritt der Fehler auf?
+      options:
+        - iPhone
+        - iPad
+        - Android Smartphone
+        - Android Tablet
+        - Windows
+        - macOS
+        - Linux
+        - ChromeOS
+        - Sonstiges
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Welche App-, Web- oder Browser-Version verwendest du?
+      placeholder: "z. B. 1.0.0 / Chrome 140"
+    validations:
+      required: false
+
+  - type: textarea
+    id: bug
+    attributes:
+      label: Was ist passiert?
+      description: Beschreibe den Fehler möglichst genau.
+      placeholder: "Was funktioniert nicht?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Was sollte passieren?
+      description: Beschreibe das erwartete Verhalten.
+      placeholder: "Eigentlich sollte ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Wie kann der Fehler reproduziert werden?
+      placeholder: |
+        1. Öffne ...
+        2. Klicke auf ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Weitere Informationen
+      description: Screenshots, Logs, Links oder sonstige Informationen.
+    validations:
+      required: false

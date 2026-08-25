@@ -1,0 +1,76 @@
+name: 📋 Allgemein
+description: Allgemeines Issue ohne speziellen Bug- oder Feature-Typ
+title: "[ISSUE] - "
+labels:
+  - basic
+projects:
+  - FlorianCramer/OpenWarnDE
+assignees:
+  - FlorianCramer
+type: task
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Verwende dieses Formular für allgemeine Aufgaben, Fragen,
+        Dokumentation, technische Arbeiten oder sonstige Themen.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Endgerät / Plattform
+      description: Auf welche Plattform bezieht sich das Issue?
+      options:
+        - app
+        - web
+        - app & web
+        - Backend / API
+        - unabhängig von der Plattform
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: Gerät / Betriebssystem
+      description: Welches Gerät bzw. Betriebssystem ist betroffen?
+      options:
+        - iPhone
+        - iPad
+        - Android Smartphone
+        - Android Tablet
+        - Windows
+        - macOS
+        - Linux
+        - ChromeOS
+        - Alle Geräte
+        - Nicht zutreffend
+        - Sonstiges
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Beschreibung
+      description: Beschreibe das Anliegen möglichst ausführlich.
+      placeholder: "Worum geht es?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Kontext
+      description: Zusätzliche Informationen, Hintergründe oder Zusammenhänge.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Weitere Informationen
+      description: Links, Screenshots, Dokumentation oder sonstige Informationen.
+    validations:
+      required: false

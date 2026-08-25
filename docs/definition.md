@@ -1,1388 +1,2978 @@
-# OpenWarn 2.0 – Projektgrundlage
+# OpenWarnDE 2.0 – Repository- und API-Architektur
 
-**Status:** Entwurf / Planungsgrundlage  
-**Projekt:** OpenWarn  
-**Zweck:** Professioneller Neustart des bestehenden OpenWarnDEV-Projekts als strukturiertes Ausbildungs- und Portfolio-Projekt
-
----
-
-## 1. Projektidee
-
-OpenWarn ist eine modulare Warn-, Karten- und Lageinformationsplattform für Deutschland.
-
-Das System soll öffentliche Warninformationen und perspektivisch einsatzrelevante Informationen zentral erfassen, verarbeiten, bewerten und für unterschiedliche Nutzergruppen bereitstellen.
-
-Das neue Projekt soll nicht einfach eine Kopie des bestehenden `OpenWarnDEV` werden. Die bestehende Anwendung wird als **Vorprojekt / Prototyp / Wissensbasis** betrachtet. Aus den Erfahrungen der bisherigen Entwicklung soll eine sauber geplante und professionell strukturierte Version entstehen.
-
-Ziel ist neben der Software selbst auch ein nachvollziehbarer professioneller Entwicklungsprozess:
-
-> Anforderungsanalyse → Planung → Konzeption → Architektur → Umsetzung → Testing → Deployment → Dokumentation → Release → Retrospektive
-
-Das Projekt dient gleichzeitig als persönliches Selbst-Ausbildungsprojekt und als langfristiges Portfolio-Projekt.
+**Status:** Konzeptentwurf  
+**Version:** 0.1  
+**Zweck:** Definition der grundlegenden Repository-, Backend-, API- und Produktstruktur von OpenWarnDE 2.0
 
 ---
 
-# 2. Ausgangssituation
+# 1. Zielbild
 
-Das bestehende Repository `OpenWarnDEV` enthält bereits eine umfangreiche technische Basis.
+OpenWarnDE 2.0 soll als zentrale Plattform aufgebaut werden.
 
-Dazu gehören unter anderem:
+Das System besteht grundsätzlich aus:
 
-- Next.js
-- React
-- TypeScript
-- Capacitor
-- MapLibre GL JS
-- Firebase Hosting
-- Android / iOS
-- Geolocation
-- Karten- und 3D-Funktionen
-- verschiedene geplante Datenquellen
-- eine geplante Server-/Verarbeitungsschicht
-- ein eigener Admin-Bereich
-- umfangreiche Kartenanforderungen
+1. OpenWarnDE App
+2. OpenWarnDE Admin / Web Platform
+3. OpenWarnDE Backend
+4. OpenWarnDE API
+5. Datenverarbeitung
+6. zentraler Datenhaltung
+7. externen Datenquellen
 
-Die bestehende Architektur beschreibt bereits eine Trennung zwischen Client, Server, Datenintegration, Warnlogik und Administration.
+Die zentrale Idee lautet:
 
-Die aktuelle Codebasis und Dokumentation sind jedoch historisch gewachsen. Anforderungen, technische Entscheidungen, Feature-Ideen und Implementierungsdetails sind teilweise vermischt.
+> Die OpenWarnDE App ist ein Client der OpenWarnDE-Plattform. Daten werden zentral gesammelt, verarbeitet, bewertet und über eine eigene API bereitgestellt.
 
-Deshalb wird OpenWarn neu geplant.
+Dadurch soll verhindert werden, dass jedes Endgerät selbst externe Datenquellen abrufen und komplexe Datenverarbeitung durchführen muss.
 
 ---
 
-# 3. Ziel des Neustarts
+# 2. Zielarchitektur
 
-Der Neustart verfolgt folgende Ziele:
-
-- klare Produktdefinition
-- saubere Anforderungsanalyse
-- professionelles Lastenheft
-- professionelles Pflichtenheft
-- nachvollziehbare Architektur
-- klare Trennung der Verantwortlichkeiten
-- sauberer Git- und GitHub-Workflow
-- reproduzierbare Entwicklung
-- automatisierte Qualitätssicherung
-- dokumentierte Technologieentscheidungen
-- sauberes Deployment
-- nachvollziehbare Releases
-- langfristig wartbare Codebasis
-
-Die neue Version soll bewusst so entwickelt werden, wie ein reales Softwareprojekt strukturiert werden würde.
-
----
-
-# 4. Grundprinzip
-
-Die wichtigste Änderung gegenüber dem bisherigen Projekt ist die klare Trennung zwischen:
-
-1. **OpenWarn App**
-2. **OpenWarn Admin**
-3. **OpenWarn Backend / Processing**
-
-Diese drei Komponenten gehören zu einer gemeinsamen Plattform, haben aber unterschiedliche Verantwortlichkeiten.
-
----
-
-# 5. Systemkontext
+Die grundlegende Kommunikation soll folgendermaßen funktionieren:
 
 ```text
-                         OpenWarn Plattform
+                        Externe Datenquellen
                                 │
               ┌─────────────────┼─────────────────┐
               │                 │                 │
-              ▼                 ▼                 ▼
-        OpenWarn App      OpenWarn Admin     Backend Services
-        /app              /admin             Verarbeitung
+             DWD              Pegel          weitere Quellen
               │                 │                 │
-              │                 │                 │
-              │                 └───────┐         │
-              │                         │         │
-              │                         ▼         │
-              │                  Konfiguration   │
-              │                  Monitoring      │
-              │                  Auswertung      │
-              │                                   │
-              │                         ┌─────────┘
-              │                         ▼
-              │                  Datenquellen
-              │                  DWD / Pegel /
-              │                  Wetter / weitere
-              │                         │
-              │                         ▼
-              │                  Verarbeitung
-              │                  Normalisierung
-              │                  Bewertung
-              │                  Aggregation
-              │                         │
-              └─────────────────────────┘
-                         │
-                         ▼
-                  veröffentlichte Daten
+              └─────────────────┼─────────────────┘
+                                │
+                                ▼
+                       OpenWarnDE Backend
+                                │
+                  ┌─────────────┴─────────────┐
+                  │                           │
+                  ▼                           ▼
+             Datenabruf                  Verarbeitung
+                  │                           │
+                  └─────────────┬─────────────┘
+                                ▼
+                         Normalisierung
+                                │
+                                ▼
+                         Warnlogik / Analyse
+                                │
+                                ▼
+                         Aggregation
+                                │
+                                ▼
+                       Published Data
+                                │
+                  ┌─────────────┴──────────────┐
+                  │                            │
+                  ▼                            ▼
+            OpenWarnDE API                interne Datenzugriffe
+                  │
+        ┌─────────┴──────────┐
+        │                    │
+        ▼                    ▼
+   OpenWarnDE App       externe API-Nutzer
+   unbegrenzt         mit API-Key / Limits
+                         / Billing
 ```
 
 ---
 
-# 6. OpenWarn App
+# 3. Grundprinzip der Plattform
 
-## Zweck
+OpenWarnDE soll nicht ausschließlich als App entwickelt werden.
 
-Die App ist die Nutzeranwendung für die Öffentlichkeit und perspektivisch für Einsatzkräfte.
+Die eigentliche Plattform ist das Backend.
 
-## Zielgruppen
+Die App ist ein Client.
 
-- Bevölkerung
-- Einsatzkräfte
-- perspektivisch weitere berechtigte Nutzergruppen
+Die API ist die standardisierte Schnittstelle zwischen Client und Plattform.
 
-## Plattformen
-
-Die App soll als:
-
-- Web-App
-- Android-App
-- iOS-App
-
-bereitgestellt werden.
-
-Für die nativen Plattformen wird Capacitor verwendet.
-
-## Hauptaufgaben
-
-- Kartenanzeige
-- Darstellung veröffentlichter Warnungen
-- Anzeige des Nutzerstandorts
-- Darstellung relevanter Kartenlayer
-- Anzeige von Warnungsdetails
-- Push-Benachrichtigungen
-- perspektivisch BOS-/Einsatzmodus
-- perspektivisch weitere Lageinformationen
-
-## Grundprinzip
-
-Die App soll möglichst wenig komplexe Datenverarbeitung selbst durchführen.
-
-Sie erhält bereits zentral aufbereitete Daten und konzentriert sich auf:
+Das bedeutet:
 
 ```text
-Daten abrufen
-    ↓
-Daten darstellen
-    ↓
-Interaktion ermöglichen
+                        OpenWarnDE Plattform
+                                │
+                         OpenWarnDE Backend
+                                │
+                         OpenWarnDE API
+                                │
+               ┌────────────────┴────────────────┐
+               │                                 │
+               ▼                                 ▼
+         OpenWarnDE App                     API-Kunden / Dritte
 ```
 
-Die App soll nicht für jeden Nutzer externe Datenquellen selbst abrufen und umfangreiche Warn- oder Risikoberechnungen durchführen.
+Die OpenWarnDE App erhält dabei einen privilegierten Zugriff.
+
+Externe Anbieter erhalten einen kontrollierten API-Zugang.
 
 ---
 
-# 7. OpenWarn Admin
+# 4. OpenWarnDE App
 
-## Zweck
+Die OpenWarnDE App ist der primäre Client der Plattform.
 
-Der Admin-Bereich ist die zentrale Verwaltungs-, Monitoring- und Auswertungsoberfläche von OpenWarn.
+Sie soll:
 
-Er ist ausschließlich für autorisierte Betreiber / Administratoren vorgesehen.
+- Warnungen abrufen
+- Karteninformationen abrufen
+- Regionen abrufen
+- veröffentlichte Lageinformationen abrufen
+- Benutzereinstellungen verwalten
+- Push-Benachrichtigungen empfangen
+- Standortinformationen verwenden
+- Daten darstellen
 
-Die geplante Rolle des Bereichs ist:
+Die App soll grundsätzlich keine externen Datenquellen direkt verarbeiten.
 
-> **Control Plane der OpenWarn-Plattform**
+Beispiel:
 
-## Aufgaben
-
-Der Admin-Bereich soll langfristig unter anderem ermöglichen:
-
-- Systemstatus überwachen
-- Datenquellen verwalten
-- Datenquellen aktivieren/deaktivieren
-- Abrufintervalle konfigurieren
-- Warnregeln konfigurieren
-- Schwellwerte verwalten
-- Regionen konfigurieren
-- veröffentlichte Warnungen überwachen
-- Nutzer verwalten
-- Geräte verwalten
-- Push-Versand überwachen
-- Systemereignisse einsehen
-- Datenqualität überwachen
-- Warn- und Systemdaten auswerten
-- Statistiken und Kennzahlen anzeigen
-- Konfiguration zentral verwalten
-
-## Wichtiger Grundsatz
-
-Der Admin-Bereich ist **nicht selbst der Hintergrundprozess**.
-
-Das System darf nicht davon abhängig sein, dass `/admin` geöffnet ist.
-
-Stattdessen:
+Falsch:
 
 ```text
-Zeitgesteuerter Backend-Prozess
+    Smartphone
         ↓
-Datenabruf
+    DWD API
         ↓
-Verarbeitung
+    Pegel API
         ↓
-Speicherung
+    eigene Berechnung
         ↓
-Admin überwacht / konfiguriert
+    Anzeige
 ```
 
-Der Admin ist somit die Kommandozentrale, nicht der eigentliche Worker.
+Ziel:
+
+```text
+    Smartphone
+        ↓
+    OpenWarnDE API
+        ↓
+    fertige OpenWarnDE-Daten
+        ↓
+    Anzeige
+```
 
 ---
 
-# 8. OpenWarn Backend / Processing
+# 5. OpenWarnDE Backend
 
-Das Backend bildet die zentrale serverseitige Verarbeitungsschicht.
+Das Backend ist die zentrale Verarbeitungsschicht.
 
-## Aufgaben
+Es übernimmt:
 
-- Datenquellen abrufen
-- Daten normalisieren
-- Daten validieren
-- Daten zusammenführen
-- Regionen bestimmen
-- Warnungen erzeugen
-- Regeln anwenden
-- Schwellenwerte prüfen
-- Risikowerte berechnen
-- Daten aggregieren
-- veröffentlichte Daten erzeugen
-- Push-Benachrichtigungen auslösen
-- Systemstatus erfassen
-- Daten für App und Admin bereitstellen
+- Datenbeschaffung
+- Datenvalidierung
+- Datennormalisierung
+- Datenaggregation
+- Warnlogik
+- Risikobewertung
+- regionale Zuordnung
+- Speicherung
+- Veröffentlichung
+- API-Bereitstellung
+- Push-Auslösung
+- Monitoring
+- API-Nutzungserfassung
+- externe API-Authentifizierung
 
-## Grundprinzip
+Das Backend muss unabhängig davon laufen, ob ein Benutzer die Admin-Weboberfläche geöffnet hat.
 
-Die zentrale Verarbeitung erfolgt serverseitig.
+---
+
+# 6. OpenWarnDE Admin / Web Platform
+
+Der Admin-Bereich wird langfristig zu einer umfassenden Web-Plattform.
+
+Die Plattform hat zwei Hauptbereiche:
+
+## 6.1 Interner Betreiberbereich
+
+Dieser Bereich ist ausschließlich für den Betreiber / Administrator bestimmt.
+
+Mögliche Funktionen:
+
+- Dashboard
+- Systemstatus
+- Datenquellen
+- Warnungen
+- Regionen
+- Nutzer
+- Geräte
+- Push
+- Datenqualität
+- Systemlogs
+- Auswertungen
+- Konfiguration
+- API-Monitoring
+- Billing-Übersicht
+- API-Kunden
+- API Keys
+- Limits
+
+## 6.2 Öffentliche / externe Entwicklerplattform
+
+Zusätzlich soll die Web-Plattform später einen Bereich für externe API-Nutzer anbieten.
+
+Beispielsweise:
+
+```text
+    OpenWarnDE
+    ├── App
+    ├── Admin
+    └── Developer Platform
+```
+
+Die Developer Platform kann später enthalten:
+
+- Registrierung
+- Login
+- API-Dokumentation
+- API Keys
+- Projekte
+- Usage
+- Limits
+- Abrechnung
+- Tarifverwaltung
+- API-Status
+
+---
+
+# 7. Firebase als zentrale Infrastruktur
+
+OpenWarnDE soll grundsätzlich über ein gemeinsames Firebase-Projekt betrieben werden.
 
 Beispiel:
 
 ```text
-DWD
- │
-Pegel
- │
-Wetter
- │
-weitere Quellen
- │
- ▼
-Data Ingestion
- │
- ▼
-Normalisierung
- │
- ▼
-Validierung
- │
- ▼
-Verarbeitung / Bewertung
- │
- ▼
-Aggregation
- │
- ▼
-Published Data
- │
- ├──────────────► OpenWarn App
- │
- └──────────────► OpenWarn Admin
+    Firebase Project
+    │
+    ├── Hosting
+    │   ├── App
+    │   └── Web Platform
+    │
+    ├── Authentication
+    │
+    ├── Firestore
+    │
+    ├── Cloud Functions / Backend
+    │
+    ├── Scheduler
+    │
+    ├── Cloud Messaging
+    │
+    └── weitere benötigte Dienste
+```
+
+Die genaue Auswahl der Firebase-Dienste wird später in der technischen Architektur festgelegt.
+
+Firebase ist die Infrastrukturplattform.
+
+Die fachliche Architektur von OpenWarnDE bleibt davon getrennt.
+
+---
+
+# 8. Repository-Struktur
+
+Das Projekt soll als Monorepo aufgebaut werden.
+
+Zielstruktur:
+
+```text
+    openwarnde/
+    │
+    ├── apps/
+    │   ├── app/
+    │   └── web/
+    │
+    ├── services/
+    │   ├── api/
+    │   ├── ingestion/
+    │   ├── processing/
+    │   ├── warnings/
+    │   ├── notifications/
+    │   └── usage/
+    │
+    ├── packages/
+    │   ├── types/
+    │   ├── validation/
+    │   ├── config/
+    │   ├── api-contract/
+    │   └── ui/
+    │
+    ├── firebase/
+    │   ├── firestore.rules
+    │   ├── firestore.indexes.json
+    │   └── ...
+    │
+    ├── docs/
+    │   ├── definition.md
+    │   ├── 01-project/
+    │   ├── 02-requirements/
+    │   ├── 03-concept/
+    │   ├── 04-architecture/
+    │   ├── 05-api/
+    │   ├── 06-development/
+    │   ├── 07-testing/
+    │   └── 08-operations/
+    │
+    ├── tests/
+    │
+    ├── scripts/
+    │
+    ├── .github/
+    │   ├── ISSUE_TEMPLATE/
+    │   ├── workflows/
+    │   └── PULL_REQUEST_TEMPLATE.md
+    │
+    ├── .editorconfig
+    ├── .gitignore
+    ├── .gitattributes
+    ├── README.md
+    ├── CONTRIBUTING.md
+    ├── SECURITY.md
+    ├── LICENSE
+    ├── package.json
+    ├── firebase.json
+    └── .firebaserc
 ```
 
 ---
 
-# 9. Datenverarbeitung
+# 9. apps/
 
-Die Daten sollen konzeptionell in mehrere Stufen getrennt werden.
+Der Ordner apps enthält ausschließlich Benutzeroberflächen.
 
 ```text
-RAW DATA
-    ↓
-NORMALIZED DATA
-    ↓
-PROCESSED DATA
-    ↓
-PUBLISHED DATA
+    apps/
+    │
+    ├── app/
+    │
+    └── web/
 ```
 
-## Raw Data
+## 9.1 apps/app
 
-Originaldaten der externen Quelle.
+Hier liegt die eigentliche OpenWarnDE App.
 
-Beispiele:
+Ziel:
 
-- DWD-Daten
-- Pegeldaten
-- Wetterdaten
-- weitere externe Datenquellen
+- Web
+- Android (Capacitor)
+- iOS (Capacitor)
 
-## Normalized Data
+Beispiel:
 
-Die Daten werden in ein gemeinsames internes Format überführt.
+```text
+    apps/app/
+    ├── src/
+    ├── public/
+    └── ...
+```
+
+Die App kommuniziert mit der OpenWarnDE API.
+
+## 9.2 apps/web
+
+Die Web Platform enthält:
+
+- Admin
+- Developer Platform
+- API Management
+- Billing
+- Account Management
+
+Die genaue interne Struktur wird später festgelegt.
+
+Es ist bewusst nicht vorgesehen, `admin` und die öffentliche Developer Platform zwangsläufig als zwei vollständig getrennte Anwendungen zu betreiben.
+
+Beide können zunächst innerhalb einer Web Platform liegen und serverseitig über Rollen und Berechtigungen getrennt werden.
+
+---
+
+# 10. services/
+
+Der Ordner services enthält serverseitige Komponenten.
+
+```text
+    services/
+    │
+    ├── api/
+    ├── ingestion/
+    ├── processing/
+    ├── warnings/
+    ├── notifications/
+    └── usage/
+```
+
+## 10.1 services/api
+
+Verantwortlich für die öffentliche OpenWarnDE API.
+
+Aufgaben:
+
+- HTTP Requests
+- Routing
+- Authentifizierung
+- API-Key-Validierung
+- Rate Limiting
+- Berechtigungen
+- Response-Format
+- Fehlerbehandlung
+- API-Versionierung
+- Usage Tracking
+
+## 10.2 services/ingestion
+
+Verantwortlich für den Abruf externer Datenquellen.
+
+Beispiel:
+
+```text
+    Scheduler
+        ↓
+    Ingestion
+        ↓
+    DWD
+        ↓
+    Raw Data
+```
+
+## 10.3 services/processing
+
+Verantwortlich für:
+
+- Normalisierung
+- Transformation
+- Aggregation
+- Datenvalidierung
+- Verarbeitung
+
+## 10.4 services/warnings
+
+Verantwortlich für:
+
+- Warnregeln
+- Schwellwerte
+- Warnstufen
+- regionale Zuordnung
+- Erzeugung veröffentlichter Warnungen
+
+## 10.5 services/notifications
+
+Verantwortlich für:
+
+- Push Notifications
+- Benachrichtigungslogik
+- FCM
+- Versandstatus
+
+## 10.6 services/usage
+
+Verantwortlich für:
+
+- API Requests zählen
+- Usage speichern
+- Limits prüfen
+- Abrechnung vorbereiten
+- Nutzungsstatistiken
+
+---
+
+# 11. packages/
+
+Packages enthalten gemeinsam verwendbare Bausteine.
+
+```text
+    packages/
+    │
+    ├── types/
+    ├── validation/
+    ├── config/
+    ├── api-contract/
+    └── ui/
+```
+
+---
+
+# 12. API Contract
+
+Ein besonders wichtiger Package ist:
+
+```text
+    packages/api-contract/
+```
+
+Dort wird das gemeinsame API-Vertragsmodell definiert.
+
+Ziel:
+
+Die App und das Backend sollen nicht unabhängig voneinander irgendwelche JSON-Strukturen erfinden.
+
+Beispiel:
+
+```text
+    API Contract
+         ↓
+    WarningResponse
+         ↓
+    Backend
+         ↓
+    OpenWarnDE App
+```
+
+Der API Contract soll unter anderem definieren:
+
+- Request-Strukturen
+- Response-Strukturen
+- Fehlerformate
+- Pagination
+- Filter
+- Versionierung
+- Typen
+- Validierung
+
+Die API soll dadurch langfristig als eigenes Produkt behandelt werden können.
+
+---
+
+# 13. Eigene OpenWarnDE API
+
+OpenWarnDE soll eine eigene API besitzen.
+
+Die API ist nicht lediglich eine direkte Weiterleitung auf externe Datenquellen.
+
+Sie stellt ein eigenes OpenWarnDE-Datenmodell bereit.
+
+Beispiel:
+
+```text
+    GET /api/v1/warnings
+```
+
+liefert OpenWarnDE-Warnungen.
+
+Nicht:
+
+```text
+    GET /api/dwd/...
+```
+
+Die Herkunft der Daten ist für den API-Nutzer möglichst unabhängig vom internen Datenmodell.
+
+---
+
+# 14. API-Versionierung
+
+Die API soll von Anfang an versioniert werden.
+
+Beispiel:
+
+```text
+    /api/v1/warnings
+```
+
+später:
+
+```text
+    /api/v2/warnings
+```
+
+Die Versionierung soll verhindern, dass Änderungen an der API automatisch bestehende Kundenintegrationen zerstören.
+
+Eine neue API-Version soll eingeführt werden, wenn Breaking Changes notwendig werden.
+
+---
+
+# 15. API Response Format
+
+OpenWarnDE soll ein einheitliches Response-Format besitzen.
 
 Beispiel:
 
 ```json
-{
-  "source": "dwd",
-  "event": "storm",
-  "severity": 3,
-  "validFrom": "...",
-  "validUntil": "..."
-}
+    {
+      "data": {
+        ...
+      },
+      "meta": {
+        "requestId": "...",
+        "generatedAt": "..."
+      }
+    }
 ```
 
-## Processed Data
+Bei Fehlern:
 
-Mehrere Datenquellen und Regeln können zusammengeführt werden.
-
-Beispiel:
-
-```text
-Warnung
-+
-Region
-+
-weitere Messwerte
-+
-Regeln
-        ↓
-Bewertung
+```json
+    {
+      "error": {
+        "code": "RATE_LIMIT_EXCEEDED",
+        "message": "API request limit exceeded."
+      },
+      "meta": {
+        "requestId": "..."
+      }
+    }
 ```
 
-## Published Data
-
-Nur die für die App notwendigen, bereits aufbereiteten Informationen werden veröffentlicht.
-
-Die App muss nicht wissen, wie das Ergebnis entstanden ist.
+Das genaue Format wird im API-Konzept definiert.
 
 ---
 
-# 10. Intervallbasierte Verarbeitung
+# 16. OpenWarnDE App Zugriff
 
-Die Datenverarbeitung soll zeitgesteuert erfolgen.
-
-Beispiel:
-
-```text
-Alle X Minuten
-       ↓
-Processing Job
-       ↓
-Datenquellen abrufen
-       ↓
-Daten verarbeiten
-       ↓
-Ergebnisse speichern
-       ↓
-Published Data aktualisieren
-       ↓
-optional Push versenden
-```
-
-Das Intervall wird später je Datenquelle und Verarbeitungstyp festgelegt.
-
-Nicht jede Datenquelle muss zwingend dasselbe Intervall verwenden.
-
----
-
-# 11. Firebase als zentrale Plattform
-
-Die grundsätzliche Infrastrukturidee ist:
-
-> Ein gemeinsames Firebase-Projekt für die OpenWarn-Plattform mit mehreren Hosting-Zielen und zentralen Backend-Diensten.
-
-Vorgesehene Struktur:
-
-```text
-Firebase Project
-│
-├── Hosting: App
-│      └── OpenWarn App
-│
-├── Hosting: Admin
-│      └── OpenWarn Admin
-│
-├── Authentication
-│
-├── Firestore / Datenhaltung
-│
-├── Cloud Functions / Backend Services
-│
-├── Scheduler / zeitgesteuerte Jobs
-│
-├── Cloud Messaging
-│
-└── weitere benötigte Firebase-Dienste
-```
-
-Die konkrete Auswahl und Nutzung der Firebase-Dienste wird erst in der Architektur- und Technologiephase final festgelegt.
-
-Firebase ist dabei die Infrastrukturplattform und nicht automatisch gleichbedeutend mit der gesamten fachlichen Backend-Architektur.
-
----
-
-# 12. Hosting
-
-Die beiden Webanwendungen sollen getrennt bereitgestellt werden.
-
-```text
-Firebase Project
-│
-├── Hosting Target: app
-│      └── OpenWarn App
-│
-└── Hosting Target: admin
-       └── OpenWarn Admin
-```
-
-Die App besitzt zusätzlich Anforderungen für:
-
-- Capacitor
-- Android
-- iOS
-- native Builds
-
-Der Admin ist ausschließlich als Web-Anwendung vorgesehen.
-
----
-
-# 13. Repository-Struktur
-
-Als Zielstruktur ist ein Monorepo vorgesehen.
-
-Beispiel:
-
-```text
-openwarn/
-│
-├── apps/
-│   ├── app/
-│   │   ├── src/
-│   │   ├── public/
-│   │   └── ...
-│   │
-│   └── admin/
-│       ├── src/
-│       ├── public/
-│       └── ...
-│
-├── packages/
-│   ├── ui/
-│   ├── types/
-│   ├── config/
-│   └── ...
-│
-├── services/
-│   ├── ingestion/
-│   ├── processing/
-│   ├── warnings/
-│   └── ...
-│
-├── docs/
-│   ├── 01-project/
-│   ├── 02-requirements/
-│   ├── 03-concept/
-│   ├── 04-architecture/
-│   ├── 05-development/
-│   ├── 06-testing/
-│   └── 07-operations/
-│
-├── tests/
-│
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   └── workflows/
-│
-├── README.md
-├── CONTRIBUTING.md
-├── SECURITY.md
-└── LICENSE
-```
-
-Die endgültige Struktur wird erst nach der Architekturplanung festgelegt.
-
----
-
-# 14. Gemeinsame Packages
-
-Wenn App und Admin gemeinsame Bestandteile benötigen, sollen diese nicht doppelt implementiert werden.
-
-Mögliche gemeinsame Packages:
-
-```text
-packages/
-├── ui/
-├── types/
-├── config/
-└── validation/
-```
-
-Beispiele:
-
-- gemeinsame TypeScript-Typen
-- API-Modelle
-- Validierungsschemas
-- Designsystem
-- gemeinsame UI-Komponenten
-- Konfigurationswerte
-
-Dabei muss trotzdem darauf geachtet werden, dass App und Admin fachlich voneinander getrennt bleiben.
-
----
-
-# 15. Sicherheitskonzept
-
-Der Admin-Bereich ist hochsensibel.
+Die OpenWarnDE App soll einen privilegierten Zugriff auf die OpenWarnDE API erhalten.
 
 Ziel:
 
-> Ausschließlich autorisierte Personen dürfen administrative Funktionen ausführen.
-
-Vorgesehene Rollenstruktur:
-
-```text
-PUBLIC
-  │
-  └── normale App-Nutzung
-
-BOS_USER
-  │
-  └── zusätzliche Einsatzfunktionen
-
-ADMIN
-  │
-  └── administrative Funktionen
-
-OWNER
-  │
-  └── vollständige Systemverwaltung
-```
-
-Die genaue Rollen- und Berechtigungsstruktur wird im Sicherheitskonzept definiert.
+- keine regulären API-Limits
+- vollständiger Zugriff auf für die App freigegebene Endpunkte
+- optimierte Kommunikation
+- Push-Unterstützung
+- möglicherweise spezielle interne Endpunkte
 
 Wichtig:
 
-Clientseitige UI-Ausblendungen sind **keine Sicherheitsmaßnahme**.
-
-Administrative Berechtigungen müssen serverseitig geprüft werden.
+Die App soll trotzdem nicht automatisch Zugriff auf administrative oder interne Backend-Funktionen erhalten.
 
 ---
 
-# 16. Datenzugriff
+# 17. Externe API-Nutzer
 
-Die App soll grundsätzlich nur die Daten erhalten, die sie für ihre Funktion benötigt.
+Dritte sollen die OpenWarnDE API später selbst verwenden können.
+
+Beispiele:
+
+- Webseiten
+- Apps
+- Smart-Home-Systeme
+- Informationssysteme
+- Unternehmen
+- Entwickler
+- kommunale Anwendungen
+- weitere Plattformen
+
+Dafür benötigen sie einen API Key.
+
+---
+
+# 18. API-Key-System
+
+Die Developer Platform soll es ermöglichen, API Keys zu erstellen.
 
 Beispiel:
 
 ```text
-OpenWarn Backend
-       ↓
-Published Data
-       ↓
-OpenWarn App
+    Benutzer
+        ↓
+    Developer Platform
+        ↓
+    Projekt erstellen
+        ↓
+    API Key erstellen
+        ↓
+    API verwenden
 ```
 
-Der Admin erhält zusätzliche Informationen:
+Ein API Key soll nicht direkt einem Benutzerkonto gleichgesetzt werden.
+
+Besser:
 
 ```text
-Backend
-   ↓
-Admin API / Admin Data
-   ↓
-OpenWarn Admin
+    Account
+       │
+       ├── Project A
+       │      ├── API Key
+       │      └── Usage
+       │
+       └── Project B
+              ├── API Key
+              └── Usage
 ```
 
-Die App darf nicht automatisch Zugriff auf interne Rohdaten, Systemkonfigurationen oder administrative Informationen erhalten.
+Dadurch können später mehrere Anwendungen / Projekte pro Kunde verwaltet werden.
 
 ---
 
-# 17. API-Grundidee
+# 19. API Limits
 
-Die genaue API wird später spezifiziert.
+Das API-System soll zwischen der OpenWarnDE App und externen API-Kunden unterscheiden.
 
-Prinzipiell sind mindestens zwei fachliche Zugriffsbereiche denkbar:
+## OpenWarnDE App
+
+Die offizielle OpenWarnDE App soll grundsätzlich ohne das normale externe API-Limit funktionieren.
+
+Beispiel:
 
 ```text
-/api/v1/...
+    OpenWarnDE App
+        ↓
+    OpenWarnDE API
+        ↓
+    privilegierter Client
+        ↓
+    kein reguläres Tageslimit
 ```
 
-für öffentliche bzw. App-relevante Funktionen.
+## Externe API-Kunden
+
+Externe Nutzer erhalten abhängig vom Tarif Limits.
+
+Beispiel:
+
+```text
+    Free
+    24 Requests / Tag
+
+    Paid
+    höhere Limits
+
+    Business
+    noch höhere Limits
+
+    Enterprise
+    individuell
+```
+
+Die konkreten Preise und Limits sind noch nicht festgelegt.
+
+---
+
+# 20. Free API Tier
+
+Der kostenlose API-Zugang soll zunächst beispielsweise enthalten:
+
+    24 Requests pro Tag
+
+Das entspricht bewusst keinem vollständigen Echtzeitzugriff.
+
+Der Free Tier dient primär dazu:
+
+- API auszuprobieren
+- Entwicklung zu ermöglichen
+- Dokumentation zu testen
+- kleine Integrationen zu ermöglichen
+
+Die tatsächliche Definition des Free Tiers wird später festgelegt.
+
+---
+
+# 21. Paid API
+
+Für höheren Verbrauch soll eine kostenpflichtige Nutzung möglich sein.
+
+Mögliche Modelle:
+
+## Subscription
+
+Beispiel:
+
+```text
+    Basic
+    Professional
+    Business
+```
+
+mit jeweils definierten Limits.
+
+## Usage Based Billing
+
+Alternativ oder zusätzlich:
+
+```text
+    Preis pro 1.000 Requests
+```
+
+oder:
+
+```text
+    Grundgebühr + verbrauchsabhängige Kosten
+```
+
+Die endgültige Preisstrategie wird später definiert.
+
+---
+
+# 22. API Usage
+
+Jeder externe API Request soll nachvollziehbar erfasst werden können.
+
+Beispiel:
+
+```text
+    API Request
+        ↓
+    API Authentication
+        ↓
+    Limit Check
+        ↓
+    Request Processing
+        ↓
+    Usage Event
+        ↓
+    Usage Storage
+```
+
+Mögliche Daten:
+
+- API Key / Key-ID
+- Account
+- Project
+- Endpoint
+- HTTP Method
+- Timestamp
+- Status Code
+- Response Time
+- Request Count
+- Datenmenge
+- Tarif
+- Verbrauch
+
+Sensible Daten sollen nicht unnötig gespeichert werden.
+
+---
+
+# 23. Rate Limiting
+
+API Limits sollen serverseitig durchgesetzt werden.
+
+Beispiel:
+
+```mermaid
+    graph TD
+        A[API Request] --> B[API Key]
+        B --> C[Tarif ermitteln]
+        C --> D[Usage prüfen]
+        D --> E{Limit überschritten?}
+        E -->|Ja| F[429]
+        E -->|Nein| G[Request]
+        G --> H[Response]
+```
+
+Bei Überschreitung soll ein standardisierter Fehler zurückgegeben werden.
+
+Beispiel:
+
+```env
+    HTTP 429
+    RATE_LIMIT_EXCEEDED
+```
+
+---
+
+# 24. API Billing
+
+Die Developer Platform soll später Abrechnung unterstützen.
+
+Mögliche Funktionen:
+
+- Tarif auswählen
+- Zahlungsmethode verwalten
+- Rechnungen anzeigen
+- Usage anzeigen
+- Limits anzeigen
+- Tarif wechseln
+- API Keys verwalten
+
+Die technische Zahlungsabwicklung wird separat als Architekturentscheidung behandelt.
+
+Ein möglicher späterer Dienst wäre beispielsweise ein externer Payment Provider.
+
+---
+
+# 25. Trennung von App-Zugriff und API-Kunden
+
+Ein wichtiger Sicherheits- und Architekturgrundsatz:
+
+```text
+    OpenWarnDE App ≠ externer API Client
+```
+
+Die App soll nicht einfach einen öffentlich sichtbaren API Key enthalten, der unbegrenzt von jedem kopiert werden kann.
+
+Die offizielle App benötigt deshalb eine eigene Authentifizierungs- und Zugriffsmethode.
+
+Mögliche spätere Ansätze:
+
+- Firebase Authentication
+- App Check
+- kurzlebige Tokens
+- Device Registration
+- signierte Requests
+- Kombination mehrerer Verfahren
+
+Die konkrete Methode wird später im Sicherheitskonzept festgelegt.
+
+---
+
+# 26. Keine Secrets in der App
+
+API-Secrets, private Schlüssel oder administrative Zugangsdaten dürfen niemals fest in der App ausgeliefert werden.
+
+Nicht erlaubt:
+
+```ts
+    const API_SECRET = "secret";
+```
+
+Die App enthält nur Informationen, die als öffentlich betrachtet werden können.
+
+Sensible Berechtigungen werden serverseitig verwaltet.
+
+---
+
+# 27. Datenfluss
+
+Der geplante Datenfluss sieht folgendermaßen aus:
+
+```mermaid
+    graph LR
+        subgraph Input
+            A[Externe Datenquelle]
+        end
+        
+        subgraph Verarbeitung
+            B[Data Ingestion]
+            C[Raw Data]
+            D[Validation]
+            E[Normalization]
+            F[Processing]
+            G[Warning Engine]
+            H[Aggregation]
+            I[Published Data]
+        end
+        
+        subgraph Output
+            J[OpenWarnDE API]
+        end
+        
+        subgraph Konsumenten
+            K[App]
+            L[API Kunden]
+        end
+        
+        A --> B --> C --> D --> E --> F --> G --> H --> I --> J
+        J --> K
+        J --> L
+```
+
+---
+
+# 28. Admin-Datenfluss
+
+Der Admin greift auf zusätzliche interne Daten zu.
+
+```text
+    Backend
+       │
+       ├── Published Data
+       │
+       ├── Raw Data
+       │
+       ├── Processing Status
+       │
+       ├── Usage
+       │
+       ├── Configuration
+       │
+       └── System Metrics
+              │
+              ▼
+        Admin / Web Platform
+```
+
+Der Admin darf dadurch wesentlich mehr Informationen sehen als die öffentliche App.
+
+---
+
+# 29. Zentrale Datenhaltung
+
+Die Datenhaltung soll mindestens logisch unterscheiden zwischen:
+
+```text
+    raw/
+    normalized/
+    processed/
+    published/
+```
+
+Zusätzlich können Bereiche existieren für:
+
+```text
+    users/
+    devices/
+    regions/
+    dataSources/
+    api/
+    usage/
+    system/
+    configuration/
+```
+
+Die konkrete Datenbankstruktur wird später im Datenmodell definiert.
+
+---
+
+# 30. Scheduler und Hintergrundverarbeitung
+
+Die Datenverarbeitung darf nicht vom Öffnen der Web Platform abhängig sein.
+
+Stattdessen:
+
+```text
+    Scheduler
+        ↓
+    Processing Job
+        ↓
+    Daten abrufen
+        ↓
+    Daten verarbeiten
+        ↓
+    Daten speichern
+        ↓
+    Published Data aktualisieren
+```
+
+Die Web Platform zeigt lediglich den Zustand an und ermöglicht Konfiguration.
+
+---
+
+# 31. Beispiel eines vollständigen Ablaufs
+
+Eine neue DWD-Warnung entsteht.
+
+```text
+    DWD
+      ↓
+    Scheduler startet Job
+      ↓
+    Ingestion lädt Daten
+      ↓
+    Daten werden validiert
+      ↓
+    Daten werden normalisiert
+      ↓
+    Warning Engine verarbeitet Warnung
+      ↓
+    Region wird bestimmt
+      ↓
+    Warnung wird gespeichert
+      ↓
+    Published Data wird aktualisiert
+      ↓
+    API stellt Warnung bereit
+      ↓
+    OpenWarnDE App ruft Daten ab
+      ↓
+    App zeigt Warnung
+      ↓
+    optional:
+    Push Notification wird ausgelöst
+```
+
+Ein externer API-Kunde kann anschließend dieselbe veröffentlichte Warnung über einen API Request abrufen.
+
+---
+
+# 32. API als eigenständiges Produkt
+
+Die API soll nicht nur als internes technisches Detail betrachtet werden.
+
+Langfristig soll die OpenWarnDE API ein eigenständiges Produkt darstellen.
+
+Dafür werden benötigt:
+
+- stabile API-Verträge
+- Versionierung
+- Dokumentation
+- API Keys
+- Usage Tracking
+- Rate Limits
+- Billing
+- Developer Portal
+- Monitoring
+- Statusinformationen
+- Changelog
+- Support
+
+Dadurch kann OpenWarnDE langfristig neben der App auch eine Plattform für Drittanbieter werden.
+
+---
+
+# 33. Repository und Produktstruktur
+
+Die Repository-Struktur soll die fachliche Architektur widerspiegeln.
+
+```text
+    openwarnde/
+    │
+    ├── apps/
+    │   ├── app/
+    │   │   └── OpenWarnDE Client
+    │   │
+    │   └── web/
+    │       └── Admin + Developer Platform
+    │
+    ├── services/
+    │   ├── api/
+    │   │   └── OpenWarnDE API
+    │   │
+    │   ├── ingestion/
+    │   │   └── Datenbeschaffung
+    │   │
+    │   ├── processing/
+    │   │   └── Datenverarbeitung
+    │   │
+    │   ├── warnings/
+    │   │   └── Warnlogik
+    │   │
+    │   ├── notifications/
+    │   │   └── Push
+    │   │
+    │   └── usage/
+    │       └── API Usage / Billing
+    │
+    ├── packages/
+    │   ├── types/
+    │   ├── validation/
+    │   ├── config/
+    │   ├── api-contract/
+    │   └── ui/
+    │
+    ├── firebase/
+    │   └── Firebase Konfiguration
+    │
+    ├── docs/
+    │   ├── definition.md
+    │   ├── 01-project/
+    │   ├── 02-requirements/
+    │   ├── 03-concept/
+    │   ├── 04-architecture/
+    │   ├── 05-api/
+    │   ├── 06-development/
+    │   ├── 07-testing/
+    │   └── 08-operations/
+    │
+    ├── tests/
+    ├── scripts/
+    └── .github/
+```
+
+---
+
+# 34. Technische Grenzen
+
+Die Repository-Struktur ist zunächst ein Architekturentwurf.
+
+Nicht jede geplante Komponente muss sofort als eigener Service implementiert werden.
+
+Beispielsweise kann der erste MVP technisch noch so aussehen:
+
+```text
+    services/
+    └── backend/
+```
+
+mit mehreren Modulen:
+
+```text
+    backend/
+    ├── api/
+    ├── ingestion/
+    ├── processing/
+    ├── warnings/
+    └── usage/
+```
+
+Erst wenn Skalierung, Deployment oder Wartbarkeit es rechtfertigen, können daraus eigenständige Services entstehen.
+
+Grundsatz:
+
+> Fachliche Trennung zuerst, technische Verteilung nur wenn sie einen echten Vorteil bringt.
+
+---
+
+# 35. MVP der Plattform
+
+Der erste MVP sollte noch kein vollständiges API-Business sein.
+
+Ein sinnvoller MVP könnte enthalten:
+
+## App
+
+- Karte
+- Standort
+- Warnungen
+- Warnungsdetails
+- API-Kommunikation
+
+## Backend
+
+- eine oder wenige Datenquellen
+- Ingestion
+- Normalisierung
+- Warnverarbeitung
+- Published Data
+- API
+
+## Web Platform
+
+- Admin Login
+- Dashboard
+- Datenquellenstatus
+- Warnungsübersicht
+- Systemstatus
+
+## API
+
+- API v1
+- grundlegende Endpunkte
+- OpenAPI-Dokumentation
+- interne App-Authentifizierung
+
+---
+
+# 36. Spätere API-Plattform
+
+Nach dem funktionierenden MVP:
+
+```text
+    Developer Platform
+        ↓
+    Account
+        ↓
+    Project
+        ↓
+    API Key
+        ↓
+    Free Tier
+        ↓
+    Usage Tracking
+        ↓
+    Rate Limiting
+        ↓
+    Paid Plans
+        ↓
+    Billing
+```
+
+Diese Funktionen werden bewusst als späterer Produktbereich behandelt.
+
+---
+
+# 37. Sicherheitsprinzipien
+
+Folgende Grundsätze gelten:
+
+1. Administrative Funktionen sind geschützt.
+2. API Keys werden niemals als Passwörter behandelt.
+3. API Secrets werden nicht in Clients gespeichert.
+4. Berechtigungen werden serverseitig geprüft.
+5. Rate Limits werden serverseitig durchgesetzt.
+6. Usage wird serverseitig erfasst.
+7. App-Zugriff und Drittanbieterzugriff werden getrennt.
+8. Rohdaten werden nicht unnötig öffentlich gemacht.
+9. Administrative Daten sind nicht Bestandteil der öffentlichen API.
+10. Jede API-Version wird kontrolliert veröffentlicht.
+
+---
+
+# 38. Dokumentation
+
+Die API erhält eine eigene Dokumentation.
+
+Vorgesehen:
+
+```text
+    docs/05-api/
+    ├── overview.md
+    ├── authentication.md
+    ├── rate-limits.md
+    ├── errors.md
+    ├── versioning.md
+    ├── usage.md
+    └── billing.md
+```
+
+Zusätzlich soll später eine maschinenlesbare API-Spezifikation entstehen.
+
+Beispielsweise:
+
+```text
+    OpenAPI Specification
+```
+
+Damit können daraus später automatisch API-Dokumentationen und Client-Code erzeugt werden.
+
+---
+
+# 39. Architekturentscheidungen
+
+Die folgenden Punkte sind aktuell Konzeptentscheidungen und noch nicht endgültig technisch umgesetzt:
+
+- Monorepo
+- Firebase als zentrale Infrastruktur
+- separate App
+- zentrale Web Platform
+- serverseitige Datenverarbeitung
+- eigene OpenWarnDE API
+- API-Versionierung
+- API Keys für externe Nutzer
+- Free Tier
+- Paid API
+- Usage Tracking
+- perspektivisch API Billing
+
+Jede wichtige technische Entscheidung wird später als Architecture Decision Record dokumentiert.
+
+Beispiel:
+
+```text
+    docs/04-architecture/adr/
+
+    ADR-001-monorepo.md
+    ADR-002-firebase.md
+    ADR-003-api-versioning.md
+    ADR-004-api-authentication.md
+    ADR-005-api-billing.md
+```
+
+---
+
+# 40. Wichtigste Architekturentscheidung
+
+Die zentrale Architekturentscheidung für OpenWarnDE 2.0 lautet:
+
+> OpenWarnDE wird als zentrale Daten- und API-Plattform aufgebaut.
+
+Die App ist der primäre Client.
+
+Die Web Platform ist die Betreiber- und Entwickleroberfläche.
+
+Das Backend verarbeitet und aggregiert die Daten.
+
+Die OpenWarnDE API stellt standardisierte Daten bereit.
+
+Externe API-Nutzer erhalten kontrollierten Zugriff über API Keys, Limits und perspektivisch Billing.
+
+---
+
+# 41. Zielbild
+
+Das langfristige Zielbild:
+
+```text
+                             OPENWARNDE
+                                  │
+                     ┌────────────┴────────────┐
+                     │                         │
+               OpenWarnDE Platform          OpenWarnDE API
+                     │                         │
+          ┌──────────┼──────────┐              │
+          │          │          │              │
+          ▼          ▼          ▼              ▼
+       Ingestion  Processing  Storage      API Clients
+          │          │          │          ┌────┴────┐
+          └──────────┼──────────┘          │         │
+                     │                   App      Dritte
+                     │
+             ┌───────┴────────┐
+             │                │
+             ▼                ▼
+        OpenWarnDE App     Web Platform
+                           │
+                    ┌──────┴──────┐
+                    │             │
+                  Admin       Developer
+                                Portal
+                                  │
+                         ┌────────┼────────┐
+                         │        │        │
+                      API Keys  Usage   Billing
+```
+
+---
+
+# 42. Nächster Planungsschritt
+
+Diese Architektur ist noch kein Pflichtenheft.
+
+Als nächstes muss das fachliche Zielbild definiert werden.
+
+Die Reihenfolge soll sein:
+
+1. Ist-Analyse von OpenWarnDEV
+2. Projektdefinition
+3. Stakeholder und Zielgruppen
+4. funktionale Anforderungen
+5. nichtfunktionale Anforderungen
+6. API-Anforderungen
+7. Anforderungen an App
+8. Anforderungen an Web Platform
+9. Anforderungen an Backend
+10. Sicherheitsanforderungen
+11. MVP
+12. Lastenheft
+13. fachliches Datenmodell
+14. Pflichtenheft
+15. technische Architektur
+16. API-Spezifikation
+17. Implementierung
+
+Die konkrete Technologie wird erst nach diesen Schritten endgültig festgelegt.
+
+---
+
+# 43. Leitgedanke
+
+OpenWarnDE 2.0 soll nicht lediglich eine App werden.
+
+OpenWarnDE soll eine Plattform werden, deren Kern aus zentraler Datenverarbeitung und einer standardisierten API besteht.
+
+Die OpenWarnDE App ist der wichtigste Client und erhält privilegierten Zugriff.
+
+Dritte können die OpenWarnDE API kontrolliert und kostenpflichtig verwenden.
+
+Damit entsteht langfristig aus:
+
+    Warn-App
+
+eine:
+
+    Warn- und Datenplattform
+
+mit:
+
+    App
+    +
+    Backend
+    +
+    Web Platform
+    +
+    API
+    +
+    Developer Platform
+    +
+    Usage / Billing
+
+
+# 44. Trennung der Verantwortlichkeiten
+
+Die einzelnen Bestandteile von OpenWarnDE sollen klar voneinander getrennte Verantwortlichkeiten besitzen.
+
+## 44.1 App
+
+Die App ist für die Benutzerinteraktion verantwortlich.
+
+Sie soll:
+
+- Daten darstellen
+- Benutzereingaben entgegennehmen
+- Standortinformationen verwalten
+- lokale Einstellungen verwalten
+- Push-Benachrichtigungen empfangen
+- API-Daten abrufen
+- Daten für die Darstellung aufbereiten
+
+Die App soll keine zentrale Geschäftslogik enthalten, die für alle Benutzer identisch ausgeführt werden muss.
+
+Beispiel:
+
+```text
+    App
+      ↓
+    "Welche Warnungen gelten für mich?"
+      ↓
+    API
+      ↓
+    fertige Daten
+```
+
+## 44.2 Backend
+
+Das Backend ist für die zentrale Geschäftslogik verantwortlich.
+
+Es soll:
+
+- Datenquellen abrufen
+- Daten validieren
+- Daten normalisieren
+- Daten zusammenführen
+- Warnungen bewerten
+- Daten aggregieren
+- veröffentlichte Daten erzeugen
+- API Requests verarbeiten
+- Berechtigungen prüfen
+- API Usage erfassen
+- Hintergrundaufgaben ausführen
+
+## 44.3 Web Platform
+
+Die Web Platform ist die zentrale Verwaltungsschnittstelle.
+
+Sie soll:
+
+- Systeminformationen anzeigen
+- Daten analysieren
+- Konfiguration ermöglichen
+- API-Zugänge verwalten
+- API Usage anzeigen
+- Kunden verwalten
+- später Billing ermöglichen
+
+# 45. Keine direkte Datenquellen-Kommunikation durch die App
+
+Ein wichtiger Architekturgrundsatz lautet:
+
+> Die OpenWarnDE App kommuniziert nicht direkt mit den externen Datenquellen.
+
+Nicht:
+
+```text
+    App
+      ├── DWD
+      ├── Pegel
+      ├── Wetterdienst
+      └── weitere APIs
+```
+
+Sondern:
+
+```text
+    App
+      ↓
+    OpenWarnDE API
+      ↓
+    OpenWarnDE Backend
+      ↓
+    Datenquellen
+```
+
+Dadurch kann OpenWarnDE die Datenquellen austauschen oder erweitern, ohne die App aktualisieren zu müssen.
+
+# 46. Vorteile der zentralen Verarbeitung
+
+Die zentrale Verarbeitung bringt mehrere Vorteile.
+
+## Einheitliche Daten
+
+Alle Clients erhalten dieselbe Datenbasis.
+
+## Weniger Client-Komplexität
+
+Die App muss keine komplexe Datenverarbeitung durchführen.
+
+## Schnellere Weiterentwicklung
+
+Neue Datenquellen können serverseitig integriert werden.
+
+## Kontrolle
+
+Der Betreiber kann nachvollziehen:
+
+- welche Daten verarbeitet wurden
+- wann Daten verarbeitet wurden
+- welche Daten veröffentlicht wurden
+- ob Datenquellen funktionieren
+
+## Performance
+
+Berechnungen werden zentral durchgeführt.
+
+Die App erhält möglichst fertige Daten.
+
+## API-Produkt
+
+Die bereits verarbeiteten Daten können sowohl für die App als auch für externe API-Kunden genutzt werden.
+
+
+# 47. Unterschied zwischen internen und öffentlichen Daten
+
+Nicht alle Backend-Daten dürfen über die öffentliche API verfügbar sein.
+
+Daher wird zwischen verschiedenen Datenebenen unterschieden.
+
+```text
+    RAW DATA
+        ↓
+    INTERNAL DATA
+        ↓
+    PROCESSED DATA
+        ↓
+    PUBLISHED DATA
+```
+
+## RAW DATA
+
+Originaldaten der Datenquellen.
+
+Diese Daten sind grundsätzlich intern.
+
+## INTERNAL DATA
+
+Daten, die während der Verarbeitung entstehen.
+
+Diese sind ebenfalls nicht öffentlich.
+
+## PROCESSED DATA
+
+Verarbeitete und normalisierte Daten.
+
+Diese können teilweise für interne Systeme verfügbar sein.
+
+## PUBLISHED DATA
+
+Daten, die für die OpenWarnDE API freigegeben wurden.
+
+Nur diese Daten dürfen über die öffentliche API bereitgestellt werden.
+
+# 48. Public API vs. Internal API
+
+Das Backend sollte logisch zwischen internen und öffentlichen Schnittstellen unterscheiden.
+
+Beispiel:
+
+```text
+    Internal API
+        ↓
+    Admin / Backend / interne Services
+
+    Public API
+        ↓
+    OpenWarnDE App
+    externe API-Kunden
+```
+
+Die interne API darf wesentlich umfangreichere Funktionen bereitstellen.
+
+Beispielsweise:
+
+```text
+    GET /internal/data-sources
+    POST /internal/data-sources
+    GET /internal/processing/jobs
+    GET /internal/system/metrics
+```
+
+Die öffentliche API könnte dagegen nur veröffentlichte Informationen bereitstellen:
+
+```text
+    GET /api/v1/warnings
+    GET /api/v1/warnings/{id}
+    GET /api/v1/regions
+    GET /api/v1/status
+```
+
+# 49. OpenWarnDE API als Produktgrenze
+
+Die Public API stellt eine klare Grenze zwischen OpenWarnDE und externen Clients dar.
+
+```text
+    ┌───────────────────────────────┐
+    │       OpenWarnDE Backend        │
+    │                               │
+    │  Datenquellen                 │
+    │  Verarbeitung                 │
+    │  Warnlogik                    │
+    │  Datenhaltung                 │
+    │                               │
+    └───────────────┬───────────────┘
+                    │
+                    │ OpenWarnDE API
+                    │
+    ┌───────────────┴───────────────┐
+    │                               │
+    ▼                               ▼
+OpenWarnDE App                 externe Kunden
+```
+
+Externe Nutzer sollen nicht wissen müssen, wie OpenWarnDE intern Daten sammelt und verarbeitet.
+
+
+# 50. API-Abstraktion
+
+Die OpenWarnDE API soll eine Abstraktion über den zugrunde liegenden Datenquellen darstellen.
+
+Beispiel:
+
+```text
+    DWD
+    ├── Format A
+    ├── Feld X
+    └── Feld Y
+
+    OpenWarnDE
+    ├── Warning
+    ├── severity
+    ├── region
+    └── validUntil
+```
+
+Ein API-Kunde arbeitet ausschließlich mit dem OpenWarnDE-Datenmodell.
+
+Dadurch kann OpenWarnDE intern Datenquellen verändern, ohne dass externe Kunden ihre Integration ändern müssen.
+
+# 51. Datenmodell als Produktbestandteil
+
+Das OpenWarnDE-Datenmodell wird dadurch zu einem zentralen Bestandteil der Plattform.
+
+Beispielsweise:
+
+```text
+    Warning
+    Region
+    Location
+    DataSource
+    Event
+    Severity
+    Validity
+    Geometry
+```
+
+Diese Modelle sollen nicht von einzelnen Anwendungen unabhängig voneinander definiert werden.
+
+Sie werden zentral dokumentiert und versioniert.
+
+# 52. API Contract als Single Source of Truth
+
+Der API Contract soll als zentrale Quelle für die Kommunikation zwischen Backend und Clients dienen.
+
+```text
+    packages/api-contract/
+              │
+       ┌──────┴──────┐
+       │             │
+       ▼             ▼
+    Backend         App
+       │
+       ▼
+    Public API
+```
+
+Der Contract soll möglichst automatisiert validierbar sein.
+
+Ziel:
+
+```text
+    API geändert
+        ↓
+    Contract Tests
+        ↓
+    Breaking Change erkannt
+```
+
+# 53. API-Request-Lifecycle
+
+Ein externer Request soll ungefähr folgenden Ablauf durchlaufen:
+
+```text
+    Client
+      ↓
+    HTTPS
+      ↓
+    API Gateway / API Service
+      ↓
+    Authentication
+      ↓
+    API Key Validierung
+      ↓
+    Account / Project bestimmen
+      ↓
+    Tarif bestimmen
+      ↓
+    Rate Limit prüfen
+      ↓
+    Berechtigung prüfen
+      ↓
+    Request verarbeiten
+      ↓
+    Usage erfassen
+      ↓
+    Response
+      ↓
+    Client
+```
+
+# 54. API Key Lebenszyklus
+
+Ein API Key soll einen definierten Lebenszyklus besitzen.
+
+```text
+    Erstellung
+       ↓
+    Aktiv
+       ↓
+    Nutzung
+       ↓
+    Rotation
+       ↓
+    Deaktivierung
+       ↓
+    Löschung
+```
+
+API Keys sollen niemals dauerhaft ohne Möglichkeit zur Deaktivierung existieren.
+
+Ein Benutzer muss einen kompromittierten API Key deaktivieren können.
+
+# 55. API Key Darstellung
+
+Ein API Key sollte nach Möglichkeit nur bei der Erstellung vollständig angezeigt werden.
+
+Beispiel:
+
+```text
+    API Key:
+    ow_live_****************
+```
+
+Nach der Erstellung soll nur eine gekürzte Darstellung angezeigt werden.
+
+Beispiel:
+
+```text
+    ow_live_8F2A...91KD
+```
+
+Die eigentlichen Secrets sollen nicht unnötig in der Web Platform angezeigt werden.
+
+# 56. Projekte für API-Kunden
+
+Ein API-Kunde soll mehrere Projekte verwalten können.
+
+Beispiel:
+
+```text
+    Unternehmen
+       │
+       ├── Website
+       │      └── API Key
+       │
+       ├── Mobile App
+       │      └── API Key
+       │
+       └── Smart Home
+              └── API Key
+```
+
+Dadurch kann Usage getrennt ausgewertet werden.
+
+# 57. API-Tarife
+
+Die Tarifstruktur soll technisch flexibel gestaltet werden.
+
+Beispiel:
+
+```text
+    FREE
+    ├── 24 Requests / Tag
+    └── Basiszugriff
+
+    BASIC
+    ├── höheres Request-Limit
+    └── Basiszugriff
+
+    PRO
+    ├── hohes Request-Limit
+    ├── erweiterte Funktionen
+    └── höhere Priorität
+
+    BUSINESS
+    ├── individuelle Limits
+    ├── erweiterte Funktionen
+    └── Support
+```
+
+Die tatsächlichen Tarife, Preise und Leistungen werden später festgelegt.
+
+# 58. App-Zugriff ist kein Tarif
+
+Die offizielle OpenWarnDE App soll nicht über das normale externe Tarifmodell abgerechnet werden.
+
+Das bedeutet:
+
+```text
+    OpenWarnDE App
+        ↓
+    App Authentication
+        ↓
+    App Access
+```
 
 und:
 
 ```text
-/api/v1/admin/...
+    Drittanbieter
+        ↓
+    API Key
+        ↓
+    Tarif
+        ↓
+    Limit
+        ↓
+    API
 ```
 
-für administrative Funktionen.
+Damit wird verhindert, dass die OpenWarnDE App durch das öffentliche Free-Tier-Limit eingeschränkt wird.
 
-Beispiele:
+# 59. Push-System
 
-```text
-GET /api/v1/warnings
-GET /api/v1/regions
-GET /api/v1/status
-
-GET /api/v1/admin/warnings
-GET /api/v1/admin/sources
-PUT /api/v1/admin/sources/{id}
-GET /api/v1/admin/system
-```
-
-Die tatsächliche API-Struktur wird im Pflichtenheft und API-Konzept festgelegt.
-
----
-
-# 18. GitHub und Entwicklungsprozess
-
-Das neue Repository soll bewusst wie ein professionelles Softwareprojekt geführt werden.
-
-## Grundworkflow
-
-```text
-Anforderung
-    ↓
-GitHub Issue
-    ↓
-Milestone
-    ↓
-Branch
-    ↓
-Implementierung
-    ↓
-Tests
-    ↓
-Pull Request
-    ↓
-Review
-    ↓
-Merge
-```
-
-## Branch-Konzept
-
-Beispiele:
-
-```text
-main
-
-feature/req-023-user-location
-feature/req-042-warning-api
-fix/map-rendering
-refactor/data-processing
-docs/architecture
-```
-
-## Commit-Konvention
-
-Eine einheitliche Commit-Konvention soll festgelegt werden, beispielsweise Conventional Commits.
-
-Beispiele:
-
-```text
-feat(app): add warning layer
-fix(admin): correct warning filter
-docs(requirements): add warning requirements
-refactor(processing): separate normalization pipeline
-test(api): add warning endpoint tests
-```
-
----
-
-# 19. GitHub Issues
-
-Features und Anforderungen sollen nicht nur in Markdown-Dateien stehen.
+Push-Benachrichtigungen sollen ebenfalls zentral vom Backend gesteuert werden.
 
 Beispiel:
 
 ```text
-[REQ-023] Nutzerstandort anzeigen
+    Neue Warnung
+         ↓
+    Warning Engine
+         ↓
+    Relevanz bestimmen
+         ↓
+    Push Event
+         ↓
+    Firebase Cloud Messaging
+         ↓
+    OpenWarnDE App
 ```
 
-Das Issue enthält:
+Die App muss nicht selbst feststellen, ob eine neue Warnung entstanden ist.
 
-- Beschreibung
-- Ziel
-- Akzeptanzkriterien
-- Priorität
-- Verknüpfung zur Anforderung
-- ggf. technische Hinweise
+Das Backend kann aktiv eine Benachrichtigung auslösen.
 
-Dadurch entsteht eine nachvollziehbare Verbindung:
+# 60. Polling und Push
+
+OpenWarnDE kann langfristig beide Verfahren verwenden.
+
+## Polling
+
+Die App fragt regelmäßig:
 
 ```text
-Anforderung
-    ↓
-Issue
-    ↓
-Branch
-    ↓
-Pull Request
-    ↓
-Code
-    ↓
-Test
+    GET /api/v1/warnings
 ```
 
----
+Vorteile:
 
-# 20. Dokumentationsstruktur
+- einfach
+- zuverlässig
+- App kann selbst aktualisieren
 
-Die Dokumentation soll ein zentraler Bestandteil des Projekts sein.
+## Push
 
-Vorgesehene Struktur:
+Das Backend sendet bei relevanten Änderungen eine Benachrichtigung.
 
-```text
-docs/
-│
-├── 01-project/
-│   ├── project-charter.md
-│   ├── project-goals.md
-│   ├── scope.md
-│   └── roadmap.md
-│
-├── 02-requirements/
-│   ├── requirements.md
-│   ├── use-cases.md
-│   ├── lastenheft.md
-│   └── acceptance-criteria.md
-│
-├── 03-concept/
-│   ├── pflichtenheft.md
-│   ├── system-context.md
-│   └── domain-model.md
-│
-├── 04-architecture/
-│   ├── architecture.md
-│   ├── backend.md
-│   ├── app.md
-│   ├── admin.md
-│   ├── data-model.md
-│   └── api.md
-│
-├── 05-development/
-│   ├── coding-guidelines.md
-│   ├── git-workflow.md
-│   └── local-development.md
-│
-├── 06-testing/
-│   ├── testing-strategy.md
-│   └── test-plan.md
-│
-└── 07-operations/
-    ├── deployment.md
-    ├── monitoring.md
-    ├── backup.md
-    └── incident-management.md
-```
+Vorteile:
 
-Diese Struktur ist ein Vorschlag und wird im Projektverlauf angepasst.
+- schnell
+- weniger unnötige Requests
+- bessere Nutzererfahrung
 
----
-
-# 21. Lastenheft
-
-Das Lastenheft beschreibt primär:
-
-> **Was soll das System leisten?**
+Beide Verfahren können kombiniert werden.
 
 Beispiel:
 
 ```text
-REQ-001
-
-Titel:
-Anzeige aktueller Warninformationen
-
-Beschreibung:
-Das System soll dem Benutzer aktuelle öffentliche
-Warninformationen für seinen relevanten Bereich anzeigen.
-
-Priorität:
-MUSS
-
-Akteur:
-Endbenutzer
-
-Akzeptanzkriterium:
-Eine verfügbare Warnung wird innerhalb der definierten
-Aktualisierungszeit in der App dargestellt.
+    Push
+      ↓
+    "Neue Warnung verfügbar"
+      ↓
+    App
+      ↓
+    API Request
+      ↓
+    aktuelle Warnung laden
 ```
 
-Technische Details gehören nicht unnötig in das Lastenheft.
+# 61. App Cache
 
----
+Die App soll nicht bei jeder Darstellung zwingend das komplette Backend neu abfragen.
 
-# 22. Pflichtenheft
-
-Das Pflichtenheft beschreibt:
-
-> **Wie werden die Anforderungen technisch umgesetzt?**
+Eine spätere Client-Architektur kann einen lokalen Cache verwenden.
 
 Beispiel:
 
 ```text
-REQ-001
-   ↓
-API Endpoint
-   ↓
-Published Warning Store
-   ↓
-Warning Service
-   ↓
-App Warning Layer
-   ↓
-Automatisierter Test
+    API
+      ↓
+    App Data Layer
+      ↓
+    Cache
+      ↓
+    UI
 ```
 
-Damit entsteht eine nachvollziehbare Traceability zwischen Anforderungen, Architektur, Code und Tests.
+Dadurch kann die App:
 
----
+- schneller reagieren
+- Daten offline verfügbar machen
+- Netzwerkzugriffe reduzieren
 
-# 23. MVP
+# 62. API Caching
 
-Das Projekt soll nicht versuchen, sofort alle langfristigen Ideen umzusetzen.
+Auch serverseitig können häufig angefragte Daten zwischengespeichert werden.
 
-Die aktuelle Featureliste enthält bereits sehr viele mögliche Erweiterungen.
-
-Dazu gehören unter anderem:
-
-- 3D-Brücken
-- 3D-Bäume
-- Vegetation
-- 3D-Straßen
-- Gewässeranimationen
-- GTFS
-- Flurstücke
-- Hydranten
-- Rettungspunkte
-- Feuerwehrzufahrten
-- Offline-Karten
-- Satellitenansicht
-- Tag-/Nachtzyklus
-- weitere BOS-Layer
-
-Diese Funktionen werden zunächst als Ideen / Anforderungen gesammelt und anschließend priorisiert.
-
-Ein MVP soll nur die Funktionen enthalten, die für einen sinnvollen ersten Release wirklich notwendig sind.
-
----
-
-# 24. Vorläufiger Entwicklungsablauf
-
-## Phase 0 – Ist-Analyse
-
-Analyse des bestehenden `OpenWarnDEV`:
-
-- aktuelle Architektur
-- App
-- Admin
-- Datenzugriffe
-- Firebase
-- Kartenlogik
-- bestehende Services
-- technische Schulden
-- vorhandene Dokumentation
-- bestehende Funktionen
-- bisherige Entscheidungen
-
-Ergebnis:
-
-**Ist-Analyse des bestehenden Systems**
-
----
-
-## Phase 1 – Produktvision
-
-Definition:
-
-- Was ist OpenWarn?
-- Welches Problem wird gelöst?
-- Wer nutzt das System?
-- Welchen Nutzen bietet es?
-- Was unterscheidet OpenWarn von bestehenden Lösungen?
-
-Ergebnis:
-
-**Projektvision / Projektsteckbrief**
-
----
-
-## Phase 2 – Systemkontext
-
-Definition der Systembestandteile:
+Beispiel:
 
 ```text
-OpenWarn App
-OpenWarn Admin
-OpenWarn Backend
-External Data Sources
-Firebase Infrastructure
+    Client
+      ↓
+    API
+      ↓
+    Cache
+      ↓
+    Published Data
 ```
 
-Ergebnis:
+Dies ist insbesondere für häufig abgefragte öffentliche Daten relevant.
 
-**Systemkontext und erste Architektur**
+Caching wird später abhängig von Datenaktualität und Infrastruktur entschieden.
 
----
+# 63. Aktualität der Daten
 
-## Phase 3 – Anforderungsanalyse
+Jede veröffentlichte Information soll einen Aktualitätskontext besitzen.
 
-Erfassung und Priorisierung von:
-
-- funktionalen Anforderungen
-- nichtfunktionalen Anforderungen
-- Sicherheitsanforderungen
-- Betriebsanforderungen
-- Datenanforderungen
-- App-Anforderungen
-- Admin-Anforderungen
-- Backend-Anforderungen
-
-Ergebnis:
-
-**Anforderungskatalog**
-
----
-
-## Phase 4 – Lastenheft
-
-Konsolidierung der Anforderungen.
-
-Ergebnis:
-
-**Lastenheft**
-
----
-
-## Phase 5 – MVP und Roadmap
-
-Definition:
-
-- MVP
-- Version 1.0
-- spätere Versionen
-- Muss / Soll / Kann
-- technische Risiken
-
-Ergebnis:
-
-**Releaseplanung**
-
----
-
-## Phase 6 – Pflichtenheft
-
-Technische Umsetzung der Anforderungen.
-
-Ergebnis:
-
-**Pflichtenheft**
-
----
-
-## Phase 7 – Architektur
-
-Ausarbeitung von:
-
-- Systemarchitektur
-- Frontendarchitektur
-- Adminarchitektur
-- Backendarchitektur
-- Datenmodell
-- API
-- Authentifizierung
-- Autorisierung
-- Datenverarbeitung
-- Fehlerbehandlung
-- Logging
-- Monitoring
-
-Ergebnis:
-
-**Technisches Architekturkonzept**
-
----
-
-## Phase 8 – Technologieentscheidungen
-
-Erst jetzt werden Technologien endgültig festgelegt.
-
-Mögliche Bereiche:
-
-- Frontend
-- Backend
-- Datenbank
-- Firebase-Dienste
-- API
-- Testing
-- CI/CD
-- Monitoring
-
-Technologieentscheidungen werden dokumentiert und begründet.
-
----
-
-## Phase 9 – Repository und GitHub
-
-Einrichtung:
-
-- Monorepo
-- Branch-Konzept
-- Issue Templates
-- PR Templates
-- Labels
-- Milestones
-- GitHub Actions
-- Branch Protection
-- Coding Guidelines
-- Contribution Guidelines
-
----
-
-## Phase 10 – Implementierung
-
-Entwicklung nach:
+Beispiel:
 
 ```text
-Issue
- ↓
-Branch
- ↓
-Implementierung
- ↓
-Tests
- ↓
-PR
- ↓
-Review
- ↓
-Merge
+    generatedAt
+    updatedAt
+    validFrom
+    validUntil
+    sourceUpdatedAt
 ```
 
----
+Dadurch kann ein Client erkennen, wie aktuell eine Information ist.
 
-## Phase 11 – Qualitätssicherung
+# 64. Datenqualität
 
-Geplant sind je nach Komponente:
+Da OpenWarnDE Informationen aus externen Quellen verarbeitet, muss Datenqualität berücksichtigt werden.
 
-- Unit Tests
-- Integration Tests
-- API Tests
-- E2E Tests
-- Linting
-- Type Checking
-- Build Checks
-- Security Checks
-- Performance Tests
-
----
-
-## Phase 12 – Deployment
-
-Automatisierte Bereitstellung von:
+Mögliche Zustände:
 
 ```text
-OpenWarn App
-OpenWarn Admin
-Backend Services
+    VALID
+    WARNING
+    INVALID
+    STALE
+    UNKNOWN
 ```
 
-über geeignete CI/CD-Prozesse.
+Beispiel:
 
----
+```text
+    Datenquelle
+        ↓
+    letzter erfolgreicher Abruf:
+    10:31 Uhr
 
-## Phase 13 – Release
+    erwarteter Abruf:
+    alle 5 Minuten
 
-Vor einem Release:
+    aktueller Zustand:
+    STALE
+```
 
-- Tests
-- Abnahme
-- Dokumentation
-- Changelog
-- Versionsnummer
-- Release Notes
-- Deployment
-- Monitoring
+Die Web Platform soll solche Zustände sichtbar machen.
 
----
+# 65. Monitoring
 
-## Phase 14 – Retrospektive
+Das Backend soll überwacht werden.
 
-Nach jedem größeren Release:
+Mögliche Kennzahlen:
 
-- Was lief gut?
-- Was lief schlecht?
-- Welche technischen Schulden sind entstanden?
-- Welche Anforderungen haben sich geändert?
-- Welche Entscheidungen müssen angepasst werden?
-- Was wurde gelernt?
+- erfolgreiche Datenabrufe
+- fehlgeschlagene Datenabrufe
+- Verarbeitungsdauer
+- Anzahl verarbeiteter Warnungen
+- API Requests
+- API Fehler
+- Rate Limit Überschreitungen
+- Push-Ausfälle
+- Datenquellenstatus
 
----
 
-# 25. Architekturprinzipien
+Die Admin Platform soll diese Informationen später aggregiert darstellen.
 
-Für OpenWarn sollen folgende Prinzipien gelten:
 
-### Separation of Concerns
+# 66. Auditierbarkeit
 
-App, Admin und Backend haben klar definierte Verantwortlichkeiten.
+Administrative Aktionen sollen nachvollziehbar sein.
 
-### Server-side Processing
+Beispiel:
 
-Komplexe Datenverarbeitung erfolgt zentral.
+```text
+    Administrator
+        ↓
+    änderte Datenquelle
+        ↓
+    Zeitpunkt
+        ↓
+    vorheriger Wert
+        ↓
+    neuer Wert
+```
 
-### Client Simplicity
+Besonders relevante Änderungen sollen protokolliert werden.
 
-Die App erhält möglichst fertige, nutzbare Daten.
+Beispiele:
 
-### Security by Design
+- Konfigurationsänderungen
+- API-Key-Aktionen
+- Tarifänderungen
+- Berechtigungsänderungen
+- Datenquellenänderungen
 
-Sicherheit wird bereits bei der Architektur berücksichtigt.
+# 67. Rollenmodell
 
-### Modularity
+Die Web Platform soll ein Rollenmodell besitzen.
 
-Neue Datenquellen, Warnmodelle und Kartenlayer sollen modular ergänzt werden können.
+Beispielsweise:
 
-### Observability
+```text
+    OWNER
+    ADMIN
+    OPERATOR
+    ANALYST
+    DEVELOPER
+```
 
-Das Backend soll nachvollziehbar überwacht werden können.
+Für das erste Projekt kann zunächst ausschließlich:
 
-### Testability
+```text
+    OWNER
+```
 
-Komponenten sollen automatisiert testbar sein.
+implementiert werden.
 
-### Documentation
+Weitere Rollen können später hinzukommen.
 
-Architektur- und Technologieentscheidungen werden dokumentiert.
+# 68. Owner
 
-### Reproducibility
+Der Owner besitzt vollständigen Zugriff auf die Betreiberfunktionen.
 
-Das Projekt soll lokal und in CI reproduzierbar gebaut und getestet werden können.
+Mögliche Berechtigungen:
 
----
+- System konfigurieren
+- Datenquellen verwalten
+- Warnungen verwalten
+- API verwalten
+- Nutzer verwalten
+- API Keys verwalten
+- Usage ansehen
+- Billing verwalten
+- Systemstatus ansehen
 
-# 26. Datenquellen
 
-Die bisherige Planung enthält unter anderem:
+# 69. Developer Account
 
-- Wetterwarnungen
-- Radar- und Niederschlagsdaten
-- Hochwasserinformationen
-- Pegeldaten
-- Geländedaten
-- Höhenmodelle
-- Waldbrand-/Feuergefahreninformationen
-- Infrastrukturinformationen
-- OpenStreetMap
-- Overpass API
-- weitere öffentliche Datenquellen
+Ein externer Entwickler soll ausschließlich Zugriff auf seine eigenen Ressourcen besitzen.
 
-Neue Datenquellen müssen vor Integration hinsichtlich:
+Beispiel:
 
-- Verfügbarkeit
-- Aktualisierungsintervall
-- Lizenz
-- Datenqualität
-- Stabilität
-- technischer Schnittstelle
-- Fehlerverhalten
+```text
+    Developer A
+        ↓
+    Project A
+        ↓
+    API Key A
+        ↓
+    Usage A
+```
 
-bewertet werden.
+Developer A darf nicht sehen:
 
----
+```text
+    Developer B
+    Project B
+    Usage B
+```
 
-# 27. Datenqualität
+Die Autorisierung muss serverseitig erfolgen.
 
-Da OpenWarn sicherheitsrelevante Informationen darstellen kann, muss Datenqualität ausdrücklich berücksichtigt werden.
+# 70. Mandantenfähigkeit
 
-Für Datenquellen sollen unter anderem geprüft werden:
-
-- Quelle erreichbar?
-- Daten vollständig?
-- Daten aktuell?
-- Datenformat korrekt?
-- Werte plausibel?
-- Zeitstempel gültig?
-- Geometrien gültig?
-- Quelle zuletzt erfolgreich verarbeitet?
-
-Fehlerhafte oder veraltete Daten dürfen nicht unkontrolliert als aktuelle Daten veröffentlicht werden.
-
----
-
-# 28. Warnlogik
-
-Die Warnlogik soll zentral stattfinden.
+Die Developer Platform sollte perspektivisch mandantenfähig aufgebaut werden.
 
 Grundprinzip:
 
 ```text
-Input Data
-    ↓
-Validation
-    ↓
-Normalization
-    ↓
-Rules
-    ↓
-Thresholds
-    ↓
-Evaluation
-    ↓
-Warning
-    ↓
-Published Warning
+    Account
+       │
+       ├── Projects
+       │
+       ├── API Keys
+       │
+       ├── Usage
+       │
+       └── Billing
 ```
 
-Die genaue fachliche Warnlogik wird später separat spezifiziert.
+Jede Ressource muss eindeutig einem Account bzw. Projekt zugeordnet sein.
 
----
+# 71. Billing und API Usage trennen
 
-# 29. Push-Benachrichtigungen
+API Usage und Billing sind fachlich miteinander verbunden, aber technisch unterschiedliche Bereiche.
 
-Push-Nachrichten sollen zentral ausgelöst werden.
+Usage beantwortet:
+
+> Wie viel wurde verwendet?
+
+Billing beantwortet:
+
+> Was muss dafür bezahlt werden?
+
+Daher:
+
+```text
+    API Request
+        ↓
+    Usage
+        ↓
+    Billing Calculation
+        ↓
+    Invoice / Payment
+```
+
+Dadurch kann die Billing-Logik später verändert werden, ohne die API selbst neu zu bauen.
+
+# 72. Kostenkontrolle
+
+Das System muss verhindern, dass interne Prozesse unkontrolliert Kosten verursachen.
+
+Besonders relevant:
+
+- externe APIs
+- Cloud Functions
+- Datenbankzugriffe
+- Scheduler
+- Storage
+- API Traffic
+- Push
+
+Die Admin Platform soll später relevante Verbrauchswerte anzeigen können.
+
+# 73. Entwicklungsprinzip
+
+Die Plattform soll zunächst modular, aber nicht unnötig kompliziert aufgebaut werden.
+
+Grundsatz:
+
+> Modularer Monolith vor Microservice-Overengineering.
+
+Das bedeutet:
+
+Fachliche Bereiche werden sauber getrennt.
+
+Sie müssen aber nicht sofort als vollständig voneinander getrennte Deployments betrieben werden.
+
+# 74. Beispiel einer initialen Backend-Struktur
+
+Eine mögliche erste Umsetzung:
+
+```text
+    services/backend/
+    │
+    ├── api/
+    │   ├── routes/
+    │   ├── middleware/
+    │   └── controllers/
+    │
+    ├── ingestion/
+    │   ├── sources/
+    │   └── jobs/
+    │
+    ├── processing/
+    │   ├── normalization/
+    │   └── aggregation/
+    │
+    ├── warnings/
+    │   ├── rules/
+    │   └── services/
+    │
+    ├── usage/
+    │
+    └── shared/
+```
+
+Diese Struktur kann später bei Bedarf in einzelne Services aufgeteilt werden.
+
+# 75. Infrastruktur vs. Anwendung
+
+Die Repository-Struktur soll unterscheiden zwischen:
+
+```text
+    Infrastruktur
+```
+
+und:
+
+```text
+    OpenWarnDE Anwendung
+```
+
+Firebase-Konfiguration gehört beispielsweise in:
+
+```text
+    firebase/
+```
+
+Die OpenWarnDE Geschäftslogik gehört in:
+
+```text
+    services/
+```
+
+Die App gehört in:
+
+```text
+    apps/app/
+```
+
+Die Web Platform gehört in:
+
+```text
+    apps/web/
+```
+
+Dadurch bleibt die Architektur nachvollziehbar.
+
+# 76. Deployment-Zielbild
+
+Langfristig:
+
+```text
+    GitHub
+       ↓
+    CI/CD
+       ↓
+    Build
+       ↓
+    Tests
+       ↓
+    Deployment
+       ↓
+    Firebase / Cloud
+```
+
+Mögliche Deployments:
+
+```text
+    apps/app
+        ↓
+    Firebase Hosting / App Hosting
+
+    apps/web
+        ↓
+    Firebase Hosting / App Hosting
+
+    Backend
+        ↓
+    Cloud Functions / geeignete Backend-Infrastruktur
+```
+
+Die konkrete Deploymentstrategie wird später definiert.
+
+# 77. Entwicklungsumgebungen
+
+Es sollen mindestens folgende Umgebungen berücksichtigt werden:
+
+```text
+    Development
+    Staging
+    Production
+```
+
+## Development
+
+Für lokale Entwicklung.
+
+## Staging
+
+Für Integrationstests und Release-Kandidaten.
+
+## Production
+
+Für echte Nutzer und API-Kunden.
+
+Nicht jede Umgebung muss im MVP sofort vollständig eingerichtet werden.
+
+# 78. Konfiguration
+
+Umgebungsspezifische Werte dürfen nicht hart im Code hinterlegt werden.
+
+Beispiele:
+
+```text
+    API URLs
+    Firebase Project IDs
+    Feature Flags
+    externe API Credentials
+    Payment Provider Credentials
+```
+
+Secrets gehören in eine geeignete Secret-Management-Lösung.
+
+# 79. Feature Flags
+
+Später können Feature Flags eingesetzt werden.
 
 Beispiel:
 
 ```text
-Neue Warnung
-    ↓
-Backend erkennt relevante Änderung
-    ↓
-Regelprüfung
-    ↓
-Push-Entscheidung
-    ↓
-Firebase Cloud Messaging
-    ↓
-OpenWarn App
+    API_BILLING_ENABLED
+    NEW_WARNING_ENGINE_ENABLED
+    DEVELOPER_PORTAL_ENABLED
 ```
 
-Die App muss die Warnung anschließend nicht selbst berechnen.
+Dadurch können Funktionen kontrolliert aktiviert werden.
 
----
+# 80. API Dokumentation
 
-# 30. BOS-Modus
+Die API soll für externe Entwickler verständlich dokumentiert werden.
 
-Ein spezieller Betriebsmodus für Einsatzkräfte ist vorgesehen.
+Die Dokumentation soll enthalten:
 
-Mögliche spätere Funktionen:
+- Getting Started
+- Authentication
+- API Keys
+- Endpoints
+- Request Examples
+- Response Examples
+- Error Codes
+- Rate Limits
+- Versioning
+- Changelog
+- Usage
+- Billing
 
-- Hydranten
-- Löschwasserentnahmestellen
-- Rettungspunkte
-- Feuerwehrzufahrten
-- Aufstellflächen
-- Flurstücke
-- Sammelplätze
-- weitere einsatzrelevante Karteninformationen
+Ziel:
 
-Der BOS-Modus wird als eigener Funktionsbereich betrachtet und nicht mit der öffentlichen Nutzeroberfläche vermischt.
+Ein Entwickler soll die OpenWarnDE API ohne direkte Unterstützung integrieren können.
 
----
+# 81. OpenAPI
 
-# 31. Langfristige Vision
+Die API soll langfristig eine OpenAPI-Spezifikation besitzen.
 
-Langfristig soll OpenWarn eine zentrale Plattform für:
-
-- öffentliche Warninformationen
-- Lageinformationen
-- regionale Gefahrenbewertung
-- Karteninformationen
-- Einsatzunterstützung
-- Datenaggregation
-- Betreiberanalyse
-
-werden.
-
-Die Architektur soll deshalb von Beginn an Erweiterbarkeit ermöglichen, ohne dass jede neue Funktion das Gesamtsystem unnötig verkompliziert.
-
----
-
-# 32. Abgrenzung
-
-OpenWarn soll nicht von Anfang an versuchen:
-
-- sämtliche deutschen Datenquellen abzudecken
-- ein vollständiges Einsatzleitsystem zu ersetzen
-- eine Leitstelle zu ersetzen
-- sämtliche BOS-Systeme zu integrieren
-- alle denkbaren Kartenfunktionen gleichzeitig umzusetzen
-- komplexe Risikoalgorithmen ohne validierte Datenbasis bereitzustellen
-
-Der genaue Scope wird im Lastenheft festgelegt.
-
----
-
-# 33. Wichtigste Architekturentscheidung für den Neustart
-
-Die zentrale Idee des neuen Projekts lautet:
-
-> **OpenWarn ist eine zentrale Plattform. Die App ist der Client, der Admin-Bereich ist die Control Plane und das Backend verarbeitet die Daten zentral.**
-
-Kurz:
+Beispiel:
 
 ```text
-                         OPENWARN
-                            │
-              ┌───────────┼─────────────┐
-              │             │               │
-              ▼             ▼              ▼
-             APP           ADMIN         BACKEND
-              │             │               │
-         Nutzerseite    Betreiberseite   Server
-              │             │               │
-              └───────────┴─────────────┘
-                            │
-                     zentrale Datenbasis
-                            │
-                     externe Datenquellen
+    docs/05-api/
+    └── openapi.yaml
 ```
 
----
+oder eine entsprechend generierte Spezifikation.
 
-# 34. Nächster Schritt
+Die OpenAPI-Spezifikation soll möglichst aus dem tatsächlichen API Contract bzw. der API Implementierung hervorgehen.
 
-Noch keine Implementierung.
+# 82. API-Kompatibilität
 
-Als nächstes wird die bestehende `OpenWarnDEV`-Repository vollständig als **Ist-System** dokumentiert.
+Breaking Changes sollen vermieden werden.
 
-Daraus werden anschließend:
+Eine Änderung wie:
 
-1. bestehende Funktionen
-2. bestehende Architektur
-3. technische Schulden
-4. bestehende Datenquellen
-5. bestehende App-Funktionen
-6. bestehende Admin-Funktionen
-7. bestehende Firebase-Struktur
-8. gute Entscheidungen
-9. schlechte bzw. überholte Entscheidungen
-10. übernommene Anforderungen
-11. verworfene Anforderungen
+```text
+    severity
+```
 
-abgeleitet.
+zu:
 
-Danach beginnt die eigentliche Planung von **OpenWarn 2.0**.
+```text
+    level
+```
 
----
+darf nicht einfach in einer bestehenden API-Version erfolgen.
 
-# 35. Leitgedanke
+Stattdessen:
 
-OpenWarn 2.0 soll nicht nur ein funktionierendes Programm werden.
+```text
+    /api/v1/
+```
 
-Es soll zeigen, dass ein angehender Fachinformatiker für Anwendungsentwicklung ein Softwareprojekt strukturiert planen, begründen, entwickeln, testen, betreiben und dokumentieren kann.
+bestehende Struktur bleibt stabil.
 
-Das Ziel ist deshalb nicht:
+Bei Breaking Changes:
 
-> „Möglichst schnell fertig werden.“
+```text
+    /api/v2/
+```
 
-Sondern:
+# 83. API Fehler
 
-> **„Ein technisch sinnvolles und professionell entwickeltes System bauen und dabei einen nachvollziehbaren Softwareentwicklungsprozess demonstrieren.“**
+Fehler sollen einheitlich aufgebaut sein.
+
+Beispiel:
+
+```json
+    {
+      "error": {
+        "code": "INVALID_API_KEY",
+        "message": "The provided API key is invalid."
+      },
+      "meta": {
+        "requestId": "..."
+      }
+    }
+```
+
+Mögliche Fehlercodes:
+
+```text
+    INVALID_API_KEY
+    API_KEY_REVOKED
+    RATE_LIMIT_EXCEEDED
+    FORBIDDEN
+    NOT_FOUND
+    INVALID_REQUEST
+    INTERNAL_ERROR
+    SERVICE_UNAVAILABLE
+```
+
+# 84. Request IDs
+
+Jeder API Request soll möglichst eine eindeutige Request-ID erhalten.
+
+Beispiel:
+
+```text
+    X-Request-ID
+```
+
+oder Bestandteil der Response:
+
+```text
+    meta.requestId
+```
+
+Dies erleichtert:
+
+- Debugging
+- Support
+- Monitoring
+- Fehleranalyse
+
+# 85. API Security
+
+Die API soll ausschließlich über HTTPS erreichbar sein.
+
+Zusätzlich sollen unter anderem berücksichtigt werden:
+
+- Authentication
+- Authorization
+- Rate Limiting
+- Input Validation
+- Request Size Limits
+- Logging
+- Abuse Prevention
+- Secret Management
+- CORS
+- Security Headers
+
+Die konkrete Umsetzung erfolgt im Sicherheitskonzept.
+
+# 86. Abuse Prevention
+
+Der Free Tier mit 24 Requests pro Tag darf nicht dazu führen, dass beliebig viele Accounts erstellt werden, um das Limit zu umgehen.
+
+Daher müssen langfristig Maßnahmen gegen Missbrauch berücksichtigt werden.
+
+Beispielsweise:
+
+- Account Verification
+- API Key Limits
+- Device / App Identification
+- Abuse Detection
+- IP-basierte Schutzmechanismen
+- App Check
+- Request Pattern Analysis
+
+Die konkrete Umsetzung wird später festgelegt.
+
+# 87. App-Zugriff absichern
+
+Die offizielle App darf nicht einfach einen geheimen API Key enthalten.
+
+Ein möglicher späterer Ansatz:
+
+```text
+    App
+      ↓
+    Firebase Authentication / App Check
+      ↓
+    OpenWarnDE Backend
+      ↓
+    App Authorization
+      ↓
+    API
+```
+
+Die App kann dadurch als offizieller OpenWarnDE Client erkannt werden.
+
+Die konkrete Architektur ist noch offen.
+
+# 88. Keine Vertrauensannahme beim Client
+
+Ein wichtiger Sicherheitsgrundsatz:
+
+> Alles, was vom Client kommt, muss als nicht vertrauenswürdig betrachtet werden.
+
+Das gilt auch für:
+
+- App
+- Browser
+- API Client
+- API Key
+- Request Parameter
+
+Berechtigungen müssen serverseitig geprüft werden.
+
+# 89. Datenmodell und API-Modell trennen
+
+Das interne Datenmodell muss nicht identisch mit dem öffentlichen API-Modell sein.
+
+Beispiel:
+
+Intern:
+
+```text
+    Firestore Warning Document
+    ├── internalProcessingState
+    ├── sourcePayload
+    ├── normalizedData
+    ├── internalFlags
+    └── ...
+```
+
+Public API:
+
+```text
+    Warning
+    ├── id
+    ├── title
+    ├── severity
+    ├── region
+    ├── validFrom
+    └── validUntil
+```
+
+Dadurch bleibt die interne Architektur flexibel.
+
+# 90. Ziel der Repository-Struktur
+
+Die Repository-Struktur soll folgende Fragen eindeutig beantworten:
+
+```text
+    Wo liegt die App?
+        → apps/app/
+
+    Wo liegt die Web Platform?
+        → apps/web/
+
+    Wo liegt die API?
+        → services/api/
+
+    Wo findet Datenbeschaffung statt?
+        → services/ingestion/
+
+    Wo findet Verarbeitung statt?
+        → services/processing/
+
+    Wo liegt die Warnlogik?
+        → services/warnings/
+
+    Wo wird API Usage verarbeitet?
+        → services/usage/
+
+    Wo liegen gemeinsame Typen?
+        → packages/types/
+
+    Wo liegt der API Contract?
+        → packages/api-contract/
+
+    Wo liegt Firebase?
+        → firebase/
+
+    Wo liegt die Dokumentation?
+        → docs/
+```
+
+# 91. Aktueller Architekturstatus
+
+Folgende Punkte gelten als vorläufig festgelegt:
+
+```text
+    [x] Monorepo
+    [x] OpenWarnDE App als Client
+    [x] zentrale Datenverarbeitung
+    [x] Firebase als zentrale Infrastruktur
+    [x] eigene OpenWarnDE API
+    [x] API-Versionierung
+    [x] Web Platform
+    [x] interner Admin-Bereich
+    [x] Developer Platform als langfristiges Ziel
+    [x] API Keys für externe Kunden
+    [x] Free Tier
+    [x] API Limits
+    [x] Usage Tracking
+    [ ] konkrete Billing-Lösung
+    [ ] konkrete API-Authentifizierung
+    [ ] konkretes Datenmodell
+    [ ] konkrete Firebase Services
+    [ ] konkrete Deploymentarchitektur
+    [ ] konkrete Tarifstruktur
+    [ ] konkrete Preisgestaltung
+```
+
+# 92. Nächster fachlicher Planungsschritt
+
+Nach der Repository- und Architektur-Grundidee darf noch nicht direkt implementiert werden.
+
+Als nächstes muss die Ist-Analyse von OpenWarnDEV durchgeführt werden.
+
+Dabei werden insbesondere untersucht:
+
+```text
+    1. Repository-Struktur
+    2. App
+    3. Admin
+    4. Firebase
+    5. Backend
+    6. Datenquellen
+    7. Datenmodell
+    8. Authentication
+    9. Push
+    10. Hosting
+    11. Capacitor
+    12. bestehende APIs
+    13. technische Schulden
+    14. bestehende Features
+    15. wiederverwendbare Komponenten
+```
+
+# 93. Vorgehensmodell
+
+Die Entwicklung von OpenWarnDE 2.0 soll nach folgendem Schema erfolgen:
+
+```text
+    IST
+     ↓
+    ANALYSE
+     ↓
+    DEFINITION
+     ↓
+    ANFORDERUNGEN
+     ↓
+    LASTENHEFT
+     ↓
+    MVP
+     ↓
+    FACHLICHES KONZEPT
+     ↓
+    PFLICHTENHEFT
+     ↓
+    ARCHITEKTUR
+     ↓
+    API CONTRACT
+     ↓
+    IMPLEMENTIERUNGSPLAN
+     ↓
+    ENTWICKLUNG
+     ↓
+    TEST
+     ↓
+    RELEASE
+     ↓
+    MONITORING
+     ↓
+    ITERATION
+```
+
+# 94. Wichtiges Entwicklungsprinzip
+
+OpenWarnDE 2.0 wird nicht nach dem Prinzip:
+
+```text
+    "Ich baue zuerst die App und mache den Rest später."
+```
+
+entwickelt.
+
+Stattdessen:
+
+```text
+    "Ich definiere zuerst das System und seine Schnittstellen."
+```
+
+Die App ist nur ein Client.
+
+Die Web Platform ist nur eine Verwaltungsschnittstelle.
+
+Das Backend ist der zentrale Verarbeitungskern.
+
+Die API ist die definierte Grenze zwischen OpenWarnDE und seinen Clients.
+
+# 95. Langfristige Vision
+
+OpenWarnDE soll langfristig drei miteinander verbundene Produkte bilden:
+
+```text
+    1. OpenWarnDE App
+
+    2. OpenWarnDE Platform
+
+    3. OpenWarnDE API
+```
+
+Die OpenWarnDE App bietet Endnutzern einen möglichst einfachen Zugang.
+
+Die OpenWarnDE Platform ermöglicht dem Betreiber und später Entwicklern die Verwaltung des Systems.
+
+Die OpenWarnDE API ermöglicht Drittanbietern, auf standardisierte OpenWarnDE-Daten zuzugreifen.
+
+Damit kann OpenWarnDE langfristig von einer einzelnen Anwendung zu einer eigenständigen technischen Plattform wachsen.
+
+# 96. Grundsatz für die weitere Planung
+
+Die aktuell beschriebene Architektur ist eine Zielarchitektur.
+
+Sie darf nicht dazu führen, dass der MVP unnötig komplex wird.
+
+Jede technische Entscheidung soll anhand folgender Fragen bewertet werden:
+
+1. Welches Problem löst sie?
+2. Wird sie für den aktuellen Scope benötigt?
+3. Erhöht sie Wartbarkeit?
+4. Erhöht sie Sicherheit?
+5. Erhöht sie Skalierbarkeit?
+6. Erhöht sie die Komplexität?
+7. Gibt es eine einfachere Lösung?
+8. Ist die Entscheidung reversibel?
+9. Welche langfristigen Auswirkungen besitzt sie?
+
+# 97. Definition of Done für die Planungsphase
+
+Die Planungsphase gilt erst als ausreichend abgeschlossen, wenn mindestens folgende Punkte definiert wurden:
+
+```text
+    [ ] Projektziel
+    [ ] Zielgruppen
+    [ ] Scope
+    [ ] Nicht-Scope
+    [ ] Ist-Zustand
+    [ ] funktionale Anforderungen
+    [ ] nichtfunktionale Anforderungen
+    [ ] Use Cases
+    [ ] MVP
+    [ ] fachliches Datenmodell
+    [ ] Systemarchitektur
+    [ ] App-Konzept
+    [ ] Web-Platform-Konzept
+    [ ] Backend-Konzept
+    [ ] API-Konzept
+    [ ] Authentifizierung
+    [ ] Autorisierung
+    [ ] API Limits
+    [ ] API Usage
+    [ ] Sicherheitskonzept
+    [ ] Deployment-Konzept
+    [ ] Teststrategie
+    [ ] Monitoring-Konzept
+    [ ] offene Architekturentscheidungen
+```
+
+# 98. Ergebnis der Planungsphase
+
+Am Ende der Planung soll nicht nur eine Sammlung von Markdown-Dateien vorhanden sein.
+
+Es soll ein nachvollziehbares technisches Gesamtkonzept entstehen.
+
+Ein Entwickler, der das Repository zum ersten Mal öffnet, soll verstehen können:
+
+```text
+    Was ist OpenWarnDE?
+
+    Welches Problem löst es?
+
+    Wer nutzt es?
+
+    Wie funktioniert es?
+
+    Woher kommen die Daten?
+
+    Wo werden die Daten verarbeitet?
+
+    Wie kommt die App an Daten?
+
+    Wie funktioniert die API?
+
+    Wie werden externe Entwickler angebunden?
+
+    Wie werden API Limits umgesetzt?
+
+    Wie wird Usage erfasst?
+
+    Wie soll Billing funktionieren?
+
+    Wie wird das System deployed?
+
+    Wie wird es getestet?
+
+    Wie wird es überwacht?
+```
+
+# 99. Aktueller Fokus
+
+Der aktuelle Fokus liegt noch nicht auf Billing, Microservices oder einer vollständigen Developer Platform.
+
+Der unmittelbare Fokus ist:
+
+```text
+    OpenWarnDEV verstehen
+            ↓
+    Ist-Zustand dokumentieren
+            ↓
+    Probleme identifizieren
+            ↓
+    Zielzustand definieren
+            ↓
+    Anforderungen ableiten
+            ↓
+    MVP festlegen
+```
+
+# 100. Nächster konkreter Schritt
+
+Als nächstes wird das bestehende OpenWarnDEV-Repository analysiert.
+
+Die Analyse beginnt mit:
+
+```text
+    1. Repository-Struktur
+```
+
+Danach folgen:
+
+```text
+    2. App
+    3. Admin
+    4. Firebase
+    5. Backend
+    6. Datenquellen
+    7. Datenmodell
+    8. Authentication
+    9. Push
+    10. Hosting
+    11. Capacitor
+    12. APIs
+    13. technische Schulden
+```
+
+Das Ergebnis wird in:
+
+```text
+    docs/01-project/ist-analyse.md
+```
+
+festgehalten.
+
+Erst auf Basis dieser Ist-Analyse wird entschieden, welche Bestandteile von OpenWarnDEV übernommen, angepasst oder vollständig neu entwickelt werden.

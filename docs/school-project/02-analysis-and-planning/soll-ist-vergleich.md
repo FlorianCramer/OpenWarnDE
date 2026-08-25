@@ -22,22 +22,22 @@ Dadurch wird der Projektumfang bewusst begrenzt und eine realistische Umsetzung 
 
 ## 2. Grundsätzlicher Vergleich
 
-| Bereich               | IST – OpenWarnDEV                                     | SOLL – OpenWarnDE 2.0 MVP                                      |
-| --------------------- | ----------------------------------------------------- | -------------------------------------------------------------- |
-| **Projektstruktur**   | Historisch gewachsene Struktur                        | Neu strukturierte und klar abgegrenzte Projektstruktur         |
-| **Anwendung**         | Bestehende Web-/Mobile-Anwendung                      | Neue grundlegende Client-Anwendung                             |
-| **Karte**             | Bereits vorhanden und teilweise erweitert             | Klare, erweiterbare Kartenkomponente                           |
-| **Standort**          | Geolocation bereits vorhanden                         | Standortbestimmung und Darstellung als definierte Kernfunktion |
-| **Suche**             | Nicht als klar abgegrenzte MVP-Anforderung definiert  | Kartensuche als Kernfunktion                                   |
-| **Kartendarstellung** | Mehrere bestehende bzw. geplante Funktionen           | Definierte und anpassbare Kartendarstellung                    |
-| **Verwaltung**        | Konzeptionell bzw. teilweise vorhanden                | Funktionierende grundlegende Verwaltungsoberfläche             |
-| **Push**              | Vorgesehen                                            | Manuelles Erstellen und Auslösen von Push-Nachrichten          |
-| **Datenquellen**      | Verschiedene Quellen geplant bzw. teilweise vorhanden | Keine umfangreiche externe Datenverarbeitung im MVP            |
-| **Datenverarbeitung** | Serververarbeitung konzeptionell vorgesehen           | Nicht Bestandteil des Schul-MVP                                |
-| **API**               | Langfristig vorgesehen                                | Nicht Bestandteil des Schul-MVP                                |
-| **Architektur**       | Teilweise vermischte Verantwortlichkeiten             | Klare Systemgrenzen und Erweiterbarkeit                        |
-| **Tests**             | Erste technische Prüfungen vorhanden                  | MVP-bezogenes Test- und Qualitätssicherungskonzept             |
-| **Dokumentation**     | Bestehende technische Dokumentation vorhanden         | Strukturierte und eindeutige Projektdokumentation              |
+| Bereich               | IST – OpenWarnDEV                                                 | SOLL – OpenWarnDE 2.0 MVP                                      |
+| --------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------- |
+| **Projektstruktur**   | Historisch gewachsene Struktur                                    | Neu strukturierte und klar abgegrenzte Projektstruktur         |
+| **Anwendung**         | Webanwendung; Capacitor-Integration und Android-Projekt vorhanden | Neue grundlegende Client-Anwendung                             |
+| **Karte**             | Bereits vorhanden und teilweise erweitert                         | Klare, erweiterbare Kartenkomponente                           |
+| **Standort**          | Geolocation bereits vorhanden                                     | Standortbestimmung und Darstellung als definierte Kernfunktion |
+| **Suche**             | Nicht als klar abgegrenzte MVP-Anforderung definiert              | Kartensuche als Kernfunktion                                   |
+| **Kartendarstellung** | Mehrere bestehende bzw. geplante Funktionen                       | Definierte und anpassbare Kartendarstellung                    |
+| **Verwaltung**        | Dokumentiert/geplant, im Frontend nicht auffindbar                | Funktionierende grundlegende Verwaltungsoberfläche             |
+| **Push**              | Dokumentiert/geplant, nicht implementiert                         | Manuelles Erstellen und Auslösen von Push-Nachrichten          |
+| **Datenquellen**      | Dokumentiert/geplant, nicht im Code auffindbar                    | Keine umfangreiche externe Datenverarbeitung im MVP            |
+| **Datenverarbeitung** | Dokumentiert/geplant, nicht implementiert                         | Nicht Bestandteil des Schul-MVP                                |
+| **API**               | Langfristig vorgesehen, nicht implementiert                       | Nicht Bestandteil des Schul-MVP                                |
+| **Architektur**       | Teilweise vermischte Verantwortlichkeiten                         | Klare Systemgrenzen und Erweiterbarkeit                        |
+| **Tests**             | Android-Beispieltests und Build-Prüfungen vorhanden               | MVP-bezogenes Test- und Qualitätssicherungskonzept             |
+| **Dokumentation**     | Bestehende technische Dokumentation vorhanden                     | Strukturierte und eindeutige Projektdokumentation              |
 
 ---
 
@@ -79,7 +79,7 @@ Eine direkte Übernahme der gesamten bestehenden Struktur von OpenWarnDEV ist ni
 
 ### 4.1 IST-Zustand
 
-OpenWarnDEV verfügt bereits über eine Web-/Mobile-Anwendung.
+OpenWarnDEV verfügt über eine Webanwendung sowie eine Capacitor-Integration mit vorhandenem Android-Projekt. Eine vollständig entwickelte mobile Anwendung ist daraus nicht abzuleiten.
 
 Die bestehende Anwendung enthält unter anderem Karten-, Standort- und UI-Funktionen.
 
@@ -345,11 +345,11 @@ Diese Verarbeitung ist jedoch nicht vollständig Bestandteil der aktuellen Clien
 
 Eine vollständige serverseitige Datenverarbeitung ist nicht Bestandteil des Schul-MVPs.
 
-Die Umsetzung wird auf die grundlegenden Funktionen des Clients und der Verwaltung konzentriert.
+Die Umsetzung wird auf die grundlegenden Funktionen des Clients und der Verwaltung konzentriert. Für Zugriffsschutz, Persistenz und den manuellen Push-Auslösevorgang darf nur die jeweils erforderliche minimale technische Unterstützung eingeplant werden; eine allgemeine Datenverarbeitungsplattform entsteht dadurch nicht.
 
 ### 12.3 Handlungsbedarf
 
-Die konkrete Datenverarbeitungsarchitektur wird nach Abschluss des Schulprojekts weiter spezifiziert.
+Die konkrete Datenverarbeitungsarchitektur wird nach Abschluss des Schulprojekts weiter spezifiziert. Im MVP werden keine realen externen Warnmeldungen automatisch verarbeitet.
 
 Dabei sollen die im MVP getroffenen Architekturentscheidungen eine spätere Erweiterung ermöglichen.
 
@@ -375,7 +375,7 @@ Die Architektur soll jedoch so geplant werden, dass eine API später eingeführt
 
 Im Rahmen des Schulprojekts wird lediglich darauf geachtet, dass die Architektur eine spätere API-Integration nicht unnötig erschwert.
 
-Die konkrete API-Spezifikation wird als zukünftige Erweiterung behandelt.
+Die konkrete API-Spezifikation wird als zukünftige Erweiterung behandelt. Interne Schnittstellen werden nur dokumentiert und getestet, wenn sie für die tatsächlich implementierten MVP-Funktionen erforderlich sind.
 
 ---
 
@@ -385,13 +385,13 @@ Die konkrete API-Spezifikation wird als zukünftige Erweiterung behandelt.
 
 OpenWarnDEV sieht verschiedene Nutzer- und Administrationsszenarien vor.
 
-Die genaue Trennung zwischen normalen Endnutzern, autorisierten Nutzern und Administratoren ist jedoch noch nicht vollständig als einheitliches Berechtigungssystem umgesetzt.
+Eine Authentifizierung, ein Rollenmodell oder eine Zugriffskontrolle ist im geprüften Repository nicht auffindbar. Die Trennung zwischen normalen Endnutzern, autorisierten Nutzern und Administratoren ist nur als konzeptionelles Nutzungsszenario dokumentiert.
 
 ### 14.2 SOLL-Zustand
 
 Der MVP soll zwischen normalen Endnutzern und administrativen Funktionen unterscheiden.
 
-Administrative Funktionen müssen vor unberechtigtem Zugriff geschützt werden.
+Administrative Funktionen müssen vor unberechtigtem Zugriff geschützt werden. Die konkrete technische Umsetzung der Zugriffskontrolle wird vor der Implementierung entschieden und darf nicht ausschließlich auf einer Client-Prüfung beruhen.
 
 Insbesondere das manuelle Auslösen von Push-Nachrichten darf nicht für normale Endnutzer verfügbar sein.
 

@@ -3,6 +3,7 @@
 **Projekt:** OpenWarnDE 2.0  
 **Ausgangssystem:** OpenWarnDEV  
 **Repository:** https://github.com/FlorianCramer/OpenWarnDEV  
+**Geprüfter Stand:** `main`, Commit `25cb016119ad06727c27aab604249f004b3a0ac9`
 **Analyseziel:** Erfassung des bestehenden technischen und fachlichen Zustands als Grundlage für die Neukonzeption von OpenWarnDE 2.0
 
 ---
@@ -28,23 +29,25 @@ Die Analyse bildet die Grundlage für:
 
 ## 2. Ausgangssituation
 
-OpenWarnDEV ist eine bestehende Warn-, Karten- und Lageinformationsanwendung.
+OpenWarnDEV ist im geprüften Stand eine Webanwendung mit Karten- und Standortfunktionen. Eine implementierte Verarbeitung realer Warnmeldungen ist im Repository nicht eindeutig nachweisbar.
 
 Das Projekt verfolgt bereits die Idee, öffentliche Gefährdungs- und Warninformationen zentral bereitzustellen und diese über eine Kartenansicht für verschiedene Nutzergruppen zugänglich zu machen.
 
-Die bestehende Anwendung enthält bereits wesentliche technische Grundlagen für:
+Die vorhandene Repository-Struktur und die zu diesem Zeitpunkt geprüfte Dokumentation weisen auf folgende technische Grundlagen oder Planungen hin. Der jeweilige Umsetzungsstatus wird nachfolgend getrennt betrachtet:
 
-- Webanwendung
-- mobile Anwendungen
-- interaktive Karten
-- Standortbestimmung
-- Warnungsdarstellung
-- Push-Benachrichtigungen
-- 3D-Kartendarstellung
-- zukünftige Datenverarbeitung auf Serverseite
-- administrative Funktionen
+- Webanwendung (**Vorhanden**)
+- Capacitor-Integration und Android-Projekt (**Teilweise vorhanden**)
+- interaktive Karten (**Vorhanden**)
+- Standortbestimmung (**Vorhanden**)
+- Darstellung des eigenen Standorts (**Vorhanden**)
+- Kartenlayer und 3D-bezogene Layer (**Vorhanden**)
+- Push-Benachrichtigungen (**Geplant, nicht implementiert**)
+- serverseitige Datenverarbeitung (**Dokumentiert/geplant, nicht implementiert**)
+- administrative Funktionen (**Dokumentiert/geplant, nicht auffindbar**)
 
-Die bestehende Dokumentation beschreibt bereits eine Trennung zwischen Client-Anwendung, Server, Datenintegration, Warnlogik und Administration.
+Die Aufzählung enthält sowohl vorhandene Ansätze als auch geplante Funktionen. Eine Funktion wird für die weitere Planung nur dann als vorhanden behandelt, wenn sie im Repository oder in einer nachvollziehbaren technischen Dokumentation eindeutig nachweisbar ist.
+
+Die bestehende Dokumentation beschreibt eine geplante Trennung zwischen Client-Anwendung, Server, Datenintegration, Warnlogik und Administration. Diese Trennung ist nicht als vollständig implementierte Systemarchitektur nachgewiesen.
 
 Gleichzeitig ist die bestehende Codebasis historisch gewachsen. Anforderungen, technische Entscheidungen, geplante Funktionen und bereits implementierte Bestandteile sind teilweise miteinander vermischt.
 
@@ -58,29 +61,30 @@ Das Repository enthält neben dem eigentlichen Anwendungscode auch Dokumentation
 
 | Bereich        | Bedeutung                                                        |
 | -------------- | ---------------------------------------------------------------- |
-| `app/`         | Hauptanwendung                                                   |
-| `app/android/` | Android-Projekt für die mobile Anwendung                         |
+| `app/`         | Next.js-Hauptanwendung                                           |
+| `app/android/` | vorhandenes Android-Projekt für die Capacitor-Integration        |
 | `.github/`     | GitHub-Konfiguration, Issue-/Pull-Request-Vorlagen und Workflows |
 | `docs/`        | technische Dokumentation und Planung                             |
 | `README.md`    | Projektbeschreibung und grundlegende Informationen               |
 
-Das Repository ist aktuell noch stark auf die bestehende Anwendung ausgerichtet.
+Das Repository enthält im geprüften Stand im Wesentlichen eine einzelne Webanwendung mit Kartenkomponenten. Ein separates Admin- oder Backend-Projekt ist nicht vorhanden.
 
-Eine klare Trennung in eigenständige Komponenten wie **App**, **Admin** und **Backend/Processing**, wie sie für OpenWarnDE 2.0 vorgesehen ist, ist im aktuellen Projekt noch nicht vollständig umgesetzt.
+Eine klare Trennung in eigenständige Komponenten wie **App**, **Admin** und **Backend/Processing**, wie sie für OpenWarnDE 2.0 vorgesehen ist, ist im aktuellen Projekt nicht umgesetzt.
 
 ---
 
 ## 4. Bestehende Anwendung
 
-### 4.1 Web- und Mobile-Anwendung
+### 4.1 Webanwendung und mobile Grundlage
 
-Die bestehende Anwendung basiert auf einer Webtechnologie und wird über Capacitor für mobile Plattformen ergänzt.
+Die bestehende Anwendung basiert auf Next.js und React. Capacitor ist integriert und ein Android-Projekt ist vorhanden. Daraus lässt sich keine vollständig entwickelte mobile Anwendung ableiten.
 
 Aus der vorhandenen Projektstruktur und Dokumentation ergeben sich folgende Einsatzbereiche:
 
 - Webanwendung
-- Android-Anwendung
-- geplante bzw. vorbereitete iOS-Anwendung
+- Capacitor-Integration
+- vorhandenes Android-Projekt
+- teilweise vorhandene iOS-Struktur; eine vollständig implementierte iOS-Anwendung ist nicht nachgewiesen
 
 Die Anwendung stellt die zentrale Benutzeroberfläche von OpenWarnDEV dar.
 
@@ -88,16 +92,15 @@ Die Anwendung stellt die zentrale Benutzeroberfläche von OpenWarnDEV dar.
 
 Die Karte stellt einen wesentlichen Bestandteil der Anwendung dar.
 
-Bereits vorgesehen bzw. umgesetzt sind unter anderem:
+Im geprüften Code sind unter anderem folgende Kartenbestandteile vorhanden:
 
 - interaktive Kartenansicht
 - Darstellung des eigenen Standorts
 - Geolocation
 - Kartenlayer
-- Warninformationen
-- 3D-Gelände
-- 3D-Gebäude
-- weitere operative bzw. geografische Informationen
+- 3D-bezogene Gelände- und Gebäude-Layer
+
+Eine konkrete Darstellung realer Warnmeldungen oder operativer Fachdaten ist im Code nicht eindeutig nachgewiesen.
 
 Als Kartenbibliothek wird **MapLibre GL JS** verwendet.
 
@@ -109,43 +112,43 @@ Der Standort wird unter anderem für die Darstellung des eigenen Standortes inne
 
 ### 4.4 Push-Benachrichtigungen
 
-Für Warnmeldungen ist eine Push-Funktion vorgesehen.
+Push-Benachrichtigungen sind in der OpenWarnDEV-Dokumentation als zukünftige beziehungsweise konzeptionelle Funktion beschrieben. Im geprüften OpenWarnDEV-Code ist kein Push-Versand implementiert.
 
-Die bestehende Architektur sieht vor, dass Warnungen serverseitig erzeugt bzw. verarbeitet und anschließend an die Anwendung übermittelt werden.
+Die Dokumentation beschreibt eine geplante serverseitige Erzeugung und Verarbeitung von Warnungen.
 
-Die konkrete und vollständig produktive serverseitige Warnungsverarbeitung ist Bestandteil der weiteren Analyse.
+Eine implementierte serverseitige Warnungsverarbeitung ist im Repository nicht auffindbar.
 
 ---
 
 ## 5. Technologischer Ist-Zustand
 
-Die bestehende Anwendung verwendet unter anderem folgende Technologien:
+Im geprüften Repository sind unter anderem folgende Technologien und Konfigurationen nachweisbar:
 
-| Technologie               | Verwendung                      |
-| ------------------------- | ------------------------------- |
-| TypeScript                | Programmiersprache              |
-| React                     | UI-Framework                    |
-| Next.js                   | Webanwendungsframework          |
-| Capacitor                 | Mobile Plattformintegration     |
-| MapLibre GL JS            | Kartendarstellung               |
-| Zustand                   | Zustandsverwaltung              |
-| Tailwind CSS              | Styling                         |
-| Flowbite / Flowbite React | UI-Komponenten                  |
-| Firebase Hosting          | Bereitstellung der Webanwendung |
-| Git / GitHub              | Versionsverwaltung              |
-| GitHub Actions            | Automatisierung und CI/CD       |
+| Technologie               | Verwendung                            |
+| ------------------------- | ------------------------------------- |
+| TypeScript                | Programmiersprache                    |
+| React                     | UI-Framework                          |
+| Next.js                   | Webanwendungsframework                |
+| Capacitor                 | Mobile Plattformintegration           |
+| MapLibre GL JS            | Kartendarstellung                     |
+| Zustand                   | Zustandsverwaltung                    |
+| Tailwind CSS              | Styling                               |
+| Flowbite / Flowbite React | UI-Komponenten                        |
+| Firebase Hosting          | Hosting- und Deployment-Konfiguration |
+| Git / GitHub              | Versionsverwaltung                    |
+| GitHub Actions            | Automatisierung und CI/CD             |
 
-Die bestehende Anwendung verwendet aktuell Next.js 16, React 19, TypeScript 5 und MapLibre GL JS 5.
+Die zum Analysezeitpunkt ermittelten Versionsstände werden nur als Momentaufnahme des Ausgangssystems betrachtet. Sie sind keine Festlegung für OpenWarnDE 2.0.
 
-Die konkreten Versionsstände sind Bestandteil des aktuellen Repository-Zustands und können sich während der weiteren Entwicklung ändern.
+Die konkreten Versionsstände sind Bestandteil des geprüften Ausgangszustands und können sich während der weiteren Entwicklung ändern.
 
 ---
 
 ## 6. Firebase und Hosting
 
-Firebase wird im bestehenden Projekt insbesondere für die Bereitstellung der Webanwendung verwendet.
+Firebase Hosting und Firebase-bezogene Deployment-Konfiguration sind vorhanden.
 
-Die Anwendung ist aktuell über Firebase Hosting öffentlich erreichbar.
+Eine Firebase-Hosting-Konfiguration und ein Hosting-Deployment-Workflow sind vorhanden. Eine Aussage über die aktuelle öffentliche Erreichbarkeit wird in dieser Analyse nicht zusätzlich verifiziert.
 
 Die bestehende Repository-Struktur enthält unter anderem:
 
@@ -155,13 +158,13 @@ Die bestehende Repository-Struktur enthält unter anderem:
 
 Die aktuelle Webanwendung wird als statischer Export bereitgestellt.
 
-Eine zentrale serverseitige Verarbeitungsschicht ist in der bestehenden Dokumentation vorgesehen, aber nicht vollständig Bestandteil der aktuellen App-Implementierung.
+Eine zentrale serverseitige Verarbeitungsschicht ist in der bestehenden Dokumentation vorgesehen, im geprüften Repository aber nicht als implementierte Komponente nachweisbar. Firebase wird nicht als Backend, Datenbank, Authentifizierungs- oder Push-Dienst des Ist-Systems dargestellt.
 
 ---
 
 ## 7. Backend / Server
 
-Die bestehende Projektdokumentation beschreibt bereits einen zukünftigen bzw. geplanten Server als zentrale Verarbeitungsschicht.
+Die bestehende Projektdokumentation beschreibt einen zukünftigen beziehungsweise geplanten Server als zentrale Verarbeitungsschicht.
 
 Dieser soll unter anderem folgende Aufgaben übernehmen:
 
@@ -179,7 +182,7 @@ Als Technologie für diesen Server ist in der bestehenden Dokumentation Python v
 
 ### Ist-Bewertung
 
-Die serverseitige Architektur ist im bestehenden Projekt stärker als Konzept bzw. geplante Funktionalität vorhanden als als vollständig integrierter Bestandteil der aktuellen Anwendung.
+Die serverseitige Architektur ist als Dokumentation beziehungsweise Planung vorhanden. Eine separate Backend- oder Python-Komponente ist im geprüften Repository nicht auffindbar.
 
 Dies stellt einen wichtigen Unterschied zur Zielarchitektur von OpenWarnDE 2.0 dar.
 
@@ -187,7 +190,7 @@ Dies stellt einen wichtigen Unterschied zur Zielarchitektur von OpenWarnDE 2.0 d
 
 ## 8. Datenquellen
 
-OpenWarnDEV ist darauf ausgelegt, verschiedene öffentliche und möglichst frei verfügbare Datenquellen zu verwenden.
+Die OpenWarnDEV-Dokumentation beschreibt die mögliche Verwendung verschiedener öffentlicher Datenquellen. Im geprüften Code sind keine entsprechenden Datenadapter, Parser oder Abrufdienste nachweisbar.
 
 In der bestehenden Dokumentation werden unter anderem folgende Datenbereiche genannt:
 
@@ -200,7 +203,7 @@ In der bestehenden Dokumentation werden unter anderem folgende Datenbereiche gen
 - Infrastrukturinformationen
 - weitere geografische bzw. operative Daten
 
-Die Datenquellen sind jedoch nicht als vollständig integrierte und einheitliche Datenplattform umgesetzt.
+Die Datenquellen sind im geprüften Repository nicht als integrierte Datenplattform umgesetzt.
 
 Für OpenWarnDE 2.0 muss daher untersucht werden:
 
@@ -215,7 +218,7 @@ Für OpenWarnDE 2.0 muss daher untersucht werden:
 
 ## 9. Datenverarbeitung
 
-Die bestehende Architektur sieht eine zentrale Verarbeitung der externen Daten vor.
+Die bestehende Dokumentation sieht eine zentrale Verarbeitung externer Daten vor.
 
 Das geplante Prinzip ist:
 
@@ -227,15 +230,15 @@ Das geplante Prinzip ist:
 6. Erzeugung einer Warnung
 7. Übermittlung an die Anwendung
 
-Damit ist bereits eine grundsätzliche Trennung zwischen Datenerfassung und Benutzeroberfläche vorgesehen.
+Damit ist konzeptionell eine Trennung zwischen Datenerfassung und Benutzeroberfläche beschrieben.
 
-Die vollständige Umsetzung dieser Verarbeitung ist jedoch nicht Bestandteil der aktuellen App-Struktur und muss für OpenWarnDE 2.0 neu bewertet und konkretisiert werden.
+Eine Implementierung dieser Verarbeitung ist im geprüften Repository nicht auffindbar und muss für OpenWarnDE 2.0 neu bewertet und konkretisiert werden.
 
 ---
 
 ## 10. Administration
 
-OpenWarnDEV enthält konzeptionell einen administrativen Bereich.
+Die OpenWarnDEV-Dokumentation beschreibt einen administrativen Bereich. Eine Admin-Anwendung, Admin-Route oder Verwaltungslogik ist im geprüften Frontend nicht auffindbar.
 
 Dieser soll unter anderem die Verwaltung von:
 
@@ -267,7 +270,7 @@ Dieser soll spezielle Funktionen für beispielsweise:
 
 bereitstellen.
 
-Die genaue Ausgestaltung von Authentifizierung und Autorisierung ist für OpenWarnDE 2.0 noch zu definieren.
+Eine implementierte Authentifizierung, ein Rollenmodell oder eine Zugriffskontrolle ist im geprüften Repository nicht auffindbar. Die Ausgestaltung ist für OpenWarnDE 2.0 zu definieren.
 
 Dabei soll insbesondere zwischen:
 
@@ -396,7 +399,7 @@ ist für OpenWarnDE 2.0 erforderlich.
 
 ## 16. Positive Bestandteile und wiederverwendbare Grundlagen
 
-Trotz der genannten Probleme enthält OpenWarnDEV bereits eine umfangreiche technische Grundlage.
+Trotz der genannten Lücken enthält OpenWarnDEV nachweisbare technische Grundlagen für Webanwendung, Karten und Geolocation.
 
 Als potenziell wiederverwendbare Bestandteile werden insbesondere betrachtet:
 
@@ -406,7 +409,7 @@ Als potenziell wiederverwendbare Bestandteile werden insbesondere betrachtet:
 - Capacitor-Integration
 - mobile Projektstruktur
 - UI-Komponenten
-- bestehende Firebase-Konfiguration
+- Firebase-Hosting- und Deployment-Konfiguration
 - GitHub-Actions-Workflows
 - vorhandene technische Dokumentation
 - Erfahrungen aus der bisherigen Entwicklung
@@ -417,7 +420,7 @@ Die tatsächliche Übernahme einzelner Bestandteile wird erst nach der weiteren 
 
 ## 17. Zusammenfassung des Ist-Zustands
 
-OpenWarnDEV besitzt bereits eine funktionsfähige technische Grundlage für eine kartenbasierte Warn- und Lageinformationsanwendung.
+OpenWarnDEV bietet nach dem geprüften Stand eine technische Ausgangsbasis für eine kartenbasierte Warn- und Lageinformationsanwendung.
 
 Insbesondere die App, Kartenfunktionen, Geolocation, mobile Integration, Webbereitstellung und erste automatisierte Entwicklungsprozesse sind bereits vorhanden.
 
@@ -447,20 +450,20 @@ Aus der Ist-Analyse ergeben sich folgende vorläufige Konsequenzen:
 
 ## 19. Vorläufige Bewertung
 
-| Bereich           | Ist-Zustand                   | Bewertung                            |
-| ----------------- | ----------------------------- | ------------------------------------ |
-| Web-App           | vorhanden                     | gute Grundlage                       |
-| Mobile App        | vorhanden / vorbereitet       | wiederverwendbare Grundlage          |
-| Kartenfunktion    | umfangreich vorhanden         | wichtige Grundlage                   |
-| Geolocation       | vorhanden                     | wiederverwendbar                     |
-| Push              | vorgesehen / integriert       | weitere Prüfung erforderlich         |
-| Firebase          | vorhanden                     | Nutzung muss neu bewertet werden     |
-| Backend           | teilweise konzeptionell       | neu zu definieren                    |
-| Datenintegration  | teilweise vorhanden / geplant | neu zu strukturieren                 |
-| Administration    | konzeptionell vorhanden       | klar abzugrenzen                     |
-| Authentifizierung | teilweise vorgesehen          | Anforderungen neu definieren         |
-| CI/CD             | vorhanden                     | weiter nutzbar                       |
-| Tests             | vorhanden, aber begrenzt      | Teststrategie erweitern              |
-| Dokumentation     | umfangreich vorhanden         | Ist und Planung stärker trennen      |
-| MVP-Abgrenzung    | nicht eindeutig               | muss neu definiert werden            |
-| Systemarchitektur | teilweise vorhanden           | für OpenWarnDE 2.0 neu strukturieren |
+| Bereich           | Ist-Zustand           | Bewertung                                                                  |
+| ----------------- | --------------------- | -------------------------------------------------------------------------- |
+| Web-App           | vorhanden             | Next.js-/React-Anwendung vorhanden                                         |
+| Mobile Grundlage  | teilweise vorhanden   | Capacitor und Android-Projekt                                              |
+| Kartenfunktion    | vorhanden             | MapLibre und Kartenkomponenten                                             |
+| Geolocation       | vorhanden             | Capacitor-Geolocation                                                      |
+| Push              | nicht auffindbar      | nur konzeptionell dokumentiert                                             |
+| Firebase          | konfiguriert          | Hosting/Deployment, kein Backendnachweis                                   |
+| Backend           | nicht auffindbar      | nur dokumentiert/geplant                                                   |
+| Datenintegration  | nicht auffindbar      | Datenquellen nur dokumentiert                                              |
+| Administration    | nicht auffindbar      | nur konzeptionell beschrieben                                              |
+| Authentifizierung | nicht auffindbar      | Rollenmodell nicht nachgewiesen                                            |
+| CI/CD             | vorhanden             | Builds und Deployments automatisiert                                       |
+| Tests             | teilweise vorhanden   | Android-Beispieltests; keine vollständige Anwendungstestsuite nachgewiesen |
+| Dokumentation     | umfangreich vorhanden | Ist und Planung stärker trennen                                            |
+| MVP-Abgrenzung    | nicht eindeutig       | muss neu definiert werden                                                  |
+| Systemarchitektur | teilweise vorhanden   | für OpenWarnDE 2.0 neu strukturieren                                       |

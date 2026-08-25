@@ -25,7 +25,7 @@
 
 ## 2. Ausgangssituation (IST)
 
-OpenWarnDEV ist eine bestehende Vorversion der OpenWarnDE-Plattform. Sie enthält bereits eine Web- und App-Anwendung, Kartenfunktionen, Geolocation, Firebase sowie erste Ansätze für Datenquellen, Administration und serverseitige Verarbeitung.
+OpenWarnDEV ist eine bestehende Vorversion der OpenWarnDE-Plattform. Im geprüften Stand verfügt es über eine Webanwendung, eine Capacitor-Integration mit Android-Projekt, Kartenfunktionen und Geolocation. Firebase ist für Hosting- und Deployment-Konfiguration nachweisbar. Datenquellen, Administration und serverseitige Verarbeitung sind in der Dokumentation beschrieben, im Code jedoch nicht als implementierte Komponenten nachweisbar.
 
 Die bestehende Codebasis und Dokumentation sind historisch gewachsen. Anforderungen, Architekturentscheidungen, Feature-Ideen und Implementierungsdetails sind teilweise miteinander vermischt und erschweren dadurch eine strukturierte Weiterentwicklung.
 
@@ -64,7 +64,7 @@ Die konkrete technische Ausgestaltung und der Umfang der einzelnen Komponenten w
 - Qualitätssicherung und Tests
 - Dokumentation und interne Abnahme
 
-> Die konkreten MVP-Funktionen werden erst nach der Anforderungsanalyse anhand von Nutzen, technischen Rahmenbedingungen, Abhängigkeiten und verfügbarem Projektumfang priorisiert.
+Der verbindliche Umfang des Schul-MVPs ist in [anforderungen.md](../02-analysis-and-planning/anforderungen.md) festgelegt. Änderungen daran werden begründet dokumentiert und nur vorgenommen, wenn sie innerhalb des Zeitbudgets erforderlich sind.
 
 ---
 
@@ -128,13 +128,13 @@ Da das Projekt als Einzelprojekt durchgeführt wird, werden Projektplanung, Entw
 | Phase      | Meilenstein                           |  Aufwand |
 | ---------- | ------------------------------------- | -------: |
 | 1          | Projektvorbereitung und Projektantrag |      4 h |
-| 2          | Ist-Analyse OpenWarnDEV               |     10 h |
-| 3          | Stakeholder- und Anforderungsanalyse  |     16 h |
-| 4          | Soll-Konzept und Architektur          |     12 h |
-| 5          | Variantenvergleich und MVP-Definition |      6 h |
-| 6          | Prototypische Implementierung         |     18 h |
-| 7          | Qualitätssicherung und Abnahme        |      4 h |
-| 8          | Dokumentation und Präsentation        |     10 h |
+| 2          | Ist-Analyse OpenWarnDEV               |      6 h |
+| 3          | Stakeholder- und Anforderungsanalyse  |      6 h |
+| 4          | Soll-Konzept und Architektur          |      6 h |
+| 5          | Variantenvergleich und MVP-Definition |      4 h |
+| 6          | Prototypische Implementierung         |     38 h |
+| 7          | Qualitätssicherung und Abnahme        |      8 h |
+| 8          | Dokumentation und Präsentation        |      8 h |
 | **Gesamt** |                                       | **80 h** |
 
 > Die konkrete Aufgaben- und Zeitplanung wird im Rahmen der Projektplanung weiter detailliert und bei Bedarf angepasst.
@@ -212,7 +212,7 @@ Der konkrete Testumfang wird an den tatsächlich umgesetzten Funktionsumfang ang
 
 ## 11. Bewertungsbezug
 
-Die Projektdokumentation orientiert sich an den Bewertungskriterien des Arbeitsauftrags:
+Die Projektdokumentation berücksichtigt typische Bestandteile einer strukturierten schulischen Projektarbeit. Eine exakte Übereinstimmung mit einem nicht vorliegenden Arbeitsauftrag kann nicht verifiziert werden:
 
 - **Ist-/Sollanalyse**
 - **Projektplanung**
@@ -236,10 +236,10 @@ Die für das Projekt relevanten Bereiche wie Anforderungsanalyse, Variantenvergl
 
 ## 13. Geplante Anlagen
 
-- [ ] Ist-Analyse des bestehenden OpenWarnDEV-Systems
-- [ ] Stakeholderanalyse
-- [ ] Anforderungsliste
-- [ ] Projekt- und Zeitplan
+- [x] Ist-Analyse des bestehenden OpenWarnDEV-Systems
+- [x] Stakeholderanalyse
+- [x] Anforderungsliste
+- [x] Projekt- und Zeitplan
 
 ---
 

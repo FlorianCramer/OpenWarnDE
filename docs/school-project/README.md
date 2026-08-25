@@ -51,7 +51,7 @@ school-project/
 │   ├── [x] anforderungen.md
 │   ├── [x] soll-ist-vergleich.md
 │   ├── [x] variantenvergleich.md
-│   └── [ ] projektplanung.md
+│   └── [x] projektplanung.md
 │
 ├── 03-implementation/
 │   ├── [ ] architecture.md
@@ -77,25 +77,25 @@ Der Fortschritt wird anhand der bereits vorhandenen Dateien ermittelt.
 | Phase               | Dateien vorhanden | Gesamt | Fortschritt |
 | ------------------- | ----------------: | -----: | ----------: |
 | Projektantrag       |                 2 |      2 |       100 % |
-| Analyse und Planung |                 5 |      6 |      83,3 % |
+| Analyse und Planung |                 6 |      6 |       100 % |
 | Implementierung     |                 0 |      3 |         0 % |
 | Tests und Abnahme   |                 0 |      3 |         0 % |
 | Dokumentation       |                 0 |      3 |         0 % |
-| **Gesamt**          |             **7** | **17** |  **41,1 %** |
+| **Gesamt**          |             **8** | **17** |  **47,1 %** |
 
-**Gesamtfortschritt:** `7 / 17 = 41,1 %`
+**Gesamtfortschritt:** `8 / 17 = 47,1 %`
 
 > **Hinweis:** Die Werte werden aktuell manuell anhand der abgehakten Dateien im Projektstruktur-Tree gepflegt.
 
 ## Status
 
-| Phase               | Status         |
-| ------------------- | -------------- |
-| Projektantrag       | In Bearbeitung |
-| Ist-Analyse         | Fertig         |
-| Anforderungsanalyse | Fertig         |
-| Soll-Konzept        | Fertig         |
-| MVP                 | In Bearbeitung |
-| Implementierung     | Offen          |
-| Tests               | Offen          |
-| Dokumentation       | Offen          |
+| Phase               | Status    |
+| ------------------- | --------- |
+| Projektantrag       | Fertig    |
+| Ist-Analyse         | Fertig    |
+| Anforderungsanalyse | Fertig    |
+| Soll-Konzept        | Fertig    |
+| MVP                 | Definiert |
+| Implementierung     | Offen     |
+| Tests               | Offen     |
+| Dokumentation       | Offen     |

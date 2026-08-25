@@ -15,7 +15,7 @@ Die Anforderungen dienen als Grundlage für:
 - die Qualitätssicherung und Tests
 - die spätere Abnahme des Projektergebnisses
 
-Die Anforderungen werden im weiteren Projektverlauf überprüft und bei Bedarf angepasst.
+Die Anforderungen bilden für die Planung die verbindliche Grundlage. Änderungen am MVP werden begründet dokumentiert; Soll- und Kann-Anforderungen sind keine Abnahmekriterien.
 
 ---
 
@@ -32,7 +32,7 @@ Im Mittelpunkt stehen:
 3. die Ermittlung und Darstellung des eigenen Standorts
 4. eine Suchfunktion für die Karte
 5. die Anpassung und Konfiguration der Kartendarstellung
-6. die grundlegenden Funktionen einer Verwaltungsoberfläche
+6. eine grundlegende Verwaltungsoberfläche mit Zugriffsschutz
 7. die Möglichkeit, manuell eine Push-Nachricht aus der Verwaltung auszulösen
 
 Der MVP soll bewusst so aufgebaut werden, dass spätere Funktionen wie Datenquellen, serverseitige Datenverarbeitung und eine öffentliche API darauf aufbauen können.
@@ -55,8 +55,9 @@ Folgende Funktionen sind Bestandteil des Schulprojekts:
 - Anpassung der Kartendarstellung
 - grundlegende Konfiguration der Anwendung über die Verwaltung
 - manuelles Auslösen einer Push-Nachricht
-- technische Grundlage für eine spätere Erweiterung um weitere Dienste und Datenquellen
 - Qualitätssicherung und Tests der implementierten Funktionen
+
+Die technische Vorbereitung auf spätere Dienste ist Teil der Architekturplanung, aber keine zusätzliche MVP-Funktion.
 
 ### 3.2 Nicht Bestandteil des MVP
 
@@ -102,11 +103,11 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 ### 5.1 Grundlegende Anwendung
 
-| ID | Anforderung |
-|----|-------------|
-| **FR-001** | Die Anwendung MUSS gestartet werden können und eine grundlegende Benutzeroberfläche bereitstellen. |
-| **FR-002** | Die Anwendung MUSS eine nachvollziehbare Navigation zwischen den vorgesehenen Bereichen ermöglichen. |
-| **FR-003** | Die Benutzeroberfläche für Endnutzer und die Verwaltungsfunktionen SOLLEN logisch voneinander getrennt sein. |
+| ID         | Anforderung                                                                                                                                                                           |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **FR-001** | Die Anwendung MUSS gestartet werden können und eine grundlegende Benutzeroberfläche bereitstellen.                                                                                    |
+| **FR-002** | Die Anwendung MUSS eine nachvollziehbare Navigation zwischen den vorgesehenen Bereichen ermöglichen.                                                                                  |
+| **FR-003** | Die Benutzeroberfläche für Endnutzer und die Verwaltungsfunktionen SOLLEN logisch voneinander getrennt sein.                                                                          |
 | **FR-004** | Die Projektstruktur MUSS so aufgebaut sein, dass weitere Funktionen und Komponenten später ergänzt werden können, ohne die grundlegende Struktur des Projekts neu aufbauen zu müssen. |
 
 ---
@@ -115,12 +116,12 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 ### 6.1 Kartenansicht
 
-| ID | Anforderung |
-|----|-------------|
-| **FR-101** | Die Anwendung MUSS eine interaktive Karte anzeigen. Der Nutzer MUSS die Karte mindestens verschieben und den Kartenausschnitt verändern können. |
-| **FR-102** | Der Nutzer MUSS die Möglichkeit haben, in die Karte hinein- und herauszuzoomen. |
+| ID         | Anforderung                                                                                                                                                                                                |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **FR-101** | Die Anwendung MUSS eine interaktive Karte anzeigen. Der Nutzer MUSS die Karte mindestens verschieben und den Kartenausschnitt verändern können.                                                            |
+| **FR-102** | Der Nutzer MUSS die Möglichkeit haben, in die Karte hinein- und herauszuzoomen.                                                                                                                            |
 | **FR-103** | Die Anwendung MUSS eine definierte Kartendarstellung verwenden. Die verwendete Kartendarstellung SOLL so aufgebaut sein, dass sie später angepasst oder durch weitere Darstellungen erweitert werden kann. |
-| **FR-104** | Die Darstellung der Karte SOLL über definierte Einstellungen angepasst werden können. Mögliche Einstellungen umfassen beispielsweise: <br> - verwendeter Kartenstil<br> - Sichtbarkeit bestimmter Kartenelemente<br> - Darstellung relevanter Layer<br> - grundlegende Anzeigeoptionen <br><br> Der konkrete Umfang der Einstellungen wird während der Architektur- und Implementierungsphase festgelegt. |
+| **FR-104** | Die Darstellung der Karte MUSS über mindestens eine vorab dokumentierte Einstellung angepasst werden können. Weitere Optionen sind Soll- oder Kann-Umfang.                                                 |
 
 ---
 
@@ -128,13 +129,13 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 ### 7.1 Ermittlung des eigenen Standorts
 
-| ID | Anforderung |
-|----|-------------|
+| ID         | Anforderung                                                                                                                                   |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | **FR-201** | Die Anwendung MUSS den Nutzer über die benötigte Standortberechtigung informieren und diese entsprechend der verwendeten Plattform anfordern. |
-| **FR-202** | Die Anwendung MUSS den aktuellen Standort des Nutzers ermitteln können, sofern der Nutzer die erforderliche Berechtigung erteilt. |
-| **FR-203** | Der ermittelte Standort MUSS auf der Karte dargestellt werden. |
-| **FR-204** | Der Nutzer SOLL die Möglichkeit haben, die Karte auf den eigenen Standort zu zentrieren. |
-| **FR-205** | Kann der Standort nicht ermittelt werden, MUSS die Anwendung einen verständlichen Hinweis anzeigen. |
+| **FR-202** | Die Anwendung MUSS den aktuellen Standort des Nutzers ermitteln können, sofern der Nutzer die erforderliche Berechtigung erteilt.             |
+| **FR-203** | Der ermittelte Standort MUSS auf der Karte dargestellt werden.                                                                                |
+| **FR-204** | Der Nutzer SOLL die Möglichkeit haben, die Karte auf den eigenen Standort zu zentrieren.                                                      |
+| **FR-205** | Kann der Standort nicht ermittelt werden, MUSS die Anwendung einen verständlichen Hinweis anzeigen.                                           |
 
 ---
 
@@ -142,12 +143,12 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 ### 8.1 Kartensuche
 
-| ID | Anforderung |
-|----|-------------|
-| **FR-301** | Die Anwendung MUSS ein Suchfeld für die Kartensuche bereitstellen. |
-| **FR-302** | Der Nutzer MUSS über die Suchfunktion nach einem Ort suchen können. |
-| **FR-303** | Ein ausgewähltes Suchergebnis MUSS auf der Karte dargestellt werden. |
-| **FR-304** | Nach Auswahl eines Suchergebnisses SOLL die Karte auf den gefundenen Ort zentriert werden. |
+| ID         | Anforderung                                                                                                         |
+| ---------- | ------------------------------------------------------------------------------------------------------------------- |
+| **FR-301** | Die Anwendung MUSS ein Suchfeld für die Kartensuche bereitstellen.                                                  |
+| **FR-302** | Der Nutzer MUSS über die Suchfunktion nach einem Ort suchen können.                                                 |
+| **FR-303** | Ein ausgewähltes Suchergebnis MUSS auf der Karte dargestellt werden.                                                |
+| **FR-304** | Nach Auswahl eines Suchergebnisses SOLL die Karte auf den gefundenen Ort zentriert werden.                          |
 | **FR-305** | Wenn kein passendes Suchergebnis gefunden wird, MUSS die Anwendung dem Nutzer eine verständliche Rückmeldung geben. |
 
 ---
@@ -156,13 +157,13 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 ### 9.1 Grundlagen
 
-| ID | Anforderung |
-|----|-------------|
-| **FR-401** | Es MUSS eine separate Verwaltungsoberfläche beziehungsweise ein Verwaltungsbereich vorhanden sein. |
-| **FR-402** | Die Verwaltung MUSS eine zentrale Übersicht über die verfügbaren Verwaltungsfunktionen bereitstellen. |
-| **FR-403** | Die Verwaltung SOLL die Konfiguration ausgewählter OpenWarnDE-Funktionen ermöglichen. Der konkrete Umfang wird im Rahmen der MVP-Planung festgelegt. |
-| **FR-404** | Über die Verwaltung vorgenommene Einstellungen SOLLEN dauerhaft gespeichert werden können, sofern dies für die jeweilige Einstellung erforderlich ist. |
-| **FR-405** | Nach einer Verwaltungsaktion MUSS der Administrator eine verständliche Rückmeldung über den Erfolg oder Fehler der Aktion erhalten. |
+| ID         | Anforderung                                                                                                                                                                                               |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **FR-401** | Es MUSS eine separate Verwaltungsoberfläche beziehungsweise ein Verwaltungsbereich vorhanden sein.                                                                                                        |
+| **FR-402** | Die Verwaltung MUSS eine zentrale Übersicht über die verfügbaren Verwaltungsfunktionen bereitstellen.                                                                                                     |
+| **FR-403** | Die Verwaltung MUSS mindestens die für die Kartendarstellung festgelegte Einstellung konfigurieren können. Weitere Einstellungen sind optional.                                                           |
+| **FR-404** | Die für den MVP festgelegte Einstellung MUSS dauerhaft gespeichert werden, sofern sie nicht ausschließlich für die aktuelle Sitzung gilt. Der Speicherort wird in der Architekturentscheidung festgelegt. |
+| **FR-405** | Nach einer Verwaltungsaktion MUSS der Administrator eine verständliche Rückmeldung über den Erfolg oder Fehler der Aktion erhalten.                                                                       |
 
 ---
 
@@ -170,13 +171,15 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 ### 10.1 Manuelles Versenden
 
-| ID | Anforderung |
-|----|-------------|
-| **FR-501** | Der Administrator MUSS über die Verwaltung eine Push-Nachricht erstellen können. |
-| **FR-502** | Eine Push-Nachricht MUSS mindestens einen Titel und einen Nachrichtentext enthalten können. |
-| **FR-503** | Der Administrator MUSS eine Push-Nachricht manuell auslösen können. |
-| **FR-504** | Nach dem Auslösen der Nachricht MUSS die Verwaltung den Status der Aktion anzeigen. |
+| ID         | Anforderung                                                                                                                                                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **FR-501** | Der Administrator MUSS über die Verwaltung eine Push-Nachricht erstellen können.                                                                                                                                            |
+| **FR-502** | Eine Push-Nachricht MUSS mindestens einen Titel und einen Nachrichtentext enthalten können.                                                                                                                                 |
+| **FR-503** | Der Administrator MUSS eine Push-Nachricht manuell auslösen können.                                                                                                                                                         |
+| **FR-504** | Nach dem Auslösen der Nachricht MUSS die Verwaltung den Status der Aktion anzeigen.                                                                                                                                         |
 | **FR-505** | Der MVP MUSS keine automatische Erzeugung von Push-Nachrichten aus externen Warn- oder Datenquellen unterstützen. Push-Nachrichten werden im Rahmen des Schulprojekts ausschließlich manuell über die Verwaltung ausgelöst. |
+
+Vor der Implementierung wird festgelegt, ob der manuelle Auslösevorgang an einen vorhandenen Push-Dienst oder an eine begrenzte technische Testumgebung angebunden wird. Automatische Warnverarbeitung und umfangreiche Empfängerlogik bleiben ausgeschlossen.
 
 ---
 
@@ -184,12 +187,12 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 ### 11.1 Abgrenzung
 
-| ID | Anforderung |
-|----|-------------|
-| **FR-601** | Die Verarbeitung externer Warn- und Informationsdaten ist kein Bestandteil des Schul-MVPs. |
-| **FR-602** | Die Architektur SOLL jedoch so vorbereitet werden, dass eine spätere Verarbeitung externer Datenquellen integriert werden kann. |
+| ID         | Anforderung                                                                                                                                                                               |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **FR-601** | Die Verarbeitung externer Warn- und Informationsdaten ist kein Bestandteil des Schul-MVPs.                                                                                                |
+| **FR-602** | Die Architektur SOLL jedoch so vorbereitet werden, dass eine spätere Verarbeitung externer Datenquellen integriert werden kann.                                                           |
 | **FR-603** | Die Entwicklung einer vollständigen öffentlichen OpenWarnDE-API ist nicht Bestandteil des Schulprojekts. Die Systemarchitektur SOLL jedoch eine spätere Einführung einer API ermöglichen. |
-| **FR-604** | Der MVP MUSS ohne die Integration umfangreicher externer Datenquellen funktionsfähig sein. |
+| **FR-604** | Der MVP MUSS ohne die Integration umfangreicher externer Datenquellen funktionsfähig sein.                                                                                                |
 
 ---
 
@@ -197,31 +200,31 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 ### 12.1 Wartbarkeit
 
-| ID | Anforderung |
-|----|-------------|
-| **NFR-001** | Der Quellcode MUSS nachvollziehbar strukturiert und in logisch getrennte Komponenten aufgeteilt werden. |
+| ID          | Anforderung                                                                                                                |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **NFR-001** | Der Quellcode MUSS nachvollziehbar strukturiert und in logisch getrennte Komponenten aufgeteilt werden.                    |
 | **NFR-002** | Neue Funktionen SOLLEN möglichst ohne grundlegende Änderungen an bereits bestehenden Komponenten integriert werden können. |
-| **NFR-003** | Wichtige technische Entscheidungen und die grundlegende Systemstruktur MÜSSEN dokumentiert werden. |
+| **NFR-003** | Wichtige technische Entscheidungen und die grundlegende Systemstruktur MÜSSEN dokumentiert werden.                         |
 
 ### 12.2 Qualität
 
-| ID | Anforderung |
-|----|-------------|
-| **NFR-101** | Das Projekt SOLL eine statische Typprüfung verwenden. |
-| **NFR-102** | Der Quellcode SOLL automatisiert auf definierte Qualitätsregeln geprüft werden. |
-| **NFR-103** | Das Projekt MUSS reproduzierbar gebaut werden können. |
+| ID          | Anforderung                                                                                                                 |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **NFR-101** | Das Projekt SOLL eine statische Typprüfung verwenden.                                                                       |
+| **NFR-102** | Der Quellcode SOLL automatisiert auf definierte Qualitätsregeln geprüft werden.                                             |
+| **NFR-103** | Das Projekt MUSS reproduzierbar gebaut werden können.                                                                       |
 | **NFR-104** | Fehler innerhalb der Anwendung MÜSSEN soweit möglich kontrolliert behandelt und dem Nutzer verständlich dargestellt werden. |
 
 ---
 
 ## 13. Sicherheit
 
-| ID | Anforderung |
-|----|-------------|
-| **NFR-201** | Administrative Funktionen DÜRFEN nicht ohne geeignete Zugriffskontrolle für beliebige Endnutzer zugänglich sein. |
-| **NFR-202** | Kritische administrative Aktionen SOLLEN nicht ausschließlich durch Prüfungen im Client geschützt werden. |
+| ID          | Anforderung                                                                                                                                                         |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **NFR-201** | Administrative Funktionen DÜRFEN nicht ohne geeignete Zugriffskontrolle für beliebige Endnutzer zugänglich sein.                                                    |
+| **NFR-202** | Kritische administrative Aktionen SOLLEN nicht ausschließlich durch Prüfungen im Client geschützt werden.                                                           |
 | **NFR-203** | Standortdaten DÜRFEN nur verarbeitet werden, wenn dies für die jeweilige Funktion erforderlich ist und der Nutzer die dafür notwendigen Berechtigungen erteilt hat. |
-| **NFR-204** | Das manuelle Versenden von Push-Nachrichten MUSS auf berechtigte Verwaltungsnutzer beschränkt sein. |
+| **NFR-204** | Das manuelle Versenden von Push-Nachrichten MUSS auf berechtigte Verwaltungsnutzer beschränkt sein.                                                                 |
 
 ---
 
@@ -231,7 +234,7 @@ Entwickler benötigen eine klar strukturierte technische Grundlage, auf der weit
 
 Für relevante Funktionen SOLLEN automatisierte Tests erstellt werden. Der konkrete Testumfang wird anhand der implementierten MVP-Funktionen festgelegt.
 
-Mindestens folgende Bereiche sollen überprüft werden:
+Mindestens folgende Bereiche sollen überprüft werden, soweit sie im MVP implementiert sind:
 
 - Kartenfunktionen
 - Standortfunktionen
@@ -246,7 +249,7 @@ Die Zusammenarbeit relevanter Komponenten SOLL durch Integrationstests überprü
 
 ### 14.3 API-Tests
 
-API-Tests werden nur für die im MVP tatsächlich implementierten internen Schnittstellen durchgeführt. Eine vollständige öffentliche API ist nicht Bestandteil des Projekts.
+API-Tests werden nur für tatsächlich implementierte interne Schnittstellen durchgeführt. Eine vollständige öffentliche API ist nicht Bestandteil des Projekts. Wenn keine solche Schnittstelle umgesetzt wird, entfällt diese Testart.
 
 ### 14.4 Build- und Qualitätsprüfungen
 

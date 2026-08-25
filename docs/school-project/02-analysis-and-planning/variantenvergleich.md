@@ -67,14 +67,14 @@ OpenWarnDE 2.0 wird als neues Projekt aufgebaut. Bestehende Komponenten, Erfahru
 
 # 4. Bewertungskriterien
 
-Die Varianten werden anhand der folgenden Kriterien bewertet.
+Die Varianten werden anhand der folgenden Kriterien bewertet. Die Kriterien werden zunächst gleich gewichtet, weil für das Schulprojekt keine belastbaren quantitativen Kosten- oder Betriebsdaten vorliegen. Die Punktzahlen sind eine qualitative Planungsbewertung und werden in der Architekturphase anhand der konkreten MVP-Anforderungen erneut überprüft.
 
 | Kriterium               | Bedeutung                                                                    |
 | ----------------------- | ---------------------------------------------------------------------------- |
 | **Technische Eignung**  | Wie gut unterstützt die Variante die Anforderungen des MVP?                  |
 | **Entwicklungsaufwand** | Wie hoch ist der Aufwand für die Umsetzung?                                  |
 | **Wartbarkeit**         | Wie gut kann das System langfristig gepflegt werden?                         |
-| **Erweiterbarkeit**     | Wie einfach können zukünftige OpenWarnDE-Funktionen ergänzt werden?            |
+| **Erweiterbarkeit**     | Wie einfach können zukünftige OpenWarnDE-Funktionen ergänzt werden?          |
 | **Betriebskosten**      | Welche laufenden Kosten können durch die Lösung entstehen?                   |
 | **Abhängigkeiten**      | Wie stark ist die Lösung von bestehenden oder externen Komponenten abhängig? |
 | **Risiko**              | Wie hoch ist das technische und organisatorische Projektrisiko?              |
@@ -96,6 +96,8 @@ Die Bewertung erfolgt auf einer Skala von **1 bis 5 Punkten**.
 |  **5** | sehr gut      |
 
 Bei Kriterien wie **Entwicklungsaufwand**, **Betriebskosten** und **Risiko** bedeutet eine hohe Punktzahl eine günstige Ausprägung, also beispielsweise einen geringen Aufwand, geringe Kosten oder ein geringes Risiko.
+
+Die Gesamtpunktzahl ist die Summe der neun Einzelbewertungen. Eine hohe Punktzahl ist bei allen Kriterien vorteilhaft. Die Bewertung berücksichtigt den begrenzten Umfang von 80 Stunden und die Tatsache, dass OpenWarnDEV nur als Referenzsystem dient.
 
 ---
 
@@ -264,6 +266,8 @@ Nur geeignete Komponenten oder technische Ansätze werden übernommen.
 
 Auf Grundlage der Bewertung wird **Variante C – strukturierter Neustart mit gezielter Wiederverwendung** ausgewählt.
 
+Die Entscheidung ergibt sich aus der höchsten Gesamtbewertung von 41 von 45 Punkten. Variante A erreicht zwar den geringsten anfänglichen Aufwand, übernimmt aber wahrscheinlicher bestehende Strukturprobleme. Variante B bietet die größte architektonische Freiheit, ist für ein Einzelprojekt mit 80 Stunden jedoch mit einem höheren Umsetzungsrisiko verbunden. Variante C verbindet die eigenständige Projektstruktur mit der Möglichkeit, geeignete Ansätze nach Prüfung zu übernehmen.
+
 Diese Variante bietet für das Schulprojekt das beste Verhältnis zwischen technischem Anspruch, Entwicklungsaufwand und langfristiger Erweiterbarkeit.
 
 Insbesondere wird dadurch vermieden, dass die bestehenden Strukturen von OpenWarnDEV ungeprüft übernommen werden. Gleichzeitig können bereits vorhandenes Wissen, Erfahrungen und technisch geeignete Komponenten weiterhin genutzt werden.
@@ -289,7 +293,7 @@ Aus der Entscheidung ergeben sich folgende Grundsätze für die Entwicklung:
 
 # 12. Technologieentscheidung
 
-Die konkrete Auswahl einzelner Technologien wird auf Grundlage der Anforderungen und der geplanten Architektur getroffen.
+Die konkrete Auswahl einzelner Technologien ist zum Zeitpunkt dieses Variantenvergleichs noch nicht endgültig getroffen. Sie wird auf Grundlage der Anforderungen und der geplanten Architektur getroffen und in einer eigenen Architekturentscheidung dokumentiert.
 
 Für die bereits bekannte technische Grundlage werden insbesondere folgende Technologien bewertet:
 
@@ -305,7 +309,7 @@ Für die bereits bekannte technische Grundlage werden insbesondere folgende Tech
 
 Dabei wird nicht vorausgesetzt, dass jede Technologie aus OpenWarnDEV automatisch in OpenWarnDE 2.0 übernommen wird.
 
-Die endgültige Auswahl wird anhand der Anforderungen, der technischen Eignung, des Entwicklungsaufwands und der Erweiterbarkeit begründet.
+Die endgültige Auswahl wird anhand der Anforderungen, der technischen Eignung, des Entwicklungsaufwands, der Wartbarkeit, der Erweiterbarkeit, möglicher Kosten und technischer Risiken begründet. Für den MVP werden nur die Technologien ausgewählt, die für die tatsächlich umgesetzten Funktionen erforderlich sind.
 
 ---
 

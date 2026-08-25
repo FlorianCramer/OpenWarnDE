@@ -10,7 +10,7 @@
 
 ## 1. Zweck der Projektplanung
 
-Die Projektplanung beschreibt die organisatorische und technische Vorgehensweise zur Umsetzung des OpenWarnDE-2.0-MVPs.
+Die Projektplanung beschreibt die organisatorische und technische Vorgehensweise zur geplanten Umsetzung des OpenWarnDE-2.0-MVPs.
 
 Auf Grundlage der bisherigen:
 
@@ -19,7 +19,7 @@ Auf Grundlage der bisherigen:
 * Soll-/Ist-Gegenüberstellung und
 * Variantenbewertung
 
-werden die notwendigen Arbeitspakete, Meilensteine, Ressourcen und Abhängigkeiten definiert.
+werden die notwendigen Arbeitspakete, Meilensteine, Ressourcen und Abhängigkeiten geplant.
 
 Ziel der Planung ist es, den festgelegten MVP innerhalb des verfügbaren Projektzeitraums strukturiert und nachvollziehbar umzusetzen.
 
@@ -39,8 +39,10 @@ Der MVP umfasst insbesondere:
 * anpassbare Kartendarstellung
 * grundlegende Verwaltungsoberfläche
 * manuelles Erstellen und Auslösen von Push-Nachrichten
-* grundlegende Qualitätssicherung
-* technische und fachliche Dokumentation
+* grundlegende Zugriffskontrolle
+* automatisierte und manuelle Qualitätssicherung
+* technische Dokumentation
+* technische Dokumentation
 
 Die Verarbeitung externer Datenquellen, eine umfangreiche serverseitige Datenverarbeitung sowie die Entwicklung einer vollständigen öffentlichen API sind nicht Bestandteil des Schulprojekts.
 
@@ -242,7 +244,7 @@ Definition der technischen Zielarchitektur für den MVP.
 
 ## 5.3 Ergebnis
 
-Dokumentierter Architekturentwurf für OpenWarnDE 2.0.
+Geplant ist ein dokumentierter Architekturentwurf für den Schul-MVP. Er muss mindestens die Grenzen zwischen Client, Verwaltungsbereich und den für Zugriffsschutz, Persistenz und manuellen Push-Auslösevorgang erforderlichen Diensten beschreiben. Eine vollständige Backend-, Datenquellen- oder API-Architektur ist nicht Bestandteil des MVP.
 
 ---
 
@@ -347,6 +349,8 @@ Folgende Prüfungen sollen eingesetzt werden:
 * Build-Prüfungen
 * automatisierte Tests
 
+Welche Unit- oder Integrationstests eingesetzt werden, wird abhängig von den tatsächlich implementierten Komponenten festgelegt. API-Tests sind nur vorgesehen, wenn eine interne Schnittstelle im MVP umgesetzt wird.
+
 ## 8.2 Funktionale Tests
 
 Die implementierten Kernfunktionen werden einzeln überprüft.
@@ -370,6 +374,8 @@ Die Zusammenarbeit der wichtigsten Komponenten wird überprüft.
 ## 8.4 Manuelle Tests
 
 Zusätzlich werden manuelle Tests durchgeführt, um das tatsächliche Verhalten der Anwendung aus Nutzersicht zu überprüfen.
+
+Dabei werden mindestens die MVP-Abnahmekriterien, die Berechtigungsgrenze, die Fehlersituationen der Standortbestimmung sowie die Darstellung auf den vorgesehenen Browser- und Plattformvarianten geprüft. Die konkreten Varianten werden vor der Durchführung dokumentiert.
 
 ---
 
@@ -427,22 +433,17 @@ Dadurch soll vermieden werden, dass die vollständige Dokumentation erst am Ende
 
 Der geplante Gesamtaufwand beträgt **80 Stunden**.
 
-|      Phase | Arbeitspaket                   |  Aufwand |
-| ---------: | ------------------------------ | -------: |
-|          1 | Projektvorbereitung und Antrag |      4 h |
-|          2 | Ist-Analyse OpenWarnDEV        |      8 h |
-|          3 | Stakeholder- und Umfeldanalyse |      4 h |
-|          4 | Anforderungsanalyse            |      8 h |
-|          5 | Soll-/Ist-Vergleich            |      4 h |
-|          6 | Variantenvergleich             |      8 h |
-|          7 | Architekturplanung             |      8 h |
-|          8 | MVP-Definition                 |      4 h |
-|          9 | Implementierung                |     16 h |
-|         10 | Qualitätssicherung und Tests   |      6 h |
-|         11 | Abnahme                        |      2 h |
-|         12 | Dokumentation                  |      6 h |
-|         13 | Präsentationsvorbereitung      |      2 h |
-| **Gesamt** |                                | **80 h** |
+|      Phase | Arbeitspaket                                |  Aufwand |
+| ---------: | ------------------------------------------- | -------: |
+|          1 | Projektvorbereitung und Projektantrag       |      4 h |
+|          2 | Ist-Analyse OpenWarnDEV                     |      6 h |
+|          3 | Stakeholder- und Anforderungsanalyse        |      6 h |
+|          4 | Soll-Konzept und Architektur                |      6 h |
+|          5 | Variantenvergleich und MVP-Definition       |      4 h |
+|          6 | Prototypische Implementierung               |     38 h |
+|          7 | Qualitätssicherung und interne Abnahme      |      8 h |
+|          8 | Dokumentation und Präsentationsvorbereitung |      8 h |
+| **Gesamt** |                                             | **80 h** |
 
 ---
 

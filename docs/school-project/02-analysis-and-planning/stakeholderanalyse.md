@@ -40,7 +40,7 @@ Die Analyse dient insbesondere als Grundlage für:
 
 ### Rolle
 
-Endnutzer verwenden OpenWarnDE zur Anzeige von Warnungen, Lageinformationen und weiteren relevanten Informationen.
+Endnutzer verwenden OpenWarnDE grundsätzlich zur Anzeige von Warnungen, Lageinformationen und weiteren relevanten Informationen. Im Schul-MVP stehen jedoch die Karten-, Standort- und Suchfunktionen im Vordergrund; die automatische Verarbeitung und Darstellung realer externer Warnmeldungen ist ausgeschlossen.
 
 ### Interessen
 
@@ -110,7 +110,7 @@ Die konkreten Funktionen und Berechtigungen werden in der Anforderungsanalyse we
 
 Administratoren verwalten technische und fachliche Einstellungen des Systems.
 
-Mögliche Aufgaben sind:
+Für die langfristige Zielplattform sind mögliche Aufgaben:
 
 - Verwaltung von Datenquellen
 - Konfiguration von Warnregeln
@@ -138,7 +138,7 @@ Die konkrete Ausgestaltung eines Administrationsbereichs wird im Rahmen der Arch
 
 ### Rolle
 
-OpenWarnDE soll Informationen aus externen Datenquellen beziehen.
+Die langfristige OpenWarnDE-Plattform soll Informationen aus externen Datenquellen beziehen. Dies ist kein Bestandteil des Schul-MVPs.
 
 Dazu können beispielsweise öffentliche Warn-, Wetter-, Pegel- oder Geodaten gehören.
 
@@ -257,13 +257,13 @@ Die Stakeholder werden anhand ihres Einflusses auf das Projekt und ihres Interes
 
 Für das Schulprojekt werden nicht alle Stakeholder gleich stark berücksichtigt.
 
-Die höchste Priorität erhalten:
+Für den aktuellen MVP erhalten die höchste Priorität:
 
 1. **Endnutzer / Bevölkerung**
-2. **Einsatzorganisationen**, soweit Funktionen für diese im MVP vorgesehen werden
-3. **Administratoren**
-4. **Projektverantwortlicher / Entwickler**
-5. **Betreiber relevanter Datenquellen**
+2. **Administratoren**
+3. **Projektverantwortlicher / Entwickler**
+
+Einsatzorganisationen und Betreiber externer Datenquellen bleiben für die langfristige Zielsetzung relevant, sind wegen der MVP-Abgrenzung aber keine primären Abnahmestakeholder des Schulprojekts.
 
 Die Berufsschule beziehungsweise Lehrkraft stellt zusätzlich den organisatorischen Rahmen des Schulprojekts dar.
 

@@ -9,8 +9,7 @@
     "lint": "eslint",
     "mobile:new:and": "npx cap add android",
     "mobile:new:ios": "npx cap add ios",
-    "mobile:sync": "npx cap sync",
-    "mobile:assets": "../../scripts/capacitor/assets.sh"
+    "mobile:sync": "npx cap sync"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
@@ -18,21 +17,21 @@
     "@capacitor/ios": "^8.5.0",
     "@capacitor/splash-screen": "^8.0.2",
     "@capacitor/status-bar": "^8.0.3",
-    "next": "16.3.2",
+    "flowbite-react": "^0.12.17",
+    "next": "16.3.3",
+    "postcss": "^8.5.26",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.5.0",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.2",
-    "sharp": "^0.34.3",
-    "tailwindcss": "^4",
+    "eslint-config-next": "16.3.3",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5"
   }
 }

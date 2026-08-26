@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">OpenWarnDE</string>
-    <string name="title_activity_main">OpenWarnDE</string>
-    <string name="package_name">de.openwarnde.app</string>
-    <string name="custom_url_scheme">de.openwarnde.app</string>
-</resources>

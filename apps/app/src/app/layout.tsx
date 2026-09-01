@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 
   keywords: [
     "OpenWarnDE",
+    "OpenWarnDE - App",
     "Warnmeldungen",
     "Warnungen",
     "Deutschland",
@@ -91,6 +92,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="de"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      data-scribe-recorder-ready="true"
     >
       <head>
         <ThemeModeScript />

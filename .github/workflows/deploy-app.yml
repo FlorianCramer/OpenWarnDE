@@ -1,0 +1,75 @@
+name: Deploy App to Firebase
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-app-deployment
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and deploy app
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/app/package-lock.json
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_OPENWARNDE }}
+
+      - name: Install app dependencies
+        working-directory: apps/app
+        run: |
+          set -euxo pipefail
+          echo '::group::Node and npm versions'
+          node --version
+          npm --version
+          echo '::endgroup::'
+          echo '::group::Install dependencies'
+          npm ci --loglevel=verbose
+          echo '::endgroup::'
+
+      - name: Build app
+        working-directory: apps/app
+        run: |
+          set -euxo pipefail
+          echo '::group::Build app'
+          npm run build
+          echo '::endgroup::'
+
+      - name: Verify app export
+        run: |
+          set -euxo pipefail
+          echo '::group::Verify apps/app/out'
+          test -d apps/app/out
+          test -f apps/app/out/index.html
+          printf 'Export contains %s files\n' "$(find apps/app/out -type f | wc -l)"
+          find apps/app/out -maxdepth 2 -type f | sort | head -100
+          echo '::endgroup::'
+
+      - name: Deploy app hosting target
+        run: |
+          set -euxo pipefail
+          echo '::group::Deploy hosting:app'
+          npx --yes firebase-tools@latest deploy \
+            --only hosting:app \
+            --project openwarnde \
+            --non-interactive \
+            --debug
+          echo '::endgroup::'

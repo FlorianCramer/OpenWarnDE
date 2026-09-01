@@ -1,0 +1,83 @@
+name: ✨ Feature
+description: Eine neue Funktion oder Verbesserung vorschlagen
+title: "[FEATURE] - "
+labels:
+  - feature
+projects:
+  - FlorianCramer/OpenWarnDE
+assignees:
+  - FlorianCramer
+type: feature
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für deinen Vorschlag!
+        Beschreibe möglichst genau, welches Problem gelöst werden soll.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Endgerät / Plattform
+      description: Für welche Plattform ist der Vorschlag gedacht?
+      options:
+        - app
+        - web
+        - app & web
+        - unabhängig von der Plattform
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: Gerät / Betriebssystem
+      description: Für welches Gerät bzw. Betriebssystem ist das Feature relevant?
+      options:
+        - iPhone
+        - iPad
+        - Android Smartphone
+        - Android Tablet
+        - Windows
+        - macOS
+        - Linux
+        - ChromeOS
+        - Alle Geräte
+        - Sonstiges
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Welches Problem soll gelöst werden?
+      description: Beschreibe das Problem oder den Anwendungsfall.
+      placeholder: "Aktuell ist es schwierig/unmöglich, ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Vorgeschlagene Lösung
+      description: Wie könnte das Feature deiner Meinung nach funktionieren?
+      placeholder: "Ich würde mir wünschen, dass ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativen
+      description: Gibt es andere Lösungen oder Workarounds?
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Weitere Informationen
+      description: Screenshots, Beispiele, Links oder zusätzliche Informationen.
+    validations:
+      required: false

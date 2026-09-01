@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "openwarnde"
+  },
+  "targets": {
+    "openwarnde": {
+      "hosting": {
+        "app": [
+          "openwarnde"
+        ],
+        "platform": [
+          "openwarnde-platform"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

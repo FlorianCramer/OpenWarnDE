@@ -1,0 +1,24 @@
+{
+  "name": "OpenWarnDE",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OpenWarnDE 2.0 - Offene Plattform für öffentliche Warn- und Gefährdungsinformationen in Deutschland.",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:app": "npm run dev --workspace=apps/app",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build:app": "npm run build --workspace=apps/app",
+    "build:web": "npm run build --workspace=apps/web",
+    "lint:app": "npm run lint --workspace=apps/app",
+    "lint:web": "npm run lint --workspace=apps/web",
+    "host:app": "npm run host --workspace=apps/app",
+    "host:web": "npm run host --workspace=apps/web"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

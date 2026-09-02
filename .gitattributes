@@ -1,0 +1,16 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+
+package-lock.json linguist-generated=true
+*.tsbuildinfo linguist-generated=true
+.next/** linguist-generated=true
+out/** linguist-generated=true

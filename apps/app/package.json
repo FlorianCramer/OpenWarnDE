@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "host": "next build &&  firebase deploy --only hosting:app",
     "lint": "eslint",
     "mobile:new:and": "npx cap add android",
     "mobile:new:ios": "npx cap add ios",

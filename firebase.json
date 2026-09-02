@@ -1,4 +1,7 @@
 {
+  "firestore": {
+    "rules": "firestore.rules"
+  },
   "hosting": [
     {
       "target": "app",
@@ -12,6 +15,7 @@
     {
       "target": "platform",
       "public": "apps/web/out",
+      "cleanUrls": true,
       "ignore": [
         "firebase.json",
         "**/.*",

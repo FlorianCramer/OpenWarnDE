@@ -1,23 +1,43 @@
 "use client";
 
-export default function Home() {
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+import { AuthPanel } from "@/components/auth/AuthPanel";
+import { AccessProblem } from "@/components/auth/AccessProblem";
+import { useAuth } from "@/providers/AuthProvider";
+
+function LoadingScreen() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50">
-      <section className="max-w-2xl mx-auto p-8 text-center">
-        <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
-          OpenWarnDE
-        </p>
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Platform
-        </h1>
-        <p className="text-lg text-gray-700 mb-3">
-          Die OpenWarnDE Platform wurde erfolgreich über Firebase Hosting deployed.
-        </p>
-        <p className="text-lg text-gray-700">
-          Developer-, Verwaltungs- und Plattformfunktionen werden hier zukünftig
-          bereitgestellt.
-        </p>
-      </section>
+    <main className="flex min-h-screen items-center justify-center bg-[#f6f7f9] text-[#172033]">
+      <p className="text-sm font-semibold">
+        OpenWarnDE Platform wird geladen...
+      </p>
     </main>
   );
+}
+
+export default function Home() {
+  const router = useRouter();
+  const { user, platformUser, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && platformUser) {
+      router.replace(`/${platformUser.role}`);
+    }
+  }, [loading, platformUser, router]);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (!user) {
+    return <AuthPanel />;
+  }
+
+  if (!platformUser) {
+    return <AccessProblem />;
+  }
+
+  return <LoadingScreen />;
 }

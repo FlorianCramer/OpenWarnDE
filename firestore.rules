@@ -30,10 +30,42 @@ service cloud.firestore {
         && request.resource.data.displayName is string;
     }
 
+    function isOwnerManagedCreate() {
+      return isOwner()
+        && request.resource.data.keys().hasOnly([
+          "createdAt",
+          "displayName",
+          "email",
+          "role",
+          "updatedAt",
+          "disabled"
+        ])
+        && request.resource.data.role in ["owner", "developer"]
+        && request.resource.data.email is string
+        && request.resource.data.displayName is string
+        && request.resource.data.disabled is bool;
+    }
+
+    function isOwnerManagedUpdate() {
+      return isOwner()
+        && request.resource.data.keys().hasOnly([
+          "createdAt",
+          "displayName",
+          "email",
+          "role",
+          "updatedAt",
+          "disabled"
+        ])
+        && request.resource.data.role in ["owner", "developer"]
+        && request.resource.data.email is string
+        && request.resource.data.displayName is string
+        && request.resource.data.disabled is bool;
+    }
+
     match /users/{userId} {
       allow read: if isOwnUserDocument(userId) || isOwner();
-      allow create: if isDeveloperProfileCreate(userId);
-      allow update, delete: if isOwner();
+      allow create: if isDeveloperProfileCreate(userId) || isOwnerManagedCreate();
+      allow update, delete: if isOwner() && isOwnerManagedUpdate();
     }
 
     match /{document=**} {

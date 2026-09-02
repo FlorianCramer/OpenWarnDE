@@ -6,14 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "host": "next build &&  firebase deploy --only hosting:platform",
     "lint": "eslint"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "firebase": "^12.18.0",
     "next": "16.3.3",
     "postcss": "^8.5.26",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

@@ -64,6 +64,11 @@ function createPlatformUser(
     return null;
   }
 
+  // Block disabled users from being treated as active platform users
+  if (data.disabled === true) {
+    return null;
+  }
+
   return {
     uid: firebaseUser.uid,
     email: firebaseUser.email,

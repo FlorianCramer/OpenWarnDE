@@ -4,14 +4,18 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "default" | "owner" | "developer";
+  variant?: "default" | "owner" | "developer" | "success" | "warning" | "danger" | "info";
 }
 
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(({ className, variant = "default", ...props }, ref) => {
   const variantStyles = {
-    default: "bg-[#eef2f5] text-[#334155]",
-    owner: "bg-[#fef3e2] text-[#b45309] ring-1 ring-[#fcd34d]",
-    developer: "bg-[#eef2ff] text-[#4f46e5] ring-1 ring-[#c7d2fe]",
+    default: "bg-surface-muted text-foreground",
+    owner: "bg-warning-muted text-warning-text ring-1 ring-warning",
+    developer: "bg-info-muted text-info-text ring-1 ring-info",
+    success: "bg-success-muted text-success-text ring-1 ring-success",
+    warning: "bg-warning-muted text-warning-text ring-1 ring-warning",
+    danger: "bg-danger-muted text-danger-text ring-1 ring-danger",
+    info: "bg-info-muted text-info-text ring-1 ring-info",
   };
 
   return (

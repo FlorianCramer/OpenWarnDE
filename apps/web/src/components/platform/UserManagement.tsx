@@ -157,7 +157,7 @@ function UserDialog({ open, onOpenChange, mode, user, onSubmit, loading }: UserD
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-md bg-danger-muted p-3 text-sm text-danger-text">
               {error}
             </div>
           )}
@@ -176,7 +176,7 @@ function UserDialog({ open, onOpenChange, mode, user, onSubmit, loading }: UserD
               required
             />
             {mode === "edit" && (
-              <p className="mt-1 text-xs text-[#8a94a6]">
+              <p className="mt-1 text-xs text-foreground-subtle">
                 Die E-Mail-Adresse kann nicht geändert werden.
               </p>
             )}
@@ -199,7 +199,7 @@ function UserDialog({ open, onOpenChange, mode, user, onSubmit, loading }: UserD
               required={mode === "create"}
             />
             {mode === "edit" && (
-              <p className="mt-1 text-xs text-[#8a94a6]">
+              <p className="mt-1 text-xs text-foreground-subtle">
                 Wenn ausgefüllt, wird eine Passwort-Reset-E-Mail an den Benutzer gesendet.
               </p>
             )}
@@ -269,7 +269,7 @@ function DeleteDialog({ open, onOpenChange, user, onConfirm, loading }: DeleteDi
           <DialogTitle>Benutzer löschen</DialogTitle>
           <DialogDescription>
             Möchtest du den Benutzer{" "}
-            <span className="font-semibold text-[#172033]">
+            <span className="font-semibold text-foreground">
               {user?.displayName ?? user?.email}
             </span>{" "}
             wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
@@ -285,7 +285,7 @@ function DeleteDialog({ open, onOpenChange, user, onConfirm, loading }: DeleteDi
             type="button"
             onClick={handleConfirm}
             disabled={loading}
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-danger hover:bg-danger-hover"
           >
             {loading ? "Wird gelöscht..." : "Löschen"}
           </Button>
@@ -335,8 +335,8 @@ function UserTable({ users, onEdit, onDelete, onToggleDisabled }: UserTableProps
 
   if (users.length === 0) {
     return (
-      <div className="rounded-md border border-[#dfe5ec] bg-white py-12 text-center">
-        <p className="text-sm text-[#5d6878]">Keine Benutzer gefunden.</p>
+      <div className="rounded-md border border-border bg-surface py-12 text-center">
+        <p className="text-sm text-foreground-muted">Keine Benutzer gefunden.</p>
       </div>
     );
   }
@@ -357,29 +357,29 @@ function UserTable({ users, onEdit, onDelete, onToggleDisabled }: UserTableProps
           <TableRow key={user.uid}>
             <TableCell>
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#184e63] text-xs font-bold text-white">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
                   {getInitials(user.displayName, user.email)}
                 </div>
                 <div>
                   <p className="font-medium">
-                    {user.displayName ?? <span className="text-[#8a94a6]">-</span>}
+                    {user.displayName ?? <span className="text-foreground-subtle">-</span>}
                   </p>
-                  <p className="text-xs text-[#5d6878]">{user.email}</p>
+                  <p className="text-xs text-foreground-muted">{user.email}</p>
                 </div>
               </div>
             </TableCell>
             <TableCell>
               <Badge variant={user.role}>{ROLE_LABELS[user.role]}</Badge>
             </TableCell>
-            <TableCell className="text-[#5d6878]">
+            <TableCell className="text-foreground-muted">
               {formatDate(user.createdAt)}
             </TableCell>
             <TableCell>
               <span
                 className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                   user.disabled
-                    ? "bg-red-100 text-red-700"
-                    : "bg-green-100 text-green-700"
+                    ? "bg-danger-muted text-danger-text"
+                    : "bg-success-muted text-success-text"
                 }`}
               >
                 {user.disabled ? "Deaktiviert" : "Aktiv"}
@@ -407,7 +407,7 @@ function UserTable({ users, onEdit, onDelete, onToggleDisabled }: UserTableProps
                   variant="outline"
                   size="sm"
                   onClick={() => onDelete(user)}
-                  className="h-8 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
+                  className="h-8 px-2 text-xs text-danger hover:bg-danger-muted hover:text-danger-hover"
                 >
                   Löschen
                 </Button>
@@ -535,8 +535,8 @@ export function UserManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-[#172033]">Benutzerverwaltung</h2>
-          <p className="mt-1 text-sm text-[#5d6878]">
+          <h2 className="text-2xl font-bold text-foreground">Benutzerverwaltung</h2>
+          <p className="mt-1 text-sm text-foreground-muted">
             Verwalte Benutzer mit Owner- und Developer-Rollen.
           </p>
         </div>
@@ -557,13 +557,13 @@ export function UserManagement() {
 
         <TabsContent value="owner">
           {error && (
-            <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-600">
+            <div className="mb-4 rounded-md bg-danger-muted p-4 text-sm text-danger-text">
               {error}
             </div>
           )}
           {loading ? (
-            <div className="rounded-md border border-[#dfe5ec] bg-white py-12 text-center">
-              <p className="text-sm text-[#5d6878]">Benutzer werden geladen...</p>
+            <div className="rounded-md border border-border bg-surface py-12 text-center">
+              <p className="text-sm text-foreground-muted">Benutzer werden geladen...</p>
             </div>
           ) : (
             <UserTable
@@ -577,13 +577,13 @@ export function UserManagement() {
 
         <TabsContent value="developer">
           {error && (
-            <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-600">
+            <div className="mb-4 rounded-md bg-danger-muted p-4 text-sm text-danger-text">
               {error}
             </div>
           )}
           {loading ? (
-            <div className="rounded-md border border-[#dfe5ec] bg-white py-12 text-center">
-              <p className="text-sm text-[#5d6878]">Benutzer werden geladen...</p>
+            <div className="rounded-md border border-border bg-surface py-12 text-center">
+              <p className="text-sm text-foreground-muted">Benutzer werden geladen...</p>
             </div>
           ) : (
             <UserTable

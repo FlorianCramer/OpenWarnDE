@@ -7,7 +7,7 @@ export const Card = ({ className, ...props }: CardProps) => {
   return (
     <div
       className={cn(
-        "rounded-lg border border-[#dfe5ec] bg-white p-6 shadow-sm",
+        "rounded-lg border border-border bg-surface p-6 shadow-sm",
         className
       )}
       {...props}
@@ -26,7 +26,7 @@ export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement>
 export const CardTitle = ({ className, ...props }: CardTitleProps) => {
   return (
     <h3
-      className={cn("text-lg font-semibold text-[#172033]", className)}
+      className={cn("text-lg font-semibold text-foreground", className)}
       {...props}
     />
   );
@@ -35,7 +35,7 @@ export const CardTitle = ({ className, ...props }: CardTitleProps) => {
 export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const CardContent = ({ className, ...props }: CardContentProps) => {
   return (
-    <div className={cn("text-sm text-[#5d6878]", className)} {...props} />
+    <div className={cn("text-sm text-foreground-muted", className)} {...props} />
   );
 };
 

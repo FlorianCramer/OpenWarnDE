@@ -18,7 +18,7 @@ function DeveloperContent() {
   return (
     <DashboardShell role="developer">
       <div className="mb-8">
-        <p className="text-sm font-semibold text-[#5d6878]">
+        <p className="text-sm font-semibold text-foreground-muted">
           Angemeldet als {platformUser?.email}
         </p>
         <h2 className="mt-2 text-3xl font-bold">
@@ -29,13 +29,13 @@ function DeveloperContent() {
       <div className="grid gap-4 md:grid-cols-2">
         {["API Keys", "Billing"].map((title) => (
           <article
-            className="rounded-lg border border-[#dfe5ec] bg-white p-5 shadow-sm"
+            className="rounded-lg border border-border bg-surface p-5 shadow-sm"
             key={title}
           >
             <h3 className="mb-2 text-lg font-semibold">
               {title}
             </h3>
-            <p className="text-sm leading-6 text-[#5d6878]">
+            <p className="text-sm leading-6 text-foreground-muted">
               Placeholder fuer die geplanten Developer-Funktionen.
             </p>
           </article>

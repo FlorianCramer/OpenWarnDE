@@ -1,12 +1,293 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * OpenWarnDE Design Tokens
+ * Zentrale Definition aller Farb-Tokens für Tailwind CSS.
+ * Komponenten dürfen ausschließlich diese Tokens verwenden.
+ */
+@theme {
+  /* Background / Surface */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+
+  /* Foreground / Text */
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+
+  /* Borders */
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  /* Primary (OpenWarn Blue) */
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-muted: var(--primary-muted);
+  --color-primary-foreground: var(--primary-foreground);
+
+  /* Secondary */
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-active: var(--secondary-active);
+  --color-secondary-muted: var(--secondary-muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* Success */
+  --color-success: var(--success);
+  --color-success-hover: var(--success-hover);
+  --color-success-muted: var(--success-muted);
+  --color-success-text: var(--success-text);
+  --color-success-foreground: var(--success-foreground);
+
+  /* Warning */
+  --color-warning: var(--warning);
+  --color-warning-hover: var(--warning-hover);
+  --color-warning-muted: var(--warning-muted);
+  --color-warning-text: var(--warning-text);
+  --color-warning-foreground: var(--warning-foreground);
+
+  /* Danger */
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-muted: var(--danger-muted);
+  --color-danger-text: var(--danger-text);
+  --color-danger-foreground: var(--danger-foreground);
+
+  /* Info */
+  --color-info: var(--info);
+  --color-info-hover: var(--info-hover);
+  --color-info-muted: var(--info-muted);
+  --color-info-text: var(--info-text);
+  --color-info-foreground: var(--info-foreground);
+
+  /* Severity Levels (Warnstufen) */
+  --color-severity-low: var(--severity-low);
+  --color-severity-low-bg: var(--severity-low-bg);
+  --color-severity-low-text: var(--severity-low-text);
+
+  --color-severity-moderate: var(--severity-moderate);
+  --color-severity-moderate-bg: var(--severity-moderate-bg);
+  --color-severity-moderate-text: var(--severity-moderate-text);
+
+  --color-severity-high: var(--severity-high);
+  --color-severity-high-bg: var(--severity-high-bg);
+  --color-severity-high-text: var(--severity-high-text);
+
+  --color-severity-severe: var(--severity-severe);
+  --color-severity-severe-bg: var(--severity-severe-bg);
+  --color-severity-severe-text: var(--severity-severe-text);
+
+  --color-severity-extreme: var(--severity-extreme);
+  --color-severity-extreme-bg: var(--severity-extreme-bg);
+  --color-severity-extreme-text: var(--severity-extreme-text);
+
+  /* Border tokens for status and severity */
+  --color-border-success: var(--border-success);
+  --color-border-warning: var(--border-warning);
+  --color-border-danger: var(--border-danger);
+  --color-border-info: var(--border-info);
+
+  --color-border-severity-low: var(--border-severity-low);
+  --color-border-severity-moderate: var(--border-severity-moderate);
+  --color-border-severity-high: var(--border-severity-high);
+  --color-border-severity-severe: var(--border-severity-severe);
+  --color-border-severity-extreme: var(--border-severity-extreme);
+
+  /* Ring / Focus */
+  --color-ring-primary: var(--ring-primary);
+
+  /* Radius */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  /* OpenWarnDE Color Tokens - Light Theme (default) */
+  --background: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-muted: #F1F5F9;
+
+  --foreground: #0F172A;
+  --foreground-muted: #475569;
+  --foreground-subtle: #64748B;
+
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+
+  /* Primary (OpenWarn Blue) */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-active: #1E40AF;
+  --primary-muted: #DBEAFE;
+  --primary-foreground: #FFFFFF;
+
+  /* Secondary (can be customized as needed) */
+  --secondary: #64748B;
+  --secondary-hover: #475569;
+  --secondary-active: #334155;
+  --secondary-muted: #F8FAFC;
+  --secondary-foreground: #FFFFFF;
+
+  /* Success */
+  --success: #16A34A;
+  --success-hover: #15803D;
+  --success-muted: #DCFCE7;
+  --success-text: #166534;
+  --success-foreground: #FFFFFF;
+
+  /* Warning */
+  --warning: #F59E0B;
+  --warning-hover: #D97706;
+  --warning-muted: #FEF3C7;
+  --warning-text: #92400E;
+  --warning-foreground: #FFFFFF;
+
+  /* Danger */
+  --danger: #DC2626;
+  --danger-hover: #B91C1C;
+  --danger-muted: #FEE2E2;
+  --danger-text: #991B1B;
+  --danger-foreground: #FFFFFF;
+
+  /* Info */
+  --info: #0284C7;
+  --info-hover: #0369A1;
+  --info-muted: #E0F2FE;
+  --info-text: #075985;
+  --info-foreground: #FFFFFF;
+
+  /* Severity Levels (Warnstufen) */
+  --severity-low: #16A34A;
+  --severity-low-bg: #DCFCE7;
+  --severity-low-text: #166534;
+
+  --severity-moderate: #EAB308;
+  --severity-moderate-bg: #FEF9C3;
+  --severity-moderate-text: #854D0E;
+
+  --severity-high: #F97316;
+  --severity-high-bg: #FFEDD5;
+  --severity-high-text: #9A3412;
+
+  --severity-severe: #DC2626;
+  --severity-severe-bg: #FEE2E2;
+  --severity-severe-text: #991B1B;
+
+  --severity-extreme: #991B1B;
+  --severity-extreme-bg: #FECACA;
+  --severity-extreme-text: #7F1D1D;
+
+  /* Border tokens for status and severity */
+  --border-success: #16A34A;
+  --border-warning: #F59E0B;
+  --border-danger: #DC2626;
+  --border-info: #0284C7;
+
+  --border-severity-low: #16A34A;
+  --border-severity-moderate: #EAB308;
+  --border-severity-high: #F97316;
+  --border-severity-severe: #DC2626;
+  --border-severity-extreme: #991B1B;
+
+  /* Ring/Focus */
+  --ring-primary: #2563EB;
+
+  /* Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* Dark Theme */
+.dark {
+  --background: #0F172A;
+  --surface: #1E293B;
+  --surface-muted: #334155;
+
+  --foreground: #F8FAFC;
+  --foreground-muted: #CBD5E1;
+  --foreground-subtle: #94A3B8;
+
+  --border: #334155;
+  --border-strong: #475569;
+
+  /* Primary (OpenWarn Blue) - same for dark theme */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-active: #1E40AF;
+  --primary-muted: #1E293B; /* darker muted for dark bg */
+  --primary-foreground: #FFFFFF;
+
+  /* Secondary */
+  --secondary: #94A3B8;
+  --secondary-hover: #A5B4FC;
+  --secondary-active: #818CF8;
+  --secondary-muted: #334155;
+  --secondary-foreground: #F8FAFC;
+
+  /* Success */
+  --success: #16A34A;
+  --success-hover: #15803D;
+  --success-muted: #166534; /* darker for dark bg */
+  --success-text: #BBF7D0;
+  --success-foreground: #0F172A;
+
+  /* Warning */
+  --warning: #F59E0B;
+  --warning-hover: #D97706;
+  --warning-muted: #92400E; /* darker for dark bg */
+  --warning-text: #FEF3C7;
+  --warning-foreground: #0F172A;
+
+  /* Danger */
+  --danger: #DC2626;
+  --danger-hover: #B91C1C;
+  --danger-muted: #991B1B; /* darker for dark bg */
+  --danger-text: #FEE2E2;
+  --danger-foreground: #0F172A;
+
+  /* Info */
+  --info: #0284C7;
+  --info-hover: #0369A1;
+  --info-muted: #075985; /* darker for dark bg */
+  --info-text: #E0F2FE;
+  --info-foreground: #0F172A;
+
+  /* Severity Levels (Warnstufen) - same colors, different backgrounds/text for dark theme */
+  --severity-low: #16A34A;
+  --severity-low-bg: #166534; /* darker for dark bg */
+  --severity-low-text: #DCFCE7;
+
+  --severity-moderate: #EAB308;
+  --severity-moderate-bg: #854D0E; /* darker for dark bg */
+  --severity-moderate-text: #FEF9C3;
+
+  --severity-high: #F97316;
+  --severity-high-bg: #9A3412; /* darker for dark bg */
+  --severity-high-text: #FFEDD5;
+
+  --severity-severe: #DC2626;
+  --severity-severe-bg: #991B1B; /* darker for dark bg */
+  --severity-severe-text: #FEE2E2;
+
+  --severity-extreme: #991B1B;
+  --severity-extreme-bg: #7F1D1D; /* darker for dark bg */
+  --severity-extreme-text: #FECACA;
+
+  /* Border tokens */
+  --border-success: #16A34A;
+  --border-warning: #F59E0B;
+  --border-danger: #DC2626;
+  --border-info: #0284C7;
+
+  --border-severity-low: #16A34A;
+  --border-severity-moderate: #EAB308;
+  --border-severity-high: #F97316;
+  --border-severity-severe: #DC2626;
+  --border-severity-extreme: #991B1B;
 }

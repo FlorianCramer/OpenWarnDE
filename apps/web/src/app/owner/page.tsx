@@ -32,7 +32,7 @@ function OwnerContent() {
   return (
     <DashboardShell role="owner">
       <div className="mb-8">
-        <p className="text-sm font-semibold text-[#5d6878]">
+        <p className="text-sm font-semibold text-foreground-muted">
           Angemeldet als {platformUser?.email}
         </p>
         <h2 className="mt-2 text-3xl font-bold">
@@ -54,13 +54,13 @@ function OwnerContent() {
               "Plattform Einstellungen",
             ].map((title) => (
               <article
-                className="rounded-lg border border-[#dfe5ec] bg-white p-5 shadow-sm"
+                className="rounded-lg border border-border bg-surface p-5 shadow-sm"
                 key={title}
               >
                 <h3 className="mb-2 text-lg font-semibold">
                   {title}
                 </h3>
-                <p className="text-sm leading-6 text-[#5d6878]">
+                <p className="text-sm leading-6 text-foreground-muted">
                   Dieser Bereich ist vorbereitet und kann spaeter mit
                   Owner-Funktionen erweitert werden.
                 </p>

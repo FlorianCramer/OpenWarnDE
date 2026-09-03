@@ -32,7 +32,7 @@ export const TabsList: React.FC<TabsListProps> = ({ className, children, ...prop
   return (
     <div
       className={cn(
-        "inline-flex h-10 items-center justify-center gap-1 rounded-md bg-[#eef2f5] p-1",
+        "inline-flex h-10 items-center justify-center gap-1 rounded-md bg-surface-muted p-1",
         className
       )}
       {...props}
@@ -60,8 +60,8 @@ export const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>
       className={cn(
         "inline-flex h-8 items-center justify-center gap-1.5 rounded-md px-3 text-sm font-medium transition-colors",
         isActive
-          ? "bg-white text-[#184e63] shadow-sm"
-          : "text-[#5d6878] hover:text-[#172033]",
+          ? "bg-surface text-primary shadow-sm"
+          : "text-foreground-muted hover:text-foreground",
         className
       )}
       onClick={() => context.onValueChange(value)}

@@ -46,25 +46,25 @@ export const Select: React.FC<SelectProps> = ({
         type="button"
         disabled={disabled}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-[#dfe5ec] bg-white px-3 py-2 text-sm text-[#172033]",
-          "focus:border-[#184e63] focus:outline-none focus:ring-2 focus:ring-[#184e63]/20",
+          "flex h-10 w-full items-center justify-between rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground",
+          "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
           "disabled:pointer-events-none disabled:opacity-50"
         )}
         onClick={() => !disabled && setOpen((prev) => !prev)}
       >
-        <span className={cn(!value && "text-[#8a94a6]")}>{selectedLabel}</span>
-        <span className="text-[#8a94a6]">▼</span>
+        <span className={cn(!value && "text-foreground-subtle")}>{selectedLabel}</span>
+        <span className="text-foreground-subtle">▼</span>
       </button>
       {open && (
-        <div className="absolute z-50 mt-1 w-full rounded-md border border-[#dfe5ec] bg-white shadow-lg">
+        <div className="absolute z-50 mt-1 w-full rounded-md border border-border bg-surface shadow-lg">
           <ul className="max-h-60 overflow-y-auto py-1">
             {options.map((option) => (
               <li key={option.value}>
                 <button
                   type="button"
                   className={cn(
-                    "w-full px-3 py-2 text-left text-sm hover:bg-[#eef2f5]",
-                    option.value === value && "bg-[#eef2f5] font-semibold text-[#184e63]"
+                    "w-full px-3 py-2 text-left text-sm hover:bg-surface-muted",
+                    option.value === value && "bg-surface-muted font-semibold text-primary"
                   )}
                   onClick={() => {
                     onValueChange(option.value);

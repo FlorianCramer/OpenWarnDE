@@ -38,8 +38,8 @@ export const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerPr
     <button
       ref={ref}
       className={cn(
-        "inline-flex items-center justify-center rounded-md bg-[#184e63] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors",
-        "hover:bg-[#143d54] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#184e63]",
+        "inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors",
+        "hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         className
       )}
       onClick={() => onOpenChange(true)}
@@ -63,7 +63,7 @@ export const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttribut
       <div
         ref={ref}
         className={cn(
-          "relative z-50 w-full max-w-lg rounded-lg bg-white p-6 shadow-xl",
+          "relative z-50 w-full max-w-lg rounded-lg border border-border bg-surface p-6 shadow-xl",
           className
         )}
         {...props}
@@ -93,7 +93,7 @@ export const DialogTitle = React.forwardRef<HTMLHeadingElement, DialogTitleProps
   return (
     <h2
       ref={ref}
-      className={cn("text-lg font-semibold text-[#172033]", className)}
+      className={cn("text-lg font-semibold text-foreground", className)}
       {...props}
     />
   );
@@ -106,7 +106,7 @@ export interface DialogDescriptionProps extends React.HTMLAttributes<HTMLParagra
 export const DialogDescription: React.FC<DialogDescriptionProps> = ({ className, ...props }) => {
   return (
     <p
-      className={cn("text-sm text-[#5d6878]", className)}
+      className={cn("text-sm text-foreground-muted", className)}
       {...props}
     />
   );
@@ -119,8 +119,8 @@ export const DialogClose = React.forwardRef<HTMLButtonElement, React.ButtonHTMLA
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-md border border-[#dfe5ec] bg-white px-4 py-2 text-sm font-semibold text-[#334155] hover:bg-[#eef2f5]",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#184e63]",
+          "inline-flex items-center justify-center rounded-md border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground hover:bg-surface-muted",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
           "disabled:pointer-events-none disabled:opacity-50",
           className
         )}

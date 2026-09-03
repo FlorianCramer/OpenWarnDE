@@ -9,12 +9,12 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant = "default", size = "default", disabled, ...props }, ref) => {
-  const baseClasses = "inline-flex items-center justify-center rounded-md font-semibold shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#184e63] disabled:pointer-events-none disabled:opacity-50";
+  const baseClasses = "inline-flex items-center justify-center rounded-md font-semibold shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50";
 
   const variantClasses = {
-    default: "bg-[#184e63] text-white hover:bg-[#143d54]",
-    outline: "border border-[#dfe5ec] bg-white text-[#334155] hover:bg-[#eef2f5]",
-    destructive: "bg-red-600 text-white hover:bg-red-700",
+    default: "bg-primary text-primary-foreground hover:bg-primary-hover",
+    outline: "border border-border bg-surface text-foreground hover:bg-surface-muted",
+    destructive: "bg-danger text-danger-foreground hover:bg-danger-hover",
   };
 
   const sizeClasses = {

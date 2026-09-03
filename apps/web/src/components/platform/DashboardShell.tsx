@@ -35,11 +35,11 @@ export function DashboardShell({
   }, [platformUser, role]);
 
   return (
-    <main className="min-h-screen bg-[#f6f7f9] text-[#172033]">
-      <header className="border-b border-[#dfe5ec] bg-white">
+    <main className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border bg-surface">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
           <div>
-            <p className="text-sm font-semibold uppercase text-[#1d6f8f]">
+            <p className="text-sm font-semibold uppercase text-primary">
               OpenWarnDE Platform
             </p>
             <h1 className="text-xl font-bold">
@@ -49,11 +49,11 @@ export function DashboardShell({
             </h1>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#184e63] text-sm font-bold text-white">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
               {initials}
             </div>
             <button
-              className="rounded-md border border-[#cfd8e3] bg-white px-3 py-2 text-sm font-semibold text-[#334155] hover:bg-[#eef2f5]"
+              className="rounded-md border border-border bg-surface px-3 py-2 text-sm font-semibold text-foreground hover:bg-surface-muted"
               type="button"
               onClick={() => void signOut(auth)}
             >

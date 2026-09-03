@@ -19,7 +19,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(({ classNa
         className="peer sr-only"
         {...props}
       />
-      <div className="peer h-6 w-11 rounded-full bg-[#dfe5ec] transition-colors peer-checked:bg-[#184e63] peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-[#184e63] peer-focus-visible:ring-offset-2" />
+      <div className="peer h-6 w-11 rounded-full bg-border transition-colors peer-checked:bg-primary peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2" />
       <div className="absolute left-1 top-1 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-5" />
     </label>
   );

@@ -22,7 +22,7 @@ const rolePath: Record<UserRole, string> = {
 
 function LoadingScreen() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f6f7f9] text-[#172033]">
+    <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
       <p className="text-sm font-semibold">
         OpenWarnDE Platform wird geladen...
       </p>

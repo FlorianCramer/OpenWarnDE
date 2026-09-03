@@ -134,29 +134,29 @@ export function AuthPanel() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f6f7f9] text-[#172033]">
+    <main className="min-h-screen bg-background text-foreground">
       <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-5 py-8">
         <div className="grid w-full gap-8 lg:grid-cols-[1fr_420px] lg:items-center">
           <div className="max-w-2xl">
-            <p className="mb-3 text-sm font-semibold uppercase text-[#1d6f8f]">
+            <p className="mb-3 text-sm font-semibold uppercase text-primary">
               OpenWarnDE Platform
             </p>
-            <h1 className="mb-5 text-4xl font-bold tracking-normal text-[#101827] sm:text-5xl">
+            <h1 className="mb-5 text-4xl font-bold tracking-normal text-foreground sm:text-5xl">
               Zugang
             </h1>
-            <p className="max-w-xl text-lg leading-8 text-[#4d5b6d]">
+            <p className="max-w-xl text-lg leading-8 text-foreground-muted">
               Melde dich mit deinem bestehenden Account an oder registriere dich
               fuer einen neuen Account.
             </p>
           </div>
 
-          <div className="rounded-lg border border-[#dfe5ec] bg-white p-6 shadow-sm">
-            <div className="mb-6 grid grid-cols-2 rounded-md bg-[#eef2f5] p-1">
+          <div className="rounded-lg border border-border bg-surface p-6 shadow-sm">
+            <div className="mb-6 grid grid-cols-2 rounded-md bg-surface-muted p-1">
               <button
                 className={`rounded px-3 py-2 text-sm font-semibold ${
                   mode === "login"
-                    ? "bg-white text-[#172033] shadow-sm"
-                    : "text-[#5d6878]"
+                    ? "bg-surface text-foreground shadow-sm"
+                    : "text-foreground-muted"
                 }`}
                 type="button"
                 onClick={() => {
@@ -169,8 +169,8 @@ export function AuthPanel() {
               <button
                 className={`rounded px-3 py-2 text-sm font-semibold ${
                   mode === "register"
-                    ? "bg-white text-[#172033] shadow-sm"
-                    : "text-[#5d6878]"
+                    ? "bg-surface text-foreground shadow-sm"
+                    : "text-foreground-muted"
                 }`}
                 type="button"
                 onClick={() => {
@@ -185,11 +185,11 @@ export function AuthPanel() {
             <form className="space-y-4" onSubmit={handleSubmit}>
               {isRegisterMode ? (
                 <label className="block">
-                  <span className="mb-1 block text-sm font-medium text-[#334155]">
+                  <span className="mb-1 block text-sm font-medium text-foreground">
                     Name
                   </span>
                   <input
-                    className="w-full rounded-md border border-[#cfd8e3] px-3 py-2 text-[#101827] outline-none transition focus:border-[#1d6f8f] focus:ring-2 focus:ring-[#1d6f8f]/15"
+                    className="w-full rounded-md border border-border px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                     required
                     type="text"
                     value={formState.displayName}
@@ -204,12 +204,12 @@ export function AuthPanel() {
               ) : null}
 
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-[#334155]">
+                <span className="mb-1 block text-sm font-medium text-foreground">
                   E-Mail
                 </span>
                 <input
                   autoComplete="email"
-                  className="w-full rounded-md border border-[#cfd8e3] px-3 py-2 text-[#101827] outline-none transition focus:border-[#1d6f8f] focus:ring-2 focus:ring-[#1d6f8f]/15"
+                  className="w-full rounded-md border border-border px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                   required
                   type="email"
                   value={formState.email}
@@ -220,7 +220,7 @@ export function AuthPanel() {
               </label>
 
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-[#334155]">
+                <span className="mb-1 block text-sm font-medium text-foreground">
                   Passwort
                 </span>
                 <input
@@ -229,7 +229,7 @@ export function AuthPanel() {
                       ? "new-password"
                       : "current-password"
                   }
-                  className="w-full rounded-md border border-[#cfd8e3] px-3 py-2 text-[#101827] outline-none transition focus:border-[#1d6f8f] focus:ring-2 focus:ring-[#1d6f8f]/15"
+                  className="w-full rounded-md border border-border px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                   required
                   type="password"
                   value={formState.password}
@@ -243,13 +243,13 @@ export function AuthPanel() {
               </label>
 
               {error ? (
-                <p className="rounded-md border border-[#f0b7b7] bg-[#fff1f1] px-3 py-2 text-sm text-[#9b1c1c]">
+                <p className="rounded-md border border-danger bg-danger-muted px-3 py-2 text-sm text-danger-text">
                   {error}
                 </p>
               ) : null}
 
               <button
-                className="w-full rounded-md bg-[#184e63] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#123e4f] disabled:cursor-not-allowed disabled:bg-[#8aa5b0]"
+                className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isSubmitting}
                 type="submit"
               >

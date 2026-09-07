@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "default" | "owner" | "developer" | "success" | "warning" | "danger" | "info";
+  variant?: "default" | "owner" | "developer" | "success" | "warning" | "danger" | "info" | "outline";
 }
 
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(({ className, variant = "default", ...props }, ref) => {
@@ -16,6 +16,7 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(({ className,
     warning: "bg-warning-muted text-warning-text ring-1 ring-warning",
     danger: "bg-danger-muted text-danger-text ring-1 ring-danger",
     info: "bg-info-muted text-info-text ring-1 ring-info",
+    outline: "bg-transparent text-foreground-muted ring-1 ring-border",
   };
 
   return (

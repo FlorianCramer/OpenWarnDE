@@ -26,3 +26,6 @@ export type { SwitchProps } from "./switch";
 export { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./card";
 
 export { Label } from "./label";
+
+export { Textarea } from "./textarea";
+export type { TextareaProps } from "./textarea";

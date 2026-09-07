@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:3000/api/germany-boundary)",
+      "Bash(curl -s -I http://localhost:3000/api/germany-boundary)",
+      "Bash(pnpm exec *)",
+      "Bash(/workspaces/OpenWarnDE/apps/web/node_modules/.bin/tsc --noEmit -p /workspaces/OpenWarnDE/apps/web)",
+      "Bash(pnpm run *)",
+      "Bash(cat)",
+      "Bash(node /tmp/test-render-issue.mjs)"
+    ]
+  }
+}

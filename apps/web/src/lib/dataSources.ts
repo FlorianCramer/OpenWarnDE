@@ -14,9 +14,21 @@ import type {
   DataSource,
   CreateDataSourceData,
   UpdateDataSourceData,
+  DataSourceStatus,
 } from "@/types/dataSource";
 
 const DATA_SOURCES_COLLECTION = "dataSources";
+
+const DEFAULT_GEOGRAPHIC_COVERAGE = {
+  type: "unknown",
+  geometry: null,
+} as const;
+
+const DEFAULT_CAPABILITIES = {
+  realtime: false,
+  historical: false,
+  spatial: false,
+} as const;
 
 // ─── Reads ──────────────────────────────────────────────────────────────────────
 
@@ -40,14 +52,22 @@ export async function createDataSource(
 
   const docRef = await addDoc(dataSourcesRef, {
     name: data.name.trim(),
-    type: data.type,
-    url: data.url.trim(),
     description: data.description?.trim() ?? "",
-    status: "pending",
+    type: data.type,
+    endpoint: {
+      url: data.endpoint.url.trim(),
+      method: data.endpoint.method,
+    },
+    format: data.format,
+    enabled: data.enabled ?? true,
+    status: data.status ?? "pending",
     refreshInterval: data.refreshInterval ?? 15,
+    geographicCoverage: data.geographicCoverage ?? DEFAULT_GEOGRAPHIC_COVERAGE,
+    capabilities: data.capabilities ?? DEFAULT_CAPABILITIES,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     lastFetch: null,
+    lastSuccess: null,
     errorMessage: null,
   });
 
@@ -67,20 +87,35 @@ export async function updateDataSource(
   if (data.name !== undefined) {
     updateData.name = data.name.trim();
   }
+  if (data.description !== undefined) {
+    updateData.description = data.description?.trim() ?? null;
+  }
   if (data.type !== undefined) {
     updateData.type = data.type;
   }
-  if (data.url !== undefined) {
-    updateData.url = data.url.trim();
+  if (data.endpoint !== undefined) {
+    updateData.endpoint = {
+      url: data.endpoint.url.trim(),
+      method: data.endpoint.method,
+    };
   }
-  if (data.description !== undefined) {
-    updateData.description = data.description?.trim() ?? null;
+  if (data.format !== undefined) {
+    updateData.format = data.format;
+  }
+  if (data.enabled !== undefined) {
+    updateData.enabled = data.enabled;
   }
   if (data.status !== undefined) {
     updateData.status = data.status;
   }
   if (data.refreshInterval !== undefined) {
     updateData.refreshInterval = data.refreshInterval;
+  }
+  if (data.geographicCoverage !== undefined) {
+    updateData.geographicCoverage = data.geographicCoverage;
+  }
+  if (data.capabilities !== undefined) {
+    updateData.capabilities = data.capabilities;
   }
   if (data.errorMessage !== undefined) {
     updateData.errorMessage = data.errorMessage;
@@ -94,10 +129,16 @@ export async function deleteDataSource(id: string): Promise<void> {
   await deleteDoc(docRef);
 }
 
-export async function toggleDataSourceStatus(
+export async function setDataSourceEnabled(
   id: string,
-  currentStatus: string
+  enabled: boolean
 ): Promise<void> {
-  const newStatus = currentStatus === "active" ? "inactive" : "active";
-  await updateDataSource(id, { status: newStatus as "active" | "inactive" });
+  await updateDataSource(id, { enabled });
+}
+
+export async function setDataSourceStatus(
+  id: string,
+  status: DataSourceStatus
+): Promise<void> {
+  await updateDataSource(id, { status });
 }

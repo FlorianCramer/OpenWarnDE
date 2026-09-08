@@ -27,7 +27,6 @@ import {
   createDataSource,
   updateDataSource,
   deleteDataSource,
-  toggleDataSourceStatus,
 } from "@/lib/dataSources";
 import type {
   DataSource,
@@ -35,6 +34,7 @@ import type {
   UpdateDataSourceData,
   DataSourceStatus,
   DataSourceType,
+  DataSourceFormat,
 } from "@/types/dataSource";
 
 const STATUS_LABELS: Record<DataSourceStatus, { label: string; color: string }> = {
@@ -60,6 +60,14 @@ const TYPE_OPTIONS = [
   { value: "custom", label: "Benutzerdefiniert" },
 ];
 
+const FORMAT_OPTIONS = [
+  { value: "json", label: "JSON" },
+  { value: "xml", label: "XML" },
+  { value: "geojson", label: "GeoJSON" },
+  { value: "rss", label: "RSS" },
+  { value: "atom", label: "Atom" },
+];
+
 const REFRESH_INTERVAL_OPTIONS = [
   { value: "5", label: "5 Minuten" },
   { value: "15", label: "15 Minuten" },
@@ -69,12 +77,27 @@ const REFRESH_INTERVAL_OPTIONS = [
   { value: "1440", label: "1 Tag" },
 ];
 
+const GEOGRAPHIC_COVERAGE_OPTIONS = [
+  { value: "point", label: "Punkt (Point)" },
+  { value: "bbox", label: "Bounding Box (BBOX)" },
+  { value: "polygon", label: "Polygon" },
+  { value: "country", label: "Land" },
+  { value: "unknown", label: "Unbekannt" },
+];
+
 interface DataSourceFormData {
   name: string;
   type: DataSourceType;
-  url: string;
+  endpointUrl: string;
+  endpointMethod: "GET" | "POST";
+  format: "json" | "xml" | "geojson" | "rss" | "atom";
   description: string;
   refreshInterval: number;
+  enabled: boolean;
+  geographicCoverageType: "point" | "bbox" | "polygon" | "country" | "unknown";
+  capabilitiesRealtime: boolean;
+  capabilitiesHistorical: boolean;
+  capabilitiesSpatial: boolean;
 }
 
 interface DataSourceDialogProps {
@@ -97,9 +120,16 @@ function DataSourceDialog({
   const [formData, setFormData] = React.useState<DataSourceFormData>({
     name: "",
     type: "custom",
-    url: "",
+    endpointUrl: "",
+    endpointMethod: "GET",
+    format: "json",
     description: "",
     refreshInterval: 15,
+    enabled: true,
+    geographicCoverageType: "unknown",
+    capabilitiesRealtime: false,
+    capabilitiesHistorical: false,
+    capabilitiesSpatial: false,
   });
   const [error, setError] = React.useState<string | null>(null);
 
@@ -109,17 +139,31 @@ function DataSourceDialog({
         setFormData({
           name: dataSource.name,
           type: dataSource.type,
-          url: dataSource.url,
+          endpointUrl: dataSource.endpoint.url,
+          endpointMethod: dataSource.endpoint.method,
+          format: dataSource.format,
           description: dataSource.description ?? "",
           refreshInterval: dataSource.refreshInterval,
+          enabled: dataSource.enabled,
+          geographicCoverageType: dataSource.geographicCoverage.type,
+          capabilitiesRealtime: dataSource.capabilities.realtime,
+          capabilitiesHistorical: dataSource.capabilities.historical,
+          capabilitiesSpatial: dataSource.capabilities.spatial,
         });
       } else {
         setFormData({
           name: "",
           type: "custom",
-          url: "",
+          endpointUrl: "",
+          endpointMethod: "GET",
+          format: "json",
           description: "",
           refreshInterval: 15,
+          enabled: true,
+          geographicCoverageType: "unknown",
+          capabilitiesRealtime: false,
+          capabilitiesHistorical: false,
+          capabilitiesSpatial: false,
         });
       }
       setError(null);
@@ -135,13 +179,13 @@ function DataSourceDialog({
       return;
     }
 
-    if (!formData.url.trim()) {
+    if (!formData.endpointUrl.trim()) {
       setError("URL ist erforderlich");
       return;
     }
 
     try {
-      new URL(formData.url);
+      new URL(formData.endpointUrl);
     } catch {
       setError("Ungültige URL");
       return;
@@ -210,18 +254,112 @@ function DataSourceDialog({
           </div>
 
           <div>
-            <Label htmlFor="url">URL *</Label>
+            <Label htmlFor="endpointUrl">URL *</Label>
             <Input
-              id="url"
+              id="endpointUrl"
               type="url"
-              value={formData.url}
+              value={formData.endpointUrl}
               onChange={(e) =>
-                setFormData((prev) => ({ ...prev, url: e.target.value }))
+                setFormData((prev) => ({ ...prev, endpointUrl: e.target.value }))
               }
               placeholder="https://api.example.com/data"
               disabled={loading}
               required
             />
+          </div>
+
+          <div>
+            <Label htmlFor="endpointMethod">HTTP-Methode *</Label>
+            <Select
+              value={formData.endpointMethod}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, endpointMethod: value as "GET" | "POST" }))
+              }
+              options={[{ value: "GET", label: "GET" }, { value: "POST", label: "POST" }]}
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="format">Datenformat *</Label>
+            <Select
+              value={formData.format}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, format: value as "json" | "xml" | "geojson" | "rss" | "atom" }))
+              }
+              options={FORMAT_OPTIONS}
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="geographicCoverageType">Geografische Abdeckung</Label>
+            <Select
+              value={formData.geographicCoverageType}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, geographicCoverageType: value as "point" | "bbox" | "polygon" | "country" | "unknown" }))
+              }
+              options={GEOGRAPHIC_COVERAGE_OPTIONS}
+              disabled={loading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Fähigkeiten</Label>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="capabilitiesRealtime"
+                  checked={formData.capabilitiesRealtime}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, capabilitiesRealtime: e.target.checked }))
+                  }
+                  disabled={loading}
+                />
+                <Label htmlFor="capabilitiesRealtime" className="text-sm font-normal">Realtime</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="capabilitiesHistorical"
+                  checked={formData.capabilitiesHistorical}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, capabilitiesHistorical: e.target.checked }))
+                  }
+                  disabled={loading}
+                />
+                <Label htmlFor="capabilitiesHistorical" className="text-sm font-normal">Historisch</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="capabilitiesSpatial"
+                  checked={formData.capabilitiesSpatial}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, capabilitiesSpatial: e.target.checked }))
+                  }
+                  disabled={loading}
+                />
+                <Label htmlFor="capabilitiesSpatial" className="text-sm font-normal">Räumlich</Label>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="enabled">Aktiviert</Label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="enabled"
+                checked={formData.enabled}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, enabled: e.target.checked }))
+                }
+                disabled={loading}
+              />
+              <Label htmlFor="enabled" className="text-sm font-normal">Datenquelle aktivieren</Label>
+            </div>
           </div>
 
           <div>
@@ -330,32 +468,13 @@ interface DataSourceTableProps {
   dataSources: DataSource[];
   onEdit: (dataSource: DataSource) => void;
   onDelete: (dataSource: DataSource) => void;
-  onToggleStatus: (dataSource: DataSource) => void;
 }
 
 function DataSourceTable({
   dataSources,
   onEdit,
   onDelete,
-  onToggleStatus,
 }: DataSourceTableProps) {
-  const formatDate = (
-    timestamp: { toDate: () => Date } | null | undefined
-  ) => {
-    if (!timestamp) return "-";
-    try {
-      return timestamp.toDate().toLocaleDateString("de-DE", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    } catch {
-      return "-";
-    }
-  };
-
   const formatInterval = (minutes: number) => {
     if (minutes < 60) return `${minutes} Min.`;
     if (minutes < 1440) return `${minutes / 60} Std.`;
@@ -379,9 +498,11 @@ function DataSourceTable({
           <TableHead>Name</TableHead>
           <TableHead>Typ</TableHead>
           <TableHead>URL</TableHead>
+          <TableHead>Format</TableHead>
           <TableHead>Intervall</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>Letzter Abruf</TableHead>
+          <TableHead>Aktiviert</TableHead>
+          <TableHead>Geog. Abdeckung</TableHead>
           <TableHead className="text-right">Aktionen</TableHead>
         </TableRow>
       </TableHeader>
@@ -405,13 +526,16 @@ function DataSourceTable({
               </TableCell>
               <TableCell>
                 <a
-                  href={ds.url}
+                  href={ds.endpoint.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-primary hover:underline"
                 >
-                  {ds.url.length > 40 ? `${ds.url.slice(0, 40)}...` : ds.url}
+                  {ds.endpoint.url.length > 40 ? `${ds.endpoint.url.slice(0, 40)}...` : ds.endpoint.url}
                 </a>
+              </TableCell>
+              <TableCell className="text-foreground-muted">
+                {ds.format}
               </TableCell>
               <TableCell className="text-foreground-muted">
                 {formatInterval(ds.refreshInterval)}
@@ -431,19 +555,14 @@ function DataSourceTable({
                   </p>
                 )}
               </TableCell>
+              <TableCell>
+                {ds.enabled ? "Ja" : "Nein"}
+              </TableCell>
               <TableCell className="text-foreground-muted">
-                {formatDate(ds.lastFetch)}
+                {ds.geographicCoverage.type}
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex items-center justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onToggleStatus(ds)}
-                    className="h-8 px-2 text-xs"
-                  >
-                    {ds.status === "active" ? "Deaktivieren" : "Aktivieren"}
-                  </Button>
                   <Button
                     variant="outline"
                     size="sm"
@@ -509,9 +628,23 @@ export function DataSources() {
       const createData: CreateDataSourceData = {
         name: data.name,
         type: data.type,
-        url: data.url,
+        endpoint: {
+          url: data.endpointUrl,
+          method: data.endpointMethod,
+        },
+        format: data.format,
         description: data.description || undefined,
         refreshInterval: data.refreshInterval,
+        enabled: data.enabled,
+        geographicCoverage: {
+          type: data.geographicCoverageType,
+          geometry: null,
+        },
+        capabilities: {
+          realtime: data.capabilitiesRealtime,
+          historical: data.capabilitiesHistorical,
+          spatial: data.capabilitiesSpatial,
+        },
       };
       await createDataSource(createData);
       await loadDataSources();
@@ -527,9 +660,23 @@ export function DataSources() {
       const updateData: UpdateDataSourceData = {
         name: data.name,
         type: data.type,
-        url: data.url,
+        endpoint: {
+          url: data.endpointUrl,
+          method: data.endpointMethod,
+        },
+        format: data.format,
         description: data.description || null,
         refreshInterval: data.refreshInterval,
+        enabled: data.enabled,
+        geographicCoverage: {
+          type: data.geographicCoverageType,
+          geometry: null,
+        },
+        capabilities: {
+          realtime: data.capabilitiesRealtime,
+          historical: data.capabilitiesHistorical,
+          spatial: data.capabilitiesSpatial,
+        },
       };
       await updateDataSource(selectedDataSource.id, updateData);
       await loadDataSources();
@@ -548,19 +695,6 @@ export function DataSources() {
     } finally {
       setDialogLoading(false);
       setSelectedDataSource(null);
-    }
-  };
-
-  const handleToggleStatus = async (dataSource: DataSource) => {
-    try {
-      await toggleDataSourceStatus(dataSource.id, dataSource.status);
-      await loadDataSources();
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Fehler beim Aktualisieren der Datenquelle"
-      );
     }
   };
 
@@ -607,7 +741,6 @@ export function DataSources() {
           dataSources={dataSources}
           onEdit={openEditDialog}
           onDelete={openDeleteDialog}
-          onToggleStatus={handleToggleStatus}
         />
       )}
 

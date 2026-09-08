@@ -112,12 +112,37 @@ export const DialogDescription: React.FC<DialogDescriptionProps> = ({ className,
   );
 };
 
+// Minimal Slot implementation: when `asChild` is set, merge props onto the single
+// child element instead of rendering a wrapper. This avoids nesting a <button>
+// inside another <button> when used with a Button component.
+const Slot = React.forwardRef<HTMLElement, { asChild?: boolean } & React.HTMLAttributes<HTMLElement>>(
+  ({ asChild, ...props }, ref) => {
+    if (!asChild || !React.isValidElement(props.children)) {
+      return <span ref={ref} {...props} />;
+    }
+    const child = props.children as React.ReactElement<React.HTMLAttributes<HTMLElement> & { ref?: React.Ref<HTMLElement> }>;
+    const childClassName = (child.props as { className?: string }).className;
+    const childOnClick = (child.props as { onClick?: React.MouseEventHandler<HTMLElement> }).onClick;
+    return React.cloneElement(child, {
+      ...props,
+      ...child.props,
+      ref,
+      className: cn(childClassName, props.className),
+      onClick: (e: React.MouseEvent<HTMLElement>) => {
+        childOnClick?.(e);
+        props.onClick?.(e);
+      },
+    });
+  }
+);
+Slot.displayName = "Slot";
+
 export const DialogClose = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }>(
-  ({ className, children, asChild: _asChild, ...props }, ref) => {
+  ({ className, children, asChild, ...props }, ref) => {
     const { onOpenChange } = useDialog();
     return (
-      <button
-        ref={ref}
+      <Slot
+        asChild={asChild}
         className={cn(
           "inline-flex items-center justify-center rounded-md border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground hover:bg-surface-muted",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
@@ -125,10 +150,11 @@ export const DialogClose = React.forwardRef<HTMLButtonElement, React.ButtonHTMLA
           className
         )}
         onClick={() => onOpenChange(false)}
+        ref={ref}
         {...props}
       >
         {children ?? "✕"}
-      </button>
+      </Slot>
     );
   }
 );

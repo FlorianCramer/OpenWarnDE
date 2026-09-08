@@ -68,6 +68,13 @@ service cloud.firestore {
       allow update, delete: if isOwner() && isOwnerManagedUpdate();
     }
 
+    match /dataSources/{dataSourceId} {
+      allow read: if isOwner();
+      allow create: if isOwner();
+      allow update: if isOwner();
+      allow delete: if isOwner();
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

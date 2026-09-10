@@ -250,7 +250,7 @@ function UserDialog(props: UserDialogProps) {
       <DialogContent size="lg">
         {open && (
           <UserDialogForm
-            key={`${props.mode}-${props.user?.id ?? "new"}`}
+            key={`${props.mode}-${props.user?.uid ?? "new"}`}
             {...props}
           />
         )}
@@ -452,6 +452,11 @@ export function UserManagement() {
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState<PlatformUserData | null>(null);
   const [dialogLoading, setDialogLoading] = React.useState(false);
+
+  const loadUsers = async () => {
+    const data = await getUsers();
+    setUsers(data);
+  };
 
   React.useEffect(() => {
     let ignore = false;

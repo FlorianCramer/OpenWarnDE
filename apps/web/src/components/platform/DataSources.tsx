@@ -593,6 +593,11 @@ export function DataSources() {
   );
   const [dialogLoading, setDialogLoading] = React.useState(false);
 
+  const loadDataSources = async () => {
+    const data = await getDataSources();
+    setDataSources(data);
+  };
+
   React.useEffect(() => {
     let ignore = false;
     async function fetchData() {

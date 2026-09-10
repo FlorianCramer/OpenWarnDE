@@ -18,7 +18,7 @@ const GermanyMap = dynamic(
     loading: () => (
       <div
         className="flex items-center justify-center rounded-lg border border-border bg-surface-muted"
-        style={{ height: "500px" }}
+        style={{ height: "600px" }}
       >
         <p className="text-sm text-foreground-muted">Karte wird geladen...</p>
       </div>
@@ -77,7 +77,7 @@ function OwnerContent() {
                 </p>
               </div>
               <GermanyMap
-                height="500px"
+                height="600px"
                 onRegionClick={setSelectedRegion}
                 selectedRegion={selectedRegion}
               />

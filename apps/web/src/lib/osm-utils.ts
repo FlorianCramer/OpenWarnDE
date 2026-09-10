@@ -1,4 +1,4 @@
-import type { Feature, MultiPolygon, Position, Polygon } from "geojson";
+import type { Feature, MultiPolygon, Position } from "geojson";
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import { point as turfPoint, polygon as turfPolygon } from "@turf/helpers";
 

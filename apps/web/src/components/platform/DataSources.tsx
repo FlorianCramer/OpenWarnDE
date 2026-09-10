@@ -21,6 +21,7 @@ import {
   TableCell,
   Select,
   Label,
+  Switch,
 } from "@/components/ui";
 import {
   getDataSources,
@@ -34,7 +35,6 @@ import type {
   UpdateDataSourceData,
   DataSourceStatus,
   DataSourceType,
-  DataSourceFormat,
 } from "@/types/dataSource";
 
 const STATUS_LABELS: Record<DataSourceStatus, { label: string; color: string }> = {
@@ -109,66 +109,46 @@ interface DataSourceDialogProps {
   loading?: boolean;
 }
 
-function DataSourceDialog({
-  open,
-  onOpenChange,
+function DataSourceDialogForm({
   mode,
   dataSource,
   onSubmit,
+  onOpenChange,
   loading,
-}: DataSourceDialogProps) {
-  const [formData, setFormData] = React.useState<DataSourceFormData>({
-    name: "",
-    type: "custom",
-    endpointUrl: "",
-    endpointMethod: "GET",
-    format: "json",
-    description: "",
-    refreshInterval: 15,
-    enabled: true,
-    geographicCoverageType: "unknown",
-    capabilitiesRealtime: false,
-    capabilitiesHistorical: false,
-    capabilitiesSpatial: false,
+}: Omit<DataSourceDialogProps, "open">) {
+  const [formData, setFormData] = React.useState<DataSourceFormData>(() => {
+    if (mode === "edit" && dataSource) {
+      return {
+        name: dataSource.name,
+        type: dataSource.type,
+        endpointUrl: dataSource.endpoint.url,
+        endpointMethod: dataSource.endpoint.method,
+        format: dataSource.format,
+        description: dataSource.description ?? "",
+        refreshInterval: dataSource.refreshInterval,
+        enabled: dataSource.enabled,
+        geographicCoverageType: dataSource.geographicCoverage.type,
+        capabilitiesRealtime: dataSource.capabilities.realtime,
+        capabilitiesHistorical: dataSource.capabilities.historical,
+        capabilitiesSpatial: dataSource.capabilities.spatial,
+      };
+    }
+    return {
+      name: "",
+      type: "custom",
+      endpointUrl: "",
+      endpointMethod: "GET",
+      format: "json",
+      description: "",
+      refreshInterval: 15,
+      enabled: true,
+      geographicCoverageType: "unknown",
+      capabilitiesRealtime: false,
+      capabilitiesHistorical: false,
+      capabilitiesSpatial: false,
+    };
   });
   const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (open) {
-      if (mode === "edit" && dataSource) {
-        setFormData({
-          name: dataSource.name,
-          type: dataSource.type,
-          endpointUrl: dataSource.endpoint.url,
-          endpointMethod: dataSource.endpoint.method,
-          format: dataSource.format,
-          description: dataSource.description ?? "",
-          refreshInterval: dataSource.refreshInterval,
-          enabled: dataSource.enabled,
-          geographicCoverageType: dataSource.geographicCoverage.type,
-          capabilitiesRealtime: dataSource.capabilities.realtime,
-          capabilitiesHistorical: dataSource.capabilities.historical,
-          capabilitiesSpatial: dataSource.capabilities.spatial,
-        });
-      } else {
-        setFormData({
-          name: "",
-          type: "custom",
-          endpointUrl: "",
-          endpointMethod: "GET",
-          format: "json",
-          description: "",
-          refreshInterval: 15,
-          enabled: true,
-          geographicCoverageType: "unknown",
-          capabilitiesRealtime: false,
-          capabilitiesHistorical: false,
-          capabilitiesSpatial: false,
-        });
-      }
-      setError(null);
-    }
-  }, [open, mode, dataSource]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,20 +186,19 @@ function DataSourceDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle>
-            {mode === "create" ? "Datenquelle erstellen" : "Datenquelle bearbeiten"}
-          </DialogTitle>
-          <DialogDescription>
-            {mode === "create"
-              ? "Fülle das Formular aus, um eine neue Datenquelle hinzuzufügen."
-              : "Bearbeite die Datenquelle."}
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <DialogHeader>
+        <DialogTitle>
+          {mode === "create" ? "Datenquelle erstellen" : "Datenquelle bearbeiten"}
+        </DialogTitle>
+        <DialogDescription>
+          {mode === "create"
+            ? "Fülle das Formular aus, um eine neue Datenquelle hinzuzufügen."
+            : "Bearbeite die Datenquelle."}
+        </DialogDescription>
+      </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
             <div className="rounded-md bg-danger-muted p-3 text-sm text-danger-text">
               {error}
@@ -308,36 +287,33 @@ function DataSourceDialog({
             <Label>Fähigkeiten</Label>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
+                <Switch
                   id="capabilitiesRealtime"
                   checked={formData.capabilitiesRealtime}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, capabilitiesRealtime: e.target.checked }))
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, capabilitiesRealtime: checked }))
                   }
                   disabled={loading}
                 />
                 <Label htmlFor="capabilitiesRealtime" className="text-sm font-normal">Realtime</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
+                <Switch
                   id="capabilitiesHistorical"
                   checked={formData.capabilitiesHistorical}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, capabilitiesHistorical: e.target.checked }))
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, capabilitiesHistorical: checked }))
                   }
                   disabled={loading}
                 />
                 <Label htmlFor="capabilitiesHistorical" className="text-sm font-normal">Historisch</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
+                <Switch
                   id="capabilitiesSpatial"
                   checked={formData.capabilitiesSpatial}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, capabilitiesSpatial: e.target.checked }))
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, capabilitiesSpatial: checked }))
                   }
                   disabled={loading}
                 />
@@ -349,12 +325,11 @@ function DataSourceDialog({
           <div>
             <Label htmlFor="enabled">Aktiviert</Label>
             <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
+              <Switch
                 id="enabled"
                 checked={formData.enabled}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, enabled: e.target.checked }))
+                onCheckedChange={(checked) =>
+                  setFormData((prev) => ({ ...prev, enabled: checked }))
                 }
                 disabled={loading}
               />
@@ -406,6 +381,21 @@ function DataSourceDialog({
             </Button>
           </DialogFooter>
         </form>
+      </>
+    );
+  }
+
+function DataSourceDialog(props: DataSourceDialogProps) {
+  const { open, onOpenChange } = props;
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="xl">
+        {open && (
+          <DataSourceDialogForm
+            key={`${props.mode}-${props.dataSource?.id ?? "new"}`}
+            {...props}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -433,7 +423,7 @@ function DeleteDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent size="sm">
         <DialogHeader>
           <DialogTitle>Datenquelle löschen</DialogTitle>
           <DialogDescription>
@@ -603,24 +593,34 @@ export function DataSources() {
   );
   const [dialogLoading, setDialogLoading] = React.useState(false);
 
-  const loadDataSources = React.useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await getDataSources();
-      setDataSources(data);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Fehler beim Laden der Datenquellen"
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   React.useEffect(() => {
-    void loadDataSources();
-  }, [loadDataSources]);
+    let ignore = false;
+    async function fetchData() {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await getDataSources();
+        if (!ignore) {
+          setDataSources(data);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(
+            err instanceof Error ? err.message : "Fehler beim Laden der Datenquellen"
+          );
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void fetchData();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleCreate = async (data: DataSourceFormData) => {
     setDialogLoading(true);

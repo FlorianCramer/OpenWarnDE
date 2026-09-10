@@ -15,6 +15,7 @@ import {
 
 import { auth, db } from "@/lib/firebase";
 import { useAuth } from "@/providers/AuthProvider";
+import { Button, Input, Label, Card, Alert } from "@/components/ui";
 import type { UserRole } from "@/types/user";
 
 type AuthMode = "login" | "register";
@@ -141,22 +142,22 @@ export function AuthPanel() {
             <p className="mb-3 text-sm font-semibold uppercase text-primary">
               OpenWarnDE Platform
             </p>
-            <h1 className="mb-5 text-4xl font-bold tracking-normal text-foreground sm:text-5xl">
+            <h1 className="mb-5 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               Zugang
             </h1>
             <p className="max-w-xl text-lg leading-8 text-foreground-muted">
               Melde dich mit deinem bestehenden Account an oder registriere dich
-              fuer einen neuen Account.
+              für einen neuen Account.
             </p>
           </div>
 
-          <div className="rounded-lg border border-border bg-surface p-6 shadow-sm">
-            <div className="mb-6 grid grid-cols-2 rounded-md bg-surface-muted p-1">
+          <Card className="p-6 sm:p-8">
+            <div className="mb-6 grid grid-cols-2 rounded-lg bg-surface-muted p-1">
               <button
-                className={`rounded px-3 py-2 text-sm font-semibold ${
+                className={`rounded-md px-3 py-2 text-sm font-semibold transition-all ${
                   mode === "login"
-                    ? "bg-surface text-foreground shadow-sm"
-                    : "text-foreground-muted"
+                    ? "bg-surface text-foreground shadow-xs"
+                    : "text-foreground-muted hover:text-foreground"
                 }`}
                 type="button"
                 onClick={() => {
@@ -167,10 +168,10 @@ export function AuthPanel() {
                 Login
               </button>
               <button
-                className={`rounded px-3 py-2 text-sm font-semibold ${
+                className={`rounded-md px-3 py-2 text-sm font-semibold transition-all ${
                   mode === "register"
-                    ? "bg-surface text-foreground shadow-sm"
-                    : "text-foreground-muted"
+                    ? "bg-surface text-foreground shadow-xs"
+                    : "text-foreground-muted hover:text-foreground"
                 }`}
                 type="button"
                 onClick={() => {
@@ -184,12 +185,12 @@ export function AuthPanel() {
 
             <form className="space-y-4" onSubmit={handleSubmit}>
               {isRegisterMode ? (
-                <label className="block">
-                  <span className="mb-1 block text-sm font-medium text-foreground">
+                <div>
+                  <Label htmlFor="displayName" required>
                     Name
-                  </span>
-                  <input
-                    className="w-full rounded-md border border-border px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
+                  </Label>
+                  <Input
+                    id="displayName"
                     required
                     type="text"
                     value={formState.displayName}
@@ -200,16 +201,16 @@ export function AuthPanel() {
                       )
                     }
                   />
-                </label>
+                </div>
               ) : null}
 
-              <label className="block">
-                <span className="mb-1 block text-sm font-medium text-foreground">
+              <div>
+                <Label htmlFor="email" required>
                   E-Mail
-                </span>
-                <input
+                </Label>
+                <Input
+                  id="email"
                   autoComplete="email"
-                  className="w-full rounded-md border border-border px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                   required
                   type="email"
                   value={formState.email}
@@ -217,19 +218,19 @@ export function AuthPanel() {
                     updateField("email", event.target.value)
                   }
                 />
-              </label>
+              </div>
 
-              <label className="block">
-                <span className="mb-1 block text-sm font-medium text-foreground">
+              <div>
+                <Label htmlFor="password" required>
                   Passwort
-                </span>
-                <input
+                </Label>
+                <Input
+                  id="password"
                   autoComplete={
                     isRegisterMode
                       ? "new-password"
                       : "current-password"
                   }
-                  className="w-full rounded-md border border-border px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                   required
                   type="password"
                   value={formState.password}
@@ -240,27 +241,26 @@ export function AuthPanel() {
                     )
                   }
                 />
-              </label>
+              </div>
 
               {error ? (
-                <p className="rounded-md border border-danger bg-danger-muted px-3 py-2 text-sm text-danger-text">
+                <Alert variant="danger">
                   {error}
-                </p>
+                </Alert>
               ) : null}
 
-              <button
-                className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={isSubmitting}
+              <Button
+                className="w-full mt-2"
+                size="lg"
+                loading={isSubmitting}
                 type="submit"
               >
-                {isSubmitting
-                  ? "Bitte warten..."
-                  : isRegisterMode
-                    ? "Developer Account erstellen"
-                    : "Einloggen"}
-              </button>
+                {isRegisterMode
+                  ? "Developer Account erstellen"
+                  : "Einloggen"}
+              </Button>
             </form>
-          </div>
+          </Card>
         </div>
       </section>
     </main>

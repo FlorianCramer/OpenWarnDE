@@ -12,7 +12,7 @@ import {
   serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import type { UserRole } from "@/types/user";
 
 export type PlatformUserData = {
@@ -89,14 +89,6 @@ function mapAuthErrorMessage(code: string): string {
   return messages[code] ?? `Fehler: ${code}`;
 }
 
-async function getAuthIdToken(): Promise<string> {
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    throw new Error("Du musst angemeldet sein.");
-  }
-  return currentUser.getIdToken(true);
-}
-
 async function createAuthUser(
   email: string,
   password: string,
@@ -115,6 +107,8 @@ async function createAuthUser(
 }
 
 async function disableAuthUser(_uid: string, _email: string): Promise<void> {
+  void _uid;
+  void _email;
   // We cannot truly delete a Firebase Auth account from the client SDK
   // (would require Admin SDK / Cloud Functions). The Auth account will
   // remain in Firebase Auth, but since the Firestore profile is deleted,

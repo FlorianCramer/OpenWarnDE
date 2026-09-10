@@ -64,35 +64,30 @@ interface UserDialogProps {
   loading?: boolean;
 }
 
-function UserDialog({ open, onOpenChange, mode, user, onSubmit, loading }: UserDialogProps) {
-  const [formData, setFormData] = React.useState<UserFormData>({
-    email: "",
-    password: "",
-    displayName: "",
-    role: "developer",
+function UserDialogForm({
+  mode,
+  user,
+  onSubmit,
+  onOpenChange,
+  loading,
+}: Omit<UserDialogProps, "open">) {
+  const [formData, setFormData] = React.useState<UserFormData>(() => {
+    if (mode === "edit" && user) {
+      return {
+        email: user.email,
+        password: "",
+        displayName: user.displayName ?? "",
+        role: user.role,
+      };
+    }
+    return {
+      email: "",
+      password: "",
+      displayName: "",
+      role: "developer",
+    };
   });
   const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (open) {
-      if (mode === "edit" && user) {
-        setFormData({
-          email: user.email,
-          password: "",
-          displayName: user.displayName ?? "",
-          role: user.role,
-        });
-      } else {
-        setFormData({
-          email: "",
-          password: "",
-          displayName: "",
-          role: "developer",
-        });
-      }
-      setError(null);
-    }
-  }, [open, mode, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,107 +137,123 @@ function UserDialog({ open, onOpenChange, mode, user, onSubmit, loading }: UserD
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {mode === "create" ? "Benutzer erstellen" : "Benutzer bearbeiten"}
-          </DialogTitle>
-          <DialogDescription>
-            {mode === "create"
-              ? "Fülle das Formular aus, um einen neuen Benutzer zu erstellen."
-              : "Bearbeite die Benutzerdaten."}
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <DialogHeader>
+        <DialogTitle>
+          {mode === "create" ? "Benutzer erstellen" : "Benutzer bearbeiten"}
+        </DialogTitle>
+        <DialogDescription>
+          {mode === "create"
+            ? "Fülle das Formular aus, um einen neuen Benutzer zu erstellen."
+            : "Bearbeite die Benutzerdaten."}
+        </DialogDescription>
+      </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="rounded-md bg-danger-muted p-3 text-sm text-danger-text">
-              {error}
-            </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <div className="rounded-md bg-danger-muted p-3 text-sm text-danger-text">
+            {error}
+          </div>
+        )}
+
+        <div>
+          <Label htmlFor="email">E-Mail</Label>
+          <Input
+            id="email"
+            type="email"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, email: e.target.value }))
+            }
+            placeholder="benutzer@beispiel.de"
+            disabled={loading || mode === "edit"}
+            required
+          />
+          {mode === "edit" && (
+            <p className="mt-1 text-xs text-foreground-subtle">
+              Die E-Mail-Adresse kann nicht geändert werden.
+            </p>
           )}
+        </div>
 
-          <div>
-            <Label htmlFor="email">E-Mail</Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, email: e.target.value }))
-              }
-              placeholder="benutzer@beispiel.de"
-              disabled={loading || (mode === "edit")}
-              required
-            />
-            {mode === "edit" && (
-              <p className="mt-1 text-xs text-foreground-subtle">
-                Die E-Mail-Adresse kann nicht geändert werden.
-              </p>
-            )}
-          </div>
+        <div>
+          <Label htmlFor="password">
+            {mode === "create" ? "Passwort *" : "Neues Passwort"}
+          </Label>
+          <Input
+            id="password"
+            type="password"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, password: e.target.value }))
+            }
+            placeholder={
+              mode === "create" ? "Mindestens 8 Zeichen" : "Leer lassen, um nicht zu ändern"
+            }
+            disabled={loading}
+            minLength={mode === "create" ? 8 : undefined}
+            required={mode === "create"}
+          />
+          {mode === "edit" && (
+            <p className="mt-1 text-xs text-foreground-subtle">
+              Wenn ausgefüllt, wird eine Passwort-Reset-E-Mail an den Benutzer gesendet.
+            </p>
+          )}
+        </div>
 
-          <div>
-            <Label htmlFor="password">
-              {mode === "create" ? "Passwort *" : "Neues Passwort"}
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, password: e.target.value }))
-              }
-              placeholder={mode === "create" ? "Mindestens 8 Zeichen" : "Leer lassen, um nicht zu ändern"}
-              disabled={loading}
-              minLength={mode === "create" ? 8 : undefined}
-              required={mode === "create"}
-            />
-            {mode === "edit" && (
-              <p className="mt-1 text-xs text-foreground-subtle">
-                Wenn ausgefüllt, wird eine Passwort-Reset-E-Mail an den Benutzer gesendet.
-              </p>
-            )}
-          </div>
+        <div>
+          <Label htmlFor="displayName">Name *</Label>
+          <Input
+            id="displayName"
+            type="text"
+            value={formData.displayName}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, displayName: e.target.value }))
+            }
+            placeholder="Max Mustermann"
+            disabled={loading}
+            required
+          />
+        </div>
 
-          <div>
-            <Label htmlFor="displayName">Name *</Label>
-            <Input
-              id="displayName"
-              type="text"
-              value={formData.displayName}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, displayName: e.target.value }))
-              }
-              placeholder="Max Mustermann"
-              disabled={loading}
-              required
-            />
-          </div>
+        <div>
+          <Label htmlFor="role">Rolle</Label>
+          <Select
+            value={formData.role}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, role: value as UserRole }))
+            }
+            options={ROLE_OPTIONS}
+            disabled={loading}
+          />
+        </div>
 
-          <div>
-            <Label htmlFor="role">Rolle</Label>
-            <Select
-              value={formData.role}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, role: value as UserRole }))
-              }
-              options={ROLE_OPTIONS}
-              disabled={loading}
-            />
-          </div>
-
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button type="button" variant="outline" disabled={loading}>
-                Abbrechen
-              </Button>
-            </DialogClose>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Wird gespeichert..." : mode === "create" ? "Erstellen" : "Speichern"}
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="outline" disabled={loading}>
+              Abbrechen
             </Button>
-          </DialogFooter>
-        </form>
+          </DialogClose>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Wird gespeichert..." : mode === "create" ? "Erstellen" : "Speichern"}
+          </Button>
+        </DialogFooter>
+      </form>
+    </>
+  );
+}
+
+function UserDialog(props: UserDialogProps) {
+  const { open, onOpenChange } = props;
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent size="lg">
+        {open && (
+          <UserDialogForm
+            key={`${props.mode}-${props.user?.id ?? "new"}`}
+            {...props}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -264,7 +275,26 @@ function DeleteDialog({ open, onOpenChange, user, onConfirm, loading }: DeleteDi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent
+        size="sm"
+        footer={
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline" disabled={loading}>
+                Abbrechen
+              </Button>
+            </DialogClose>
+            <Button
+              type="button"
+              onClick={handleConfirm}
+              disabled={loading}
+              className="bg-danger hover:bg-danger-hover"
+            >
+              {loading ? "Wird gelöscht..." : "Löschen"}
+            </Button>
+          </DialogFooter>
+        }
+      >
         <DialogHeader>
           <DialogTitle>Benutzer löschen</DialogTitle>
           <DialogDescription>
@@ -275,21 +305,6 @@ function DeleteDialog({ open, onOpenChange, user, onConfirm, loading }: DeleteDi
             wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="outline" disabled={loading}>
-              Abbrechen
-            </Button>
-          </DialogClose>
-          <Button
-            type="button"
-            onClick={handleConfirm}
-            disabled={loading}
-            className="bg-danger hover:bg-danger-hover"
-          >
-            {loading ? "Wird gelöscht..." : "Löschen"}
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
@@ -438,22 +453,32 @@ export function UserManagement() {
   const [selectedUser, setSelectedUser] = React.useState<PlatformUserData | null>(null);
   const [dialogLoading, setDialogLoading] = React.useState(false);
 
-  const loadUsers = React.useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await getUsers();
-      setUsers(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Fehler beim Laden der Benutzer");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   React.useEffect(() => {
-    void loadUsers();
-  }, [loadUsers]);
+    let ignore = false;
+    async function fetchData() {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await getUsers();
+        if (!ignore) {
+          setUsers(data);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(err instanceof Error ? err.message : "Fehler beim Laden der Benutzer");
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void fetchData();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   React.useEffect(() => {
     localStorage.setItem("userMgmtTab", activeTab);

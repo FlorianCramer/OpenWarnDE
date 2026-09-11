@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "flowbite-react";
+import { Button, Card } from "flowbite-react";
 
 type ErrorStateProps = {
   code: string;
@@ -10,6 +10,7 @@ type ErrorStateProps = {
   actionLabel: string;
   onAction?: () => void;
   homeLabel?: string;
+  details?: string;
 };
 
 export function ErrorState({
@@ -19,6 +20,7 @@ export function ErrorState({
   actionLabel,
   onAction,
   homeLabel = "Zur Startseite",
+  details,
 }: ErrorStateProps) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-950 sm:px-6">
@@ -73,6 +75,17 @@ export function ErrorState({
             {description}
           </p>
         </div>
+
+        {details && (
+          <Card className="mt-8 text-left">
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+              Technische Fehlerdetails
+            </h2>
+            <pre className="mt-3 max-h-64 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-gray-100 p-3 font-mono text-xs leading-5 text-red-700 dark:bg-gray-900 dark:text-red-300">
+              {details}
+            </pre>
+          </Card>
+        )}
 
         {/* Actions */}
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

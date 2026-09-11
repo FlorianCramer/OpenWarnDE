@@ -15,6 +15,14 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
     console.error("OpenWarnDE application error:", error);
   }, [error]);
 
+  const errorDetails = [
+    error.message,
+    error.digest ? `Digest: ${error.digest}` : null,
+    error.stack ? `\n${error.stack}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
   return (
     <ErrorState
       code="Anwendungsfehler"
@@ -22,6 +30,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
       description="Die Seite konnte gerade nicht geladen werden. Bitte versuche es erneut."
       actionLabel="Erneut versuchen"
       onAction={reset}
+      details={errorDetails}
     />
   );
 }

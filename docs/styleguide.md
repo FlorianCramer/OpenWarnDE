@@ -918,6 +918,76 @@ Farbe + Icon + Text sollen gemeinsam verwendet werden, wenn der Status relevant 
 
 ---
 
+# 26.1 FontAwesome Icons
+
+OpenWarnDE verwendet **FontAwesome** als zentrale Icon-Bibliothek für React-Komponenten.
+
+## Installation
+
+Die folgenden Pakete sind in Platform und App verfügbar:
+
+```json
+"@fortawesome/fontawesome-svg-core": "^7.3.1",
+"@fortawesome/react-fontawesome": "^3.5.0",
+"@fortawesome/free-solid-svg-icons": "^7.3.1",
+"@fortawesome/free-regular-svg-icons": "^7.3.1",
+"@fortawesome/free-brands-svg-icons": "^7.3.1"
+```
+
+## Verwendung
+
+Icons werden über die `FontAwesomeIcon`-Komponente eingebunden:
+
+```tsx
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+
+<FontAwesomeIcon
+  icon={faCircleExclamation}
+  className="h-5 w-5 text-danger"
+/>
+```
+
+## Icon-Pakete
+
+| Paket | Verwendung |
+| --- | --- |
+| `free-solid-svg-icons` | Standard-Icons für Aktionen, Status und Navigation |
+| `free-regular-svg-icons` | Ergänzung für weniger auffällige UI-Elemente |
+| `free-brands-svg-icons` | Marken- und Social-Media-Icons |
+
+## Design-Regeln
+
+1. **Ein Icon pro Bedeutung:** Ein Icon darf nur für eine klar definierte Bedeutung verwendet werden.
+2. **Konsistenz:** Gleiche Aktionen verwenden in Platform und App dasselbe Icon.
+3. **Semantik vor Dekoration:** Icons müssen die Aussage des Elements unterstützen, nicht nur dekorativ sein.
+4. **Größe:** Icons verwenden Tailwind-Größen wie `h-4 w-4`, `h-5 w-5` oder `h-6 w-6`.
+5. **Barrierefreiheit:** Icons in interaktiven Elementen müssen mit einem aussagekräftigen Text kombiniert werden.
+6. **Keine Emojis:** Emojis werden nicht für Status oder Aktionen verwendet.
+
+## Standard-Icons für Status
+
+| Bedeutung | Icon |
+| --- | --- |
+| Information | `faCircleInfo` |
+| Erfolg | `faCircleCheck` |
+| Warnung | `faTriangleExclamation` |
+| Fehler | `faCircleXmark` |
+| Entwarnung | `faCheck` |
+
+## Beispiel
+
+```tsx
+<Alert variant="warning">
+  <AlertTitle>Achtung</AlertTitle>
+  <AlertDescription>
+    Es wurde eine neue Warnmeldung veröffentlicht.
+  </AlertDescription>
+</Alert>
+```
+
+---
+
 # 27. Farben und Warnstufen
 
 Bei Warnungen ist die Farbe Teil der Informationshierarchie.

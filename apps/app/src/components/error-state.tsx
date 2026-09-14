@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { Button, Card } from "flowbite-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleExclamation, faInfo } from "@fortawesome/free-solid-svg-icons";
 
 type ErrorStateProps = {
   code: string;
@@ -41,20 +43,10 @@ export function ErrorState({
             className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-red-100 dark:bg-red-950"
             aria-hidden="true"
           >
-            <svg
+            <FontAwesomeIcon
+              icon={faCircleExclamation}
               className="h-12 w-12 text-red-700 dark:text-red-500"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-              />
-            </svg>
+            />
           </div>
 
           <p className="mt-5 text-sm font-semibold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
@@ -127,21 +119,10 @@ export function ErrorState({
         {/* Information */}
         <div className="mx-auto mt-10 max-w-md border-t border-gray-200 pt-6 dark:border-gray-800">
           <div className="flex items-start justify-center gap-2 text-sm text-gray-500 dark:text-gray-500">
-            <svg
+            <FontAwesomeIcon
+              icon={faInfo}
               className="mt-0.5 h-4 w-4 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            />
 
             <p>
               OpenWarnDE stellt aktuelle Warn- und

@@ -17,6 +17,7 @@ export async function GET() {
     return NextResponse.json(germanyFeature, {
       status: 200,
       headers: {
+        "Access-Control-Allow-Origin": "*",
         "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
         "Content-Type": "application/json",
       },
@@ -32,6 +33,7 @@ export async function GET() {
       {
         status: 503,
         headers: {
+          "Access-Control-Allow-Origin": "*",
           "Cache-Control": "public, max-age=60",
           "Content-Type": "application/json",
         },

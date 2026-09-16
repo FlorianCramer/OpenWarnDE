@@ -1,14 +1,16 @@
 import type { NextConfig } from "next";
-import withFlowbiteReact from "flowbite-react/plugin/nextjs";
 
 const nextConfig: NextConfig = {
   output: "export",
+  transpilePackages: ["@openwarnde/ui", "@openwarnde/map", "@openwarnde/config"],
 
   allowedDevOrigins: ["127.0.0.1"],
 
   images: {
     unoptimized: true,
   },
+
+  agentRules: false
 };
 
-export default withFlowbiteReact(nextConfig);
+export default nextConfig;

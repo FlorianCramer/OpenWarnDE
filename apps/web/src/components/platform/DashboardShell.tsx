@@ -8,7 +8,7 @@ import { signOut } from "firebase/auth";
 
 import { auth } from "@/lib/firebase";
 import { useAuth } from "@/providers/AuthProvider";
-import { Avatar, AvatarFallback, Button } from "@/components/ui";
+import { Avatar, AvatarFallback, Button } from "@openwarnde/ui";
 import type { UserRole } from "@/types/user";
 
 type DashboardShellProps = {
@@ -37,8 +37,8 @@ export function DashboardShell({
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border bg-surface shadow-xs sticky top-0 z-40">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3.5">
+      <header className="sticky top-0 z-40 border-b border-border/80 bg-surface/95 shadow-xs backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-primary">
               OpenWarnDE Platform
@@ -65,7 +65,7 @@ export function DashboardShell({
         </div>
       </header>
 
-      <section className="mx-auto max-w-7xl px-5 py-8">
+      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         {children}
       </section>
     </main>

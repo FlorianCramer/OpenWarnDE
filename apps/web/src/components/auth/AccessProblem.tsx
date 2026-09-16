@@ -4,7 +4,7 @@ import { signOut } from "firebase/auth";
 
 import { auth } from "@/lib/firebase";
 import { useAuth } from "@/providers/AuthProvider";
-import { Button, Card, CardTitle, CardDescription, Alert } from "@/components/ui";
+import { Button, Card, CardTitle, CardDescription, Alert } from "@openwarnde/ui";
 
 export function AccessProblem() {
   const { user, profileError } = useAuth();

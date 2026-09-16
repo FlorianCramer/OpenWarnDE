@@ -11,10 +11,20 @@ import {
 	faCircleExclamation,
 	faLocationCrosshairs,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Card } from "flowbite-react";
+import {
+	buildBorderLines,
+	buildGrayMaskPositions,
+	GERMANY_CENTER,
+	isGermanyBoundary,
+	type GermanyBoundary,
+} from "@openwarnde/map";
+import { apiConfig } from "@openwarnde/config";
+
+import { Button } from "@openwarnde/ui";
 
 import { useUserLocation } from "@/hooks/use-user-location";
 import { USER_LOCATION_COLOR } from "@/lib/user-location";
+
 
 export type MapLayer = {
 	id: string;
@@ -26,7 +36,6 @@ type GermanyMapProps = {
 	layers?: MapLayer[];
 };
 
-const germanyCenter: [number, number] = [51.1657, 10.4515];
 const emptyLayers: MapLayer[] = [];
 const userLocationZoom = 14;
 
@@ -45,9 +54,30 @@ export default function GermanyMap({ layers = emptyLayers }: GermanyMapProps) {
 	const userMarkerRef = useRef<L.Marker | null>(null);
 	const didCenterOnUserRef = useRef(false);
 	const [mapReady, setMapReady] = useState(false);
+	const [boundary, setBoundary] = useState<GermanyBoundary | null>(null);
 
-	const { location, permission, errorMessage, isLocating, startTracking } =
+	const { location, errorMessage, isLocating, startTracking } =
 		useUserLocation();
+
+	useEffect(() => {
+		let cancelled = false;
+
+		void fetch(`${apiConfig.platformOrigin}${apiConfig.germanyBoundaryPath}`)
+			.then((response) => {
+				if (!response.ok) throw new Error(`Boundary request failed: ${response.status}`);
+				return response.json();
+			})
+			.then((data: unknown) => {
+				if (!cancelled && isGermanyBoundary(data)) setBoundary(data);
+			})
+			.catch(() => {
+				if (!cancelled) setBoundary(null);
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -57,7 +87,7 @@ export default function GermanyMap({ layers = emptyLayers }: GermanyMapProps) {
 		}
 
 		const map = L.map(container, {
-			center: germanyCenter,
+			center: GERMANY_CENTER,
 			zoom: 6,
 			minZoom: 5,
 			maxZoom: 18,
@@ -68,7 +98,7 @@ export default function GermanyMap({ layers = emptyLayers }: GermanyMapProps) {
 			attribution:
 				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 		}).addTo(map);
-		L.control.zoom({ position: "bottomright" }).addTo(map);
+		L.control.zoom({ position: "bottomleft" }).addTo(map);
 
 		mapRef.current = map;
 		layerGroupRef.current = L.layerGroup().addTo(map);
@@ -81,7 +111,6 @@ export default function GermanyMap({ layers = emptyLayers }: GermanyMapProps) {
 			layerGroupRef.current = null;
 			map.remove();
 			mapRef.current = null;
-			setMapReady(false);
 		};
 	}, []);
 
@@ -93,10 +122,29 @@ export default function GermanyMap({ layers = emptyLayers }: GermanyMapProps) {
 		}
 
 		layerGroup.clearLayers();
+		if (boundary) {
+			const mask = buildGrayMaskPositions(boundary);
+			if (mask) {
+				L.polygon(mask, {
+					fillColor: "#94A3B8",
+					fillOpacity: 0.5,
+					color: "transparent",
+					weight: 0,
+					fillRule: "evenodd",
+					interactive: false,
+				}).addTo(layerGroup);
+			}
+			const border = buildBorderLines(boundary);
+			if (border) {
+				L.geoJSON(border, {
+					style: { color: "#2563EB", weight: 3, fill: false },
+				}).addTo(layerGroup);
+			}
+		}
 		layers.forEach((layer) => {
 			L.geoJSON(layer.data, { style: layer.style }).addTo(layerGroup);
 		});
-	}, [layers]);
+	}, [boundary, layers]);
 
 	const centerOnUser = useCallback((animate: boolean) => {
 		const map = mapRef.current;
@@ -173,9 +221,6 @@ export default function GermanyMap({ layers = emptyLayers }: GermanyMapProps) {
 		void startTracking();
 	};
 
-	const showPermissionPrompt =
-		!location && !errorMessage && permission === "prompt" && !isLocating;
-
 	return (
 		<div className="relative h-full w-full">
 			<div
@@ -198,49 +243,24 @@ export default function GermanyMap({ layers = emptyLayers }: GermanyMapProps) {
 				/>
 			</button>
 
-			{showPermissionPrompt && (
-				<div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1100] p-4 sm:p-6">
-					<Card className="pointer-events-auto mx-auto max-w-lg border border-white/70 bg-white/90 shadow-lg shadow-slate-900/10 backdrop-blur">
-						<p className="text-sm font-semibold text-slate-900">
-							Standortberechtigung
-						</p>
-						<p className="mt-1 text-sm text-slate-600">
-							OpenWarnDE kann deinen Standort auf der Karte anzeigen. Dafür wird
-							eine Standortberechtigung benötigt.
-						</p>
-						<Button
-							type="button"
-							color="blue"
-							className="mt-3"
-							onClick={() => {
-								didCenterOnUserRef.current = false;
-								void startTracking();
-							}}
-						>
-							Standort erlauben
-						</Button>
-					</Card>
-				</div>
-			)}
-
 			{errorMessage && !location && (
 				<div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1100] p-4 sm:p-6">
-					<Card
-						className="pointer-events-auto mx-auto max-w-lg border border-white/70 bg-white/90 shadow-lg shadow-slate-900/10 backdrop-blur"
+					<div
+						className="pointer-events-auto mx-auto max-w-lg rounded-lg border border-white/80 bg-surface/95 p-4 shadow-lg shadow-foreground/10 backdrop-blur-md"
 						role="alert"
 						aria-live="polite"
 					>
-						<p className="flex items-start gap-2 text-sm font-semibold text-slate-900">
+						<p className="flex items-start gap-2 text-sm font-semibold text-foreground">
 							<FontAwesomeIcon
 								icon={faCircleExclamation}
 								className="mt-0.5 h-4 w-4 shrink-0 text-red-700"
 							/>
 							Standort nicht verfügbar
 						</p>
-						<p className="mt-1 text-sm text-slate-600">{errorMessage}</p>
+						<p className="mt-1 text-sm text-foreground-muted">{errorMessage}</p>
 						<Button
 							type="button"
-							color="light"
+							variant="outline"
 							className="mt-3"
 							onClick={() => {
 								didCenterOnUserRef.current = false;
@@ -249,7 +269,7 @@ export default function GermanyMap({ layers = emptyLayers }: GermanyMapProps) {
 						>
 							Erneut versuchen
 						</Button>
-					</Card>
+					</div>
 				</div>
 			)}
 		</div>

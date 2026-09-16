@@ -7,11 +7,22 @@
 - [`definition.md`](definition.md) – Vollständige Architektur- und Repository-Definition
 - [`firebase.md`](firebase.md) – Firebase-Konzept und -Setup
 - [`school-project/`](school-project/) – Schulprojekt-bezogene Dokumentation
-- [`01-project/`](01-project/) – Projektdefinition, Ziele, Ist-Analyse
-- [`02-requirements/`](02-requirements/) – Anforderungen, Lastenheft, Pflichtenheft
-- [`03-concept/`](03-concept/) – Fachliche Konzepte
-- [`04-architecture/`](04-architecture/) – Technische Architektur, ADRs
-- [`05-api/`](05-api/) – API-Dokumentation
-- [`06-development/`](06-development/) – Entwicklung, Setup, Coding Standards
-- [`07-testing/`](07-testing/) – Teststrategie
-- [`08-operations/`](08-operations/) – Betrieb, Deployment, Monitoring
+
+## Aktuelle Implementierungsdokumentation
+
+Die laufende Implementierung folgt der Monorepo-Struktur aus `definition.md`:
+
+- `apps/app` – eigenständige OpenWarnDE-App für Web und Capacitor
+- `apps/web` – eigenständige Web Platform für Betreiber- und Entwicklerfunktionen
+- `packages/ui` – gemeinsames UI-Package `@openwarnde/ui` für Komponenten und Design-Tokens
+- `packages/map` – gemeinsame, frameworkfreie Deutschland-Geometrie für die Kartenadapter
+- `packages/types` – gemeinsame Domänentypen
+- `packages/validation` – gemeinsame Validierung
+- `packages/config` – gemeinsame Laufzeit- und API-Konfiguration
+- `packages/api-contract` – gemeinsame API-Verträge
+- `services/` – vorgesehene serverseitige Service-Grenzen
+- `tests/` und `scripts/` – repositoryweite Tests und Automatisierung
+
+Die Apps bleiben getrennte Anwendungen. Gemeinsame UI- und Fachgrundlagen werden
+über Packages bezogen; app-spezifische Laufzeitlogik, Plattformintegration und
+Seiten bleiben innerhalb der jeweiligen App.

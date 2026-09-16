@@ -15,6 +15,8 @@
     "build:web": "npm run build --workspace=apps/web",
     "lint:app": "npm run lint --workspace=apps/app",
     "lint:web": "npm run lint --workspace=apps/web",
+    "typecheck:packages": "npm run typecheck --workspaces --if-present",
+    "build:all": "npm run build:app && npm run build:web",
     "host:app": "npm run host --workspace=apps/app",
     "host:web": "npm run host --workspace=apps/web"
   },

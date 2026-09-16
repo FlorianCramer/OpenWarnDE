@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Button, Card } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation, faInfo } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "@openwarnde/ui";
 
 type ErrorStateProps = {
   code: string;
@@ -69,14 +69,14 @@ export function ErrorState({
         </div>
 
         {details && (
-          <Card className="mt-8 text-left">
+          <div className="mt-8 rounded-lg border border-border bg-surface p-6 text-left">
             <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
               Technische Fehlerdetails
             </h2>
             <pre className="mt-3 max-h-64 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-gray-100 p-3 font-mono text-xs leading-5 text-red-700 dark:bg-gray-900 dark:text-red-300">
               {details}
             </pre>
-          </Card>
+          </div>
         )}
 
         {/* Actions */}
@@ -84,7 +84,7 @@ export function ErrorState({
           {onAction ? (
             <Button
               type="button"
-              color="failure"
+              variant="danger"
               size="lg"
               onClick={onAction}
               className="sm:min-w-[160px]"
@@ -92,27 +92,21 @@ export function ErrorState({
               {actionLabel}
             </Button>
           ) : (
-            <Button
-              as={Link}
+            <Link
               href="/"
-              color="failure"
-              size="lg"
-              className="sm:min-w-[160px]"
+              className="inline-flex h-12 items-center justify-center rounded-lg bg-danger px-6 py-3 text-base font-semibold text-danger-foreground transition-colors hover:bg-danger-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:min-w-[160px]"
             >
               {actionLabel}
-            </Button>
+            </Link>
           )}
 
           {onAction && (
-            <Button
-              as={Link}
+            <Link
               href="/"
-              color="light"
-              size="lg"
-              className="sm:min-w-[160px]"
+              className="inline-flex h-12 items-center justify-center rounded-lg border border-border bg-surface px-6 py-3 text-base font-semibold text-foreground transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:min-w-[160px]"
             >
               {homeLabel}
-            </Button>
+            </Link>
           )}
         </div>
 

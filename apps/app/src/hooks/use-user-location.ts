@@ -128,7 +128,7 @@ export function useUserLocation() {
 
 			setPermission(current);
 
-			if (current === "granted") {
+			if (current === "granted" || current === "prompt") {
 				await startTracking();
 			}
 

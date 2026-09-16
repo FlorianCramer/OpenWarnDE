@@ -15,7 +15,7 @@ import {
 
 import { auth, db } from "@/lib/firebase";
 import { useAuth } from "@/providers/AuthProvider";
-import { Button, Input, Label, Card, Alert } from "@/components/ui";
+import { Button, Input, Label, Card, Alert } from "@openwarnde/ui";
 import type { UserRole } from "@/types/user";
 
 type AuthMode = "login" | "register";

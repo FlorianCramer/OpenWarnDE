@@ -13,6 +13,9 @@
     "mobile:sync": "npx cap sync"
   },
   "dependencies": {
+    "@openwarnde/ui": "^0.1.0",
+    "@openwarnde/map": "^0.1.0",
+    "@openwarnde/config": "^0.1.0",
     "@capacitor/android": "^8.5.0",
     "@capacitor/core": "^8.5.0",
     "@capacitor/geolocation": "^8.2.2",
@@ -28,7 +31,6 @@
     "@ionic/react-router": "^9.0.3",
     "@types/leaflet": "^1.9.22",
     "clsx": "^2.1.1",
-    "flowbite-react": "^0.12.17",
     "leaflet": "^1.9.4",
     "next": "16.3.3",
     "postcss": "^8.5.26",

@@ -22,7 +22,7 @@ import {
   Select,
   Label,
   Switch,
-} from "@/components/ui";
+} from "@openwarnde/ui";
 import {
   getDataSources,
   createDataSource,
@@ -285,7 +285,7 @@ function DataSourceDialogForm({
 
           <div className="space-y-2">
             <Label>Fähigkeiten</Label>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
               <div className="flex items-center space-x-2">
                 <Switch
                   id="capabilitiesRealtime"
@@ -715,16 +715,16 @@ export function DataSources() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             Datenquellenverwaltung
           </h2>
           <p className="mt-1 text-sm text-foreground-muted">
             Verwalte externe Datenquellen für die OpenWarnDE-Plattform.
           </p>
         </div>
-        <Button onClick={() => setCreateDialogOpen(true)}>
+        <Button className="w-full sm:w-auto" onClick={() => setCreateDialogOpen(true)}>
           + Neue Datenquelle
         </Button>
       </div>
@@ -736,7 +736,7 @@ export function DataSources() {
       )}
 
       {loading ? (
-        <div className="rounded-md border border-border bg-surface py-12 text-center">
+        <div className="rounded-lg border border-border bg-surface px-4 py-12 text-center shadow-xs">
           <p className="text-sm text-foreground-muted">
             Datenquellen werden geladen...
           </p>

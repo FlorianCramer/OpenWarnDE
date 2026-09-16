@@ -8,46 +8,25 @@ import {
   Polygon,
   useMap,
 } from "react-leaflet";
-import type {
-  LatLngBoundsExpression,
-  LatLngTuple,
-  LatLngExpression,
-} from "leaflet";
-import type {
-  Feature,
-  MultiPolygon,
-  FeatureCollection,
-  LineString,
-  Position,
-} from "geojson";
-import simplify from "@turf/simplify";
-import { lineString as turfLineString } from "@turf/helpers";
+import type { LatLngBoundsExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import {
+  buildBorderLines,
+  buildGrayMaskPositions,
+  GERMANY_BOUNDS,
+  GERMANY_CENTER,
+  isGermanyBoundary,
+  type GermanyBoundary,
+} from "@openwarnde/map";
+import { apiConfig } from "@openwarnde/config";
 
 // GeoJSON: [lon, lat], Leaflet: [lat, lon]. OSM coords converted via toLatLng().
-
-const GERMANY_BOUNDS: LatLngBoundsExpression = [
-  [47.0, 5.5],
-  [55.5, 15.5],
-];
-
-const GERMANY_CENTER: LatLngTuple = [51.1657, 10.4515];
 
 const MIN_ZOOM = 5;
 const MAX_ZOOM = 15;
 const DEFAULT_ZOOM = 7;
 const GERMANY_BORDER_COLOR = "#2563EB";
 const DIMMED_COLOR = "#94A3B8";
-
-const WORLD_MASK_RING: LatLngTuple[] = [
-  [30, -30],
-  [30, 75],
-  [75, 75],
-  [75, -30],
-  [30, -30],
-];
-
-const SIMPLIFY_TOLERANCE = 0.005;
 
 interface GermanyMapProps {
   className?: string;
@@ -57,7 +36,7 @@ interface GermanyMapProps {
 }
 
 interface BoundaryState {
-  boundary: Feature<MultiPolygon> | null;
+  boundary: GermanyBoundary | null;
   loading: boolean;
   error: boolean;
   debug: string;
@@ -76,11 +55,11 @@ function useGermanyBoundary(): BoundaryState {
 
     async function loadBoundary() {
       try {
-        const response = await fetch("/api/germany-boundary");
+        const response = await fetch(apiConfig.germanyBoundaryPath);
         if (!response.ok) throw new Error(`API returned ${response.status}`);
         const data = await response.json();
         if (cancelled) return;
-        if (data?.error || !data?.geometry || data?.type !== "Feature") {
+        if (!isGermanyBoundary(data)) {
           throw new Error(data?.error ?? "Invalid GeoJSON response");
         }
         const geomType = data.geometry.type;
@@ -98,57 +77,6 @@ function useGermanyBoundary(): BoundaryState {
   }, []);
 
   return state;
-}
-
-function geoJsonToLeaflet([lon, lat]: Position): LatLngTuple {
-  return [lat, lon];
-}
-
-function toLatLng(positions: Position[]): LatLngTuple[] {
-  return positions.map(geoJsonToLeaflet);
-}
-
-function simplifyRing(ring: Position[]): Position[] {
-  if (ring.length < 10) return ring;
-  try {
-    const line = turfLineString(ring);
-    const simplified = simplify(line, { tolerance: SIMPLIFY_TOLERANCE, highQuality: false, mutate: false });
-    const coords = simplified.geometry.coordinates;
-    if (coords.length >= 4) {
-      const first = coords[0];
-      const last = coords[coords.length - 1];
-      if (first[0] !== last[0] || first[1] !== last[1]) coords.push(first);
-      return coords;
-    }
-  } catch (e) {
-    console.warn("[GermanyMap] Simplify failed:", e);
-  }
-  return ring;
-}
-
-function buildBorderLines(boundary: Feature<MultiPolygon> | null): FeatureCollection<LineString> | null {
-  if (!boundary) return null;
-  const features: Feature<LineString>[] = [];
-  for (const polygon of boundary.geometry.coordinates) {
-    for (const ring of polygon) {
-      if (ring.length > 0) {
-        features.push({ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: ring } });
-      }
-    }
-  }
-  return { type: "FeatureCollection", features };
-}
-
-function buildGrayMaskPositions(boundary: Feature<MultiPolygon> | null): LatLngExpression[][] | null {
-  if (!boundary) return null;
-  const outerRingsGeoJson: Position[][] = [];
-  for (const poly of boundary.geometry.coordinates) {
-    if (poly.length > 0 && poly[0].length >= 4) {
-      outerRingsGeoJson.push(simplifyRing(poly[0]));
-    }
-  }
-  if (outerRingsGeoJson.length === 0) return null;
-  return [WORLD_MASK_RING, ...outerRingsGeoJson.map(toLatLng)];
 }
 
 function MapController({ bounds }: { bounds: LatLngBoundsExpression }) {

@@ -3,7 +3,20 @@
 > **Version:** 1.1
 > **Status:** Verbindlich
 > **Scope:** OpenWarnDE Platform & OpenWarnDE App
-> **Technologien:** Next.js, Tailwind CSS, Flowbite (App)
+> **Technologien:** Next.js, Tailwind CSS, gemeinsames `@openwarnde/ui`-Package
+
+## 0.1 App UI-Komponenten
+
+`apps/app` und `apps/web` verwenden dieselben generischen UI-Komponenten aus
+`packages/ui` (Package-Name: `@openwarnde/ui`). Fertige Flowbite-Komponenten
+werden nicht eingesetzt. Neue gemeinsame Oberflächen werden im UI-Package
+gebaut und von beiden Apps direkt importiert. App- bzw. Plattform-spezifische
+Logik bleibt in der jeweiligen App.
+
+Das gemeinsame Theme liegt in `packages/ui/src/theme.css` und wird von beiden
+Apps importiert. Die Apps behalten lediglich ihre Build-Einstiegspunkte sowie
+plattformbezogene Styles, zum Beispiel Ionic- und Karten-/Standort-Styles der
+App.
 
 ---
 
@@ -569,7 +582,7 @@ Ausnahme: Die zentralen Theme-/Design-Token-Dateien selbst dürfen die definiert
 
 # 14. Platform
 
-Die Platform verwendet Tailwind CSS.
+Platform und App verwenden Tailwind CSS über das gemeinsame UI-Package.
 
 Die OpenWarnDE-Tokens müssen zentral in der Tailwind-Konfiguration bzw. im verwendeten Theme-System definiert werden.
 
@@ -593,9 +606,12 @@ export function WarningCard() {
 
 # 15. App
 
-Die App verwendet Flowbite.
+Die App verwendet dieselben schlanken Tailwind-Komponenten wie die Platform.
+Diese Komponenten liegen zentral in `packages/ui` und werden nicht in den Apps
+dupliziert.
 
-Flowbite darf intern seine eigenen technischen Klassen verwenden.
+Fertige Flowbite-Komponenten und deren technische Klassen werden in der App
+nicht verwendet.
 
 OpenWarnDE-Komponenten sollen jedoch die OpenWarnDE-Farbsemantik nach außen kapseln.
 
@@ -607,7 +623,8 @@ Beispiel:
 </OpenWarnAlert>
 ```
 
-Die Komponente entscheidet intern, wie Flowbite konfiguriert werden muss.
+Die Komponente entscheidet intern, wie die semantischen OpenWarnDE-Tokens
+angewendet werden.
 
 Dadurch wird verhindert, dass überall unterschiedliche Kombinationen wie:
 
@@ -1051,7 +1068,7 @@ Die visuelle Semantik bleibt jedoch identisch.
              │                         │
         Platform                     App
              │                         │
-        Tailwind CSS               Flowbite
+        Tailwind CSS               eigene UI-Komponenten
              │                         │
              └────────────┬────────────┘
                           │

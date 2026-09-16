@@ -24,7 +24,7 @@ import {
   TabsContent,
   Select,
   Label,
-} from "@/components/ui";
+} from "@openwarnde/ui";
 import {
   getUsers,
   createUser,
@@ -563,14 +563,14 @@ export function UserManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Benutzerverwaltung</h2>
+          <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Benutzerverwaltung</h2>
           <p className="mt-1 text-sm text-foreground-muted">
             Verwalte Benutzer mit Owner- und Developer-Rollen.
           </p>
         </div>
-        <Button onClick={() => setCreateDialogOpen(true)}>
+        <Button className="w-full sm:w-auto" onClick={() => setCreateDialogOpen(true)}>
           + Neuer Benutzer
         </Button>
       </div>
@@ -592,7 +592,7 @@ export function UserManagement() {
             </div>
           )}
           {loading ? (
-            <div className="rounded-md border border-border bg-surface py-12 text-center">
+            <div className="rounded-lg border border-border bg-surface px-4 py-12 text-center shadow-xs">
               <p className="text-sm text-foreground-muted">Benutzer werden geladen...</p>
             </div>
           ) : (
@@ -612,7 +612,7 @@ export function UserManagement() {
             </div>
           )}
           {loading ? (
-            <div className="rounded-md border border-border bg-surface py-12 text-center">
+            <div className="rounded-lg border border-border bg-surface px-4 py-12 text-center shadow-xs">
               <p className="text-sm text-foreground-muted">Benutzer werden geladen...</p>
             </div>
           ) : (

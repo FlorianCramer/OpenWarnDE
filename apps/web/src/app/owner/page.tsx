@@ -8,7 +8,7 @@ import { DashboardShell } from "@/components/platform/DashboardShell";
 import { UserManagement } from "@/components/platform/UserManagement";
 import { DataSources } from "@/components/platform/DataSources";
 import { useAuth } from "@/providers/AuthProvider";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@openwarnde/ui";
 
 // Dynamically import the map to avoid SSR issues with Leaflet
 const GermanyMap = dynamic(
@@ -50,11 +50,11 @@ function OwnerContent() {
 
   return (
     <DashboardShell role="owner">
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <p className="text-sm font-semibold text-foreground-muted">
           Angemeldet als {platformUser?.email}
         </p>
-        <h2 className="mt-2 text-3xl font-bold">
+        <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
           Willkommen im Owner Cockpit
         </h2>
       </div>
@@ -70,14 +70,14 @@ function OwnerContent() {
           <div className="space-y-6">
             <div>
               <div className="mb-4">
-                <h3 className="text-xl font-bold">Regionsübersicht</h3>
+                <h3 className="text-lg font-bold tracking-tight sm:text-xl">Regionsübersicht</h3>
                 <p className="mt-1 text-sm text-foreground-muted">
                   Karte mit Fokus auf Deutschland. Die OpenStreetMap zeigt die
                   Topografie, Deutschland ist farblich hervorgehoben.
                 </p>
               </div>
               <GermanyMap
-                height="600px"
+                height="clamp(420px, 65vh, 600px)"
                 onRegionClick={setSelectedRegion}
                 selectedRegion={selectedRegion}
               />

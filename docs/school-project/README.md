@@ -1,101 +1,131 @@
-# Schulprojekt – OpenWarnDE 2.0
+# Arbeitsauftrag Softwareprojekt in LF12
 
-Dieses Verzeichnis enthält die Unterlagen und Projektergebnisse des Miniprojekts LF12 im Rahmen der Vorbereitung auf die AP2.
+## Überblick
 
-## Projekt
+**Teamgröße:** 2 Personen pro Team
 
-**Projekt:** Neukonzeption und prototypische Entwicklung der Warn- und Lageinformationsplattform OpenWarnDE 2.0
+**Bewertung:** 4 Noten (Projektantrag, Projektprozess, Projektdokumentation, Projektpräsentation)
 
-**Projektart:** Einzelprojekt
+**Abgaben/Termine:**
 
-**Projektzeitraum:** 28.08.2026 – 24.01.2027
+| Was?                                 | Termine A-Turnus    | Termine B-Turnus    |
+| ------------------------------------ | ------------------- | ------------------- |
+| Projektantrag                        | Fr, 28.8.26         | Fr, 11.09.26        |
+| Soll-/Ist-Analyse und Projektplanung | So, 27.11.26        | So, 13.12.26        |
+| komplette Projektdokumentation       | So, 24.01.27        | So, 27.12.26        |
+| Projektpräsentation                  | 25.01.27 - 29.01.27 | 22.02.27 - 26.02.27 |
 
-## Ausgangssystem
+## Phasen des Projekts
 
-Die Ist-Analyse basiert auf dem bestehenden Projekt:
+### 1. Vorbereitungsphase
 
-* [OpenWarnDEV](https://github.com/FlorianCramer/OpenWarnDEV)
+**Ziel:** Vorbereitung
 
-## Zielprojekt
+1. **Teambildung:** Bilden Sie 2er-Teams.
 
-Die Ergebnisse des Projekts fließen in die strukturierte Entwicklung von OpenWarnDE 2.0 ein.
+2. **Projektthema wählen:**
+   - Projektthema aus dem Bereich Softwareentwicklung suchen
+   - Projektumfang klar definieren
+   - zeitlichen Rahmen beachten!
 
-* [OpenWarnDE](https://github.com/FlorianCramer/OpenWarnDE)
+3. **Basis-Anforderungen sammeln:**
+   - Projektbeschreibung definieren
+   - Recherche (Stakeholderanalyse, Projekthintergrund, ...)
+   - Anforderungen auflisten und priorisieren
 
-## Projektphasen
+### 2. Projektphase
 
-1. [Projektantrag](./01-project-application/)
-2. [Analyse und Planung](./02-analysis-and-planning/)
-3. [Implementierung](./03-implementation/)
-4. [Tests und Abnahme](./04-testing/)
-5. [Dokumentation](./05-documentation/)
+- **Planung:**
+  - Entscheidung für ein Vorgehensmodell (z.B. Scrum, Wasserfall, ...).
+  - Aufgabenverteilung und Rollenzuweisung im Team (z.B. Projektleitung, Entwicklung, Test, Dokumentation).
+  - Zeitplan erstellen: Wer arbeitet wann an welchem Teil des Projekts?
 
-## Projektstruktur
+- **Recherche und Ist-/Sollanalyse:**
+  - Ist-Zustand ermitteln (aktuelle Schulwebsite)
+  - Anforderungen verschiedener Nutzergruppen ermitteln & priorisieren
+  - Vergleich vorhandener Lösungen (z.B. mit anderen bestehenden Schulwebsites)
+  - Wirtschaftliche Betrachtungen
 
-Die folgende Übersicht dient gleichzeitig als **Fortschritts- und Dateicheckliste**.
+- **Design und Alternativen:**
+  - verschiedene Lösungsansätze vergleichen
+  - begründete Entscheidung für einen Ansatz
+  - Entwurf der Lösung
 
-* `[x]` Datei vorhanden
-* `[ ]` Datei noch nicht vorhanden
+  » Zwischenabgabe „Soll-/Ist-Analyse und Projektplanung"
 
-```text
-school-project/
-├── README.md
-│
-├── 01-project-application/
-│   ├── [x] projektantrag.md
-│   └── [x] version-history.md
-│
-├── 02-analysis-and-planning/
-│   ├── [x] ist-analyse.md
-│   ├── [x] stakeholderanalyse.md
-│   ├── [x] anforderungen.md
-│   ├── [x] soll-ist-vergleich.md
-│   ├── [x] variantenvergleich.md
-│   └── [x] projektplanung.md
-│
-├── 03-implementation/
-│   ├── [ ] architecture.md
-│   ├── [ ] mvp.md
-│   └── [ ] implementation-notes.md
-│
-├── 04-testing/
-│   ├── [ ] testkonzept.md
-│   ├── [ ] testprotokoll.md
-│   └── [ ] abnahme.md
-│
-└── 05-documentation/
-    ├── [ ] entwicklerdokumentation.md
-    ├── [ ] benutzerdokumentation.md
-    └── [ ] projektfazit.md
-```
+- **Implementierung:** Design umsetzen & Vorgehen, Entscheidungen/Probleme & Abweichungen dokumentieren
 
-### Aktueller Stand der Dateien
+- **Testen:** überprüfen, ob alles wie geplant funktioniert
 
-Der Fortschritt wird anhand der bereits vorhandenen Dateien ermittelt.
-`Dateien vorhanden ÷ Gesamt × 100 = Fortschritt`
+- **Abnahme:** intern bei eigenem Projekt, extern bei Schulprojekt
 
-| Phase               | Dateien vorhanden | Gesamt | Fortschritt |
-| ------------------- | ----------------: | -----: | ----------: |
-| Projektantrag       |                 2 |      2 |       100 % |
-| Analyse und Planung |                 6 |      6 |       100 % |
-| Implementierung     |                 0 |      3 |         0 % |
-| Tests und Abnahme   |                 0 |      3 |         0 % |
-| Dokumentation       |                 0 |      3 |         0 % |
-| **Gesamt**          |             **8** | **17** |  **47,1 %** |
+### 3. Abschlussphase
 
-**Gesamtfortschritt:** `8 / 17 = 47,1 %`
+**Projektdokumentation:**
 
-> **Hinweis:** Die Werte werden aktuell manuell anhand der abgehakten Dateien im Projektstruktur-Tree gepflegt.
+- Projektdokumentation erstellen (10-15 Seiten + Anhang).
+- **Wichtig:** End-User- und Entwicklerdokumentation nicht vergessen!
 
-## Status
+## Bewertung
 
-| Phase               | Status    |
-| ------------------- | --------- |
-| Projektantrag       | Fertig    |
-| Ist-Analyse         | Fertig    |
-| Anforderungsanalyse | Fertig    |
-| Soll-Konzept        | Fertig    |
-| MVP                 | Definiert |
-| Implementierung     | Offen     |
-| Tests               | Offen     |
-| Dokumentation       | Offen     |
+*Auszug aus dem IHK-Merkblatt zur Abschlussprüfung:*
+
+### Bewertungskriterien der Dokumentation:
+
+- IHK-Handreichung & Merkblatt dient als Bewertungsmaßstab der Dokumentation (ohne Projektantrag)
+
+**Ist-/Sollanalyse**
+
+- Darstellung Projektziele/Projektaufgaben (2 Pkt.)
+- Darstellung Projektumfeld (2 Pkt.)
+- Projektschnittstellen: technisch, organisatorisch, personell (3 Pkt.)
+- Anforderungsanalyse (3 Pkt.)
+
+**Projektplanung**
+
+- Variantenvergleich/Entscheidungsfindung (3 Pkt.)
+- Wirtschaftlichkeit, Kosten- und Nutzenanalyse (4 Pkt.)
+- Ressourcen- und Ablaufplanung (3 Pkt.)
+
+» Zwischenabgabe Bewertung (*10 pro Kategorie)
+
+**Projektdurchführung**
+
+- Darstellung Prozessschritte (3 Pkt.)
+- Darstellung fachlicher Hintergrund (4 Pkt.)
+- Einhaltung von Standards, Normen und Qualitätssicherung (2 Pkt.)
+- Abweichungen, Anpassungen, Entscheidungen (1 Pkt.)
+
+**Projektergebnisse**
+
+- Tests/Abnahme (6 Pkt.)
+- Fazit (technisches, wirtschaftliches) (2 Pkt.)
+- Ausblick (2 Pkt.)
+
+- Kundendokumentation(en) (10 Pkt.)
+- Gestaltung der Dokumentation
+  - inhaltliche Form (Strukturierung, fach- und normgerechte Darstellung) (5 Pkt.)
+  - äußere Form (Gestaltung Text/Tabellen/Grafiken, Rechtschreibung, Grammatik, Bindung) (5 Pkt.)
+
+- IHK-Handreichung & Merkblatt dient als Bewertungsmaßstab der Dokumentation (ohne Projektantrag)
+- 15-minütige Präsentation des Projekts
+- anschließend 15 Minuten für Diskussionen und Fachgespräch
+- IHK-Merkblatt zur Prüfung dient als Bewertungsmaßstab
+
+**Hinweis:** Nicht alle Teammitglieder müssen präsentieren
+
+**Bewertungskriterien:**
+
+- Zielgruppengerechte Darstellung
+  - Anpassung an gewählte Zielgruppe (5 Pkt.)
+  - sachliche und logische Gliederung der Präsentation (5 Pkt.)
+- Fachliche Hintergründe
+  - Verwendung und Erläuterung von Fachbegriffen (4 Pkt.)
+  - Darstellung von relevanten Zusammenhängen (6 Pkt.)
+- Präsentationstechnik
+  - Ausdrucksweise, Satzbau, Stil, Körpersprache (4 Pkt.)
+  - Medieneinsatz, Visualisierung, Rechtschreibung (4 Pkt.)
+  - Einhaltung zeitlicher Rahmen (2 Pkt.)
+- Fachgespräch: (30 Pkt.)
+  - Beherrschung des relevanten Fachhintergrundes
+  - Argumentation, Begründung, Gesprächsführung
